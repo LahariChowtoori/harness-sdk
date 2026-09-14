@@ -8,7 +8,7 @@ Mistral AI model provider.
 class MistralModel(Model)
 ```
 
-Defined in: [src/strands/models/mistral.py:48](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L48)
+Defined in: [src/strands/models/mistral.py:61](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L61)
 
 Mistral API model provider implementation.
 
@@ -25,7 +25,7 @@ The implementation handles Mistral-specific features such as:
 class MistralConfig(BaseModelConfig)
 ```
 
-Defined in: [src/strands/models/mistral.py:64](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L64)
+Defined in: [src/strands/models/mistral.py:77](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L77)
 
 Configuration parameters for Mistral models.
 
@@ -36,7 +36,7 @@ Configuration parameters for Mistral models.
 -   `temperature` - Controls randomness in generation (0.0 to 1.0).
 -   `top_p` - Controls diversity via nucleus sampling.
 -   `stream` - Whether to enable streaming responses.
--   `cache_config` - Prompt-caching configuration. Mistral routes cache reads on cache\_config.cache\_key (mapped to the request’s prompt\_cache\_key); it exposes no retention or placement controls, so other fields are ignored.
+-   `cache_config` - Prompt-caching configuration. Mistral routes cache reads on cache\_config.cache\_key (mapped to the request’s prompt\_cache\_key), falling back to `strands-<session_id>` when unset and a session manager is attached; it exposes no retention or placement controls, so other fields are ignored.
 
 #### \_\_init\_\_
 
@@ -47,7 +47,7 @@ def __init__(api_key: str | None = None,
              **model_config: Unpack[MistralConfig]) -> None
 ```
 
-Defined in: [src/strands/models/mistral.py:85](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L85)
+Defined in: [src/strands/models/mistral.py:99](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L99)
 
 Initialize provider instance.
 
@@ -64,7 +64,7 @@ Initialize provider instance.
 def update_config(**model_config: Unpack[MistralConfig]) -> None
 ```
 
-Defined in: [src/strands/models/mistral.py:130](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L130)
+Defined in: [src/strands/models/mistral.py:144](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L144)
 
 Update the Mistral Model configuration with the provided arguments.
 
@@ -79,7 +79,7 @@ Update the Mistral Model configuration with the provided arguments.
 def get_config() -> MistralConfig
 ```
 
-Defined in: [src/strands/models/mistral.py:140](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L140)
+Defined in: [src/strands/models/mistral.py:154](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L154)
 
 Get the Mistral model configuration.
 
@@ -90,12 +90,14 @@ The Mistral model configuration.
 #### format\_request
 
 ```python
-def format_request(messages: Messages,
-                   tool_specs: list[ToolSpec] | None = None,
-                   system_prompt: str | None = None) -> dict[str, Any]
+def format_request(
+        messages: Messages,
+        tool_specs: list[ToolSpec] | None = None,
+        system_prompt: str | None = None,
+        agent_metadata: AgentMetadata | None = None) -> dict[str, Any]
 ```
 
-Defined in: [src/strands/models/mistral.py:277](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L277)
+Defined in: [src/strands/models/mistral.py:291](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L291)
 
 Format a Mistral chat streaming request.
 
@@ -104,6 +106,7 @@ Format a Mistral chat streaming request.
 -   `messages` - List of message objects to be processed by the model.
 -   `tool_specs` - List of tool specifications to make available to the model.
 -   `system_prompt` - System prompt to provide context to the model.
+-   `agent_metadata` - Stable identity of the invoking agent, used to derive a prompt-cache routing key when `cache_config.cache_key` is unset.
 
 **Returns**:
 
@@ -119,7 +122,7 @@ A Mistral chat streaming request.
 def format_chunk(event: dict[str, Any]) -> StreamEvent
 ```
 
-Defined in: [src/strands/models/mistral.py:325](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L325)
+Defined in: [src/strands/models/mistral.py:345](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L345)
 
 Format the Mistral response events into standardized message chunks.
 
@@ -144,10 +147,11 @@ async def stream(messages: Messages,
                  system_prompt: str | None = None,
                  *,
                  tool_choice: ToolChoice | None = None,
+                 agent_metadata: AgentMetadata | None = None,
                  **kwargs: Any) -> AsyncGenerator[StreamEvent, None]
 ```
 
-Defined in: [src/strands/models/mistral.py:436](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L436)
+Defined in: [src/strands/models/mistral.py:456](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L456)
 
 Stream conversation with the Mistral model.
 
@@ -157,6 +161,7 @@ Stream conversation with the Mistral model.
 -   `tool_specs` - List of tool specifications to make available to the model.
 -   `system_prompt` - System prompt to provide context to the model.
 -   `tool_choice` - Selection strategy for tool invocation. **Note: This parameter is accepted for interface consistency but is currently ignored for this model provider.**
+-   `agent_metadata` - Stable identity of the invoking agent, used to derive a prompt-cache routing key when `cache_config.cache_key` is unset.
 -   `**kwargs` - Additional keyword arguments for future extensibility.
 
 **Yields**:
@@ -179,7 +184,7 @@ async def structured_output(
         **kwargs: Any) -> AsyncGenerator[dict[str, T | Any], None]
 ```
 
-Defined in: [src/strands/models/mistral.py:548](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L548)
+Defined in: [src/strands/models/mistral.py:571](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/mistral.py#L571)
 
 Get structured output from the model.
 

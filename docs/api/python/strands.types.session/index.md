@@ -6,7 +6,7 @@ Data models for session management.
 class SessionType(str, Enum)
 ```
 
-Defined in: [src/strands/types/session.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L18)
+Defined in: [src/strands/types/session.py:17](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L17)
 
 Enumeration of session types.
 
@@ -18,7 +18,7 @@ As sessions are expanded to support new use cases like multi-agent patterns, new
 def encode_bytes_values(obj: Any) -> Any
 ```
 
-Defined in: [src/strands/types/session.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L28)
+Defined in: [src/strands/types/session.py:27](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L27)
 
 Recursively encode any bytes values in an object to base64.
 
@@ -30,7 +30,7 @@ Handles dictionaries, lists, and nested structures.
 def decode_bytes_values(obj: Any) -> Any
 ```
 
-Defined in: [src/strands/types/session.py:43](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L43)
+Defined in: [src/strands/types/session.py:42](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L42)
 
 Recursively decode any base64-encoded bytes values in an object.
 
@@ -43,7 +43,7 @@ Handles dictionaries, lists, and nested structures.
 class SessionMessage()
 ```
 
-Defined in: [src/strands/types/session.py:59](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L59)
+Defined in: [src/strands/types/session.py:58](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L58)
 
 Message within a SessionAgent.
 
@@ -62,7 +62,7 @@ Message within a SessionAgent.
 def from_message(cls, message: Message, index: int) -> "SessionMessage"
 ```
 
-Defined in: [src/strands/types/session.py:77](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L77)
+Defined in: [src/strands/types/session.py:76](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L76)
 
 Convert from a Message, base64 encoding bytes values.
 
@@ -72,7 +72,7 @@ Convert from a Message, base64 encoding bytes values.
 def to_message() -> Message
 ```
 
-Defined in: [src/strands/types/session.py:86](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L86)
+Defined in: [src/strands/types/session.py:85](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L85)
 
 Convert SessionMessage back to a Message, decoding any bytes values.
 
@@ -85,7 +85,7 @@ If the message was redacted, return the redact content instead.
 def from_dict(cls, env: dict[str, Any]) -> "SessionMessage"
 ```
 
-Defined in: [src/strands/types/session.py:97](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L97)
+Defined in: [src/strands/types/session.py:96](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L96)
 
 Initialize a SessionMessage from a dictionary, ignoring keys that are not class parameters.
 
@@ -95,7 +95,7 @@ Initialize a SessionMessage from a dictionary, ignoring keys that are not class 
 def to_dict() -> dict[str, Any]
 ```
 
-Defined in: [src/strands/types/session.py:102](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L102)
+Defined in: [src/strands/types/session.py:101](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L101)
 
 Convert the SessionMessage to a dictionary representation.
 
@@ -106,7 +106,7 @@ Convert the SessionMessage to a dictionary representation.
 class SessionAgent()
 ```
 
-Defined in: [src/strands/types/session.py:108](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L108)
+Defined in: [src/strands/types/session.py:107](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L107)
 
 Agent that belongs to a Session.
 
@@ -122,31 +122,12 @@ Agent that belongs to a Session.
 
 ```python
 @classmethod
-def from_agent(cls, agent: "Agent") -> "SessionAgent"
+def from_agent(cls, agent: "LocalAgent") -> "SessionAgent"
 ```
 
-Defined in: [src/strands/types/session.py:127](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L127)
+Defined in: [src/strands/types/session.py:126](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L126)
 
-Convert an Agent to a SessionAgent.
-
-#### from\_bidi\_agent
-
-```python
-@classmethod
-def from_bidi_agent(cls, agent: "BidiAgent") -> "SessionAgent"
-```
-
-Defined in: [src/strands/types/session.py:142](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L142)
-
-Convert a BidiAgent to a SessionAgent.
-
-**Arguments**:
-
--   `agent` - BidiAgent to convert
-
-**Returns**:
-
-SessionAgent with empty conversation\_manager\_state (BidiAgent doesn’t use conversation manager)
+Convert a local agent to a SessionAgent.
 
 #### from\_dict
 
@@ -155,7 +136,7 @@ SessionAgent with empty conversation\_manager\_state (BidiAgent doesn’t use co
 def from_dict(cls, env: dict[str, Any]) -> "SessionAgent"
 ```
 
-Defined in: [src/strands/types/session.py:167](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L167)
+Defined in: [src/strands/types/session.py:150](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L150)
 
 Initialize a SessionAgent from a dictionary, ignoring keys that are not class parameters.
 
@@ -165,33 +146,19 @@ Initialize a SessionAgent from a dictionary, ignoring keys that are not class pa
 def to_dict() -> dict[str, Any]
 ```
 
-Defined in: [src/strands/types/session.py:172](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L172)
+Defined in: [src/strands/types/session.py:155](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L155)
 
 Convert the SessionAgent to a dictionary representation.
 
 #### initialize\_internal\_state
 
 ```python
-def initialize_internal_state(agent: "Agent") -> None
+def initialize_internal_state(agent: "LocalAgent") -> None
 ```
 
-Defined in: [src/strands/types/session.py:176](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L176)
+Defined in: [src/strands/types/session.py:159](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L159)
 
-Initialize internal state of agent.
-
-#### initialize\_bidi\_internal\_state
-
-```python
-def initialize_bidi_internal_state(agent: "BidiAgent") -> None
-```
-
-Defined in: [src/strands/types/session.py:183](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L183)
-
-Initialize internal state of BidiAgent.
-
-**Arguments**:
-
--   `agent` - BidiAgent to initialize internal state for
+Restore internal state for Agent instances.
 
 ## Session
 
@@ -200,7 +167,7 @@ Initialize internal state of BidiAgent.
 class Session()
 ```
 
-Defined in: [src/strands/types/session.py:196](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L196)
+Defined in: [src/strands/types/session.py:173](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L173)
 
 Session data model.
 
@@ -211,7 +178,7 @@ Session data model.
 def from_dict(cls, env: dict[str, Any]) -> "Session"
 ```
 
-Defined in: [src/strands/types/session.py:205](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L205)
+Defined in: [src/strands/types/session.py:182](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L182)
 
 Initialize a Session from a dictionary, ignoring keys that are not class parameters.
 
@@ -221,6 +188,6 @@ Initialize a Session from a dictionary, ignoring keys that are not class paramet
 def to_dict() -> dict[str, Any]
 ```
 
-Defined in: [src/strands/types/session.py:209](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L209)
+Defined in: [src/strands/types/session.py:186](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py#L186)
 
 Convert the Session to a dictionary representation.

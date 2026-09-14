@@ -14,6 +14,7 @@ Output of a shell command execution.
 
 -   `output` - Standard output captured from the command.
 -   `error` - Standard error captured from the command. Empty when there was none.
+-   `exit_code` - Exit code of the command. Non-zero means the command failed.
 
 ## ShellExecutionError
 
@@ -21,7 +22,7 @@ Output of a shell command execution.
 class ShellExecutionError(RuntimeError)
 ```
 
-Defined in: [src/strands/vended\_tools/shell/types.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/shell/types.py#L18)
+Defined in: [src/strands/vended\_tools/shell/types.py:20](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/shell/types.py#L20)
 
 Raised when a sandbox-routed shell command fails.
 

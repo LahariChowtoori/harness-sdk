@@ -1,4 +1,4 @@
-Defined in: [src/models/model.ts:214](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L214)
+Defined in: [src/models/model.ts:222](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L222)
 
 Options interface for configuring streaming model invocation.
 
@@ -10,7 +10,7 @@ Options interface for configuring streaming model invocation.
 optional cancelSignal?: AbortSignal;
 ```
 
-Defined in: [src/models/model.ts:219](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L219)
+Defined in: [src/models/model.ts:227](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L227)
 
 Optional cancellation signal that a provider implementation can forward to abort an in-flight request. Support is provider-dependent.
 
@@ -22,7 +22,7 @@ Optional cancellation signal that a provider implementation can forward to abort
 optional systemPrompt?: SystemPrompt;
 ```
 
-Defined in: [src/models/model.ts:225](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L225)
+Defined in: [src/models/model.ts:233](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L233)
 
 System prompt to guide the model’s behavior. Can be a simple string or an array of content blocks for advanced caching.
 
@@ -34,7 +34,7 @@ System prompt to guide the model’s behavior. Can be a simple string or an arra
 optional toolSpecs?: ToolSpec[];
 ```
 
-Defined in: [src/models/model.ts:230](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L230)
+Defined in: [src/models/model.ts:238](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L238)
 
 Array of tool specifications that the model can use.
 
@@ -46,7 +46,7 @@ Array of tool specifications that the model can use.
 optional toolChoice?: ToolChoice;
 ```
 
-Defined in: [src/models/model.ts:235](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L235)
+Defined in: [src/models/model.ts:243](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L243)
 
 Controls how the model selects tools to use.
 
@@ -58,7 +58,7 @@ Controls how the model selects tools to use.
 optional modelState?: StateStore;
 ```
 
-Defined in: [src/models/model.ts:243](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L243)
+Defined in: [src/models/model.ts:251](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L251)
 
 Runtime state for model providers that manage server-side conversation state. The model can read and write this state during streaming (e.g., to store a response ID for conversation chaining). Mutations via `set`/`delete` are visible to the caller after the stream completes.
 
@@ -70,6 +70,18 @@ Runtime state for model providers that manage server-side conversation state. Th
 optional dynamicTrailingBlocks?: number;
 ```
 
-Defined in: [src/models/model.ts:246](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/models/model.ts#L246)
+Defined in: [src/models/model.ts:254](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L254)
 
 How many trailing blocks of the last user message are rebuilt on every call.
+
+---
+
+### agentMetadata?
+
+```ts
+optional agentMetadata?: AgentMetadata;
+```
+
+Defined in: [src/models/model.ts:257](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L257)
+
+Metadata of the invoking agent, supplied per request.

@@ -18,24 +18,24 @@ Bedrock Nova Sonic is configured as an optional dependency in Strands Agents.
 To install it, run:
 
 ```bash
-pip install 'strands-agents[bidi]'
+pip install 'strands-agents[bidi,bidi-io,bidi-pyaudio]'
 ```
 
 Or to install all bidirectional streaming providers at once:
 
 ```bash
-pip install 'strands-agents[bidi-all]'
+pip install 'strands-agents[bidi-all,bidi-pyaudio]'
 ```
 
 ## Usage
 
-After installing `strands-agents[bidi]`, you can import and initialize the Strands Agents’ Bedrock Nova Sonic provider as follows:
+After installing the Bedrock Nova Sonic and local audio extras, create a voice agent:
 
 ```python
 import asyncio
 
 from strands.experimental.bidi import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO, BidiTextIO
+from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands_tools import calculator, stop
 
@@ -44,12 +44,11 @@ async def main() -> None:
     model = BedrockNovaSonicModel(
         model_id="amazon.nova-2-sonic-v1:0",
         region="us-east-1",
-        audio={"voice": "tiffany"},
+        voice="tiffany",
     )
     agent = BidiAgent(model=model, tools=[calculator, stop])
     audio_io = BidiAudioIO()
-    text_io = BidiTextIO()
-    await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output(), text_io.output()])
+    await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output()])
 
 
 if __name__ == "__main__":
@@ -116,13 +115,10 @@ For more details on this approach, please refer to the [boto3 session docs](http
 | Parameter | Description | Example | Options |
 | --- | --- | --- | --- |
 | `model_id` | Nova Sonic model identifier. | `"amazon.nova-2-sonic-v1:0"` | Nova Sonic model IDs |
-| `audio` | Audio configuration. | `{"output_rate": 24000, "voice": "tiffany"}` | [reference](/docs/api/python/strands.experimental.bidi.types.model#AudioConfig) |
+| `audio` | Input and output stream options. | `{"output": {"sample_rate": 24000}}` | [reference](/docs/api/python/strands.experimental.bidi.models.bedrock#BedrockNovaSonicAudioConfig) |
+| `voice` | Output voice identifier. Defaults to `"matthew"`. | `"tiffany"` | Nova Sonic voices |
 | `params` | Provider-specific session parameters, such as inference and turn detection configuration. | `{"inferenceConfiguration": {"temperature": 0.7}}` | [`sessionStart` fields](https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-input-events.html) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.types.model#BidiConnectionConfig) |
-
-Note
-
-The `audio` config accepts any sample rate supported by the underlying model API. Refer to the [Nova Sonic documentation](https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html) for the full list of supported rates.
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models.configs#BidiConnectionConfig) |
 
 Conversation History Limits
 

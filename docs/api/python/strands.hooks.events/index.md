@@ -6,7 +6,7 @@ This module defines the events that are emitted as Agents run through the lifecy
 
 ```python
 @dataclass
-class AgentInitializedEvent(HookEvent)
+class AgentInitializedEvent(HookEvent[_LocalAgentT])
 ```
 
 Defined in: [src/strands/hooks/events.py:27](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/hooks/events.py#L27)
@@ -84,7 +84,7 @@ True to invoke callbacks in reverse order.
 
 ```python
 @dataclass
-class MessageAddedEvent(HookEvent)
+class MessageAddedEvent(HookEvent[_LocalAgentT])
 ```
 
 Defined in: [src/strands/hooks/events.py:118](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/hooks/events.py#L118)

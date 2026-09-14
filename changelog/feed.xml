@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Strands Agents Changelog</title><description>Releases across the Strands Agents Harness and Evals SDKs.</description><link>https://strandsagents.com/</link><language>en-us</language><item><title>Harness Python v1.55.0</title><link>https://strandsagents.com/changelog/harness/python-v1.55.0/</link><guid isPermaLink="true">https://strandsagents.com/changelog/harness/python-v1.55.0/</guid><description>• support API key authentication
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Strands Agents Changelog</title><description>Releases across the Strands Agents Harness and Evals SDKs.</description><link>https://strandsagents.com/</link><language>en-us</language><item><title>Harness Python v1.55.1</title><link>https://strandsagents.com/changelog/harness/python-v1.55.1/</link><guid isPermaLink="true">https://strandsagents.com/changelog/harness/python-v1.55.1/</guid><description>• fix various context manager parity items
+• resolve nested Bedrock model prefixes
+• add backgroundTasks to Agent
+• simplify Google and OpenAI model configs
+• use semantic system instructions for agent spans</description><pubDate>Wed, 09 Sep 2026 00:00:00 GMT</pubDate><category>context</category><category>model</category><category>async</category><category>agent</category><category>bidirectional-streaming</category><category>otel</category><category>persistence</category><category>tool</category></item><item><title>Harness Python v1.55.0</title><link>https://strandsagents.com/changelog/harness/python-v1.55.0/</link><guid isPermaLink="true">https://strandsagents.com/changelog/harness/python-v1.55.0/</guid><description>• support API key authentication
 • proactive session reconnect for bidi session
 • add cache_config to Mistral
 • close agent trace span on BaseException cancellation

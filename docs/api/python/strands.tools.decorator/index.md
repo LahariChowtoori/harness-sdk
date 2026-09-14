@@ -125,9 +125,10 @@ A dictionary with validated and converted parameter values.
 #### inject\_special\_parameters
 
 ```python
-def inject_special_parameters(validated_input: dict[str,
-                                                    Any], tool_use: ToolUse,
-                              invocation_state: dict[str, Any]) -> None
+def inject_special_parameters(validated_input: dict[str, Any],
+                              tool_use: ToolUse,
+                              invocation_state: dict[str, Any],
+                              tool_context: ToolContext | None = None) -> None
 ```
 
 Defined in: [src/strands/tools/decorator.py:397](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L397)
@@ -141,6 +142,7 @@ This method automatically provides framework-level context to tools that request
 -   `validated_input` - The validated input parameters (modified in place).
 -   `tool_use` - The tool use request containing tool invocation details.
 -   `invocation_state` - Caller-provided kwargs that were passed to the agent when it was invoked (agent(), agent.invoke\_async(), etc.).
+-   `tool_context` - Framework-supplied context to inject as-is (e.g. a background task’s context); when omitted, one is derived from `invocation_state`.
 
 #### P
 
@@ -156,7 +158,7 @@ Return type
 class DecoratedFunctionTool(AgentTool, Generic[P, R])
 ```
 
-Defined in: [src/strands/tools/decorator.py:454](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L454)
+Defined in: [src/strands/tools/decorator.py:461](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L461)
 
 An AgentTool that wraps a function that was decorated with @tool.
 
@@ -171,7 +173,7 @@ def __init__(tool_name: str, tool_spec: ToolSpec, tool_func: Callable[P, R],
              metadata: FunctionToolMetadata)
 ```
 
-Defined in: [src/strands/tools/decorator.py:469](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L469)
+Defined in: [src/strands/tools/decorator.py:476](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L476)
 
 Initialize the decorated function tool.
 
@@ -189,7 +191,7 @@ def __get__(instance: Any,
             obj_type: type | None = None) -> "DecoratedFunctionTool[P, R]"
 ```
 
-Defined in: [src/strands/tools/decorator.py:493](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L493)
+Defined in: [src/strands/tools/decorator.py:500](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L500)
 
 Descriptor protocol implementation for proper method binding.
 
@@ -223,7 +225,7 @@ tool = instance.my_tool
 def __call__(*args: P.args, **kwargs: P.kwargs) -> R
 ```
 
-Defined in: [src/strands/tools/decorator.py:526](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L526)
+Defined in: [src/strands/tools/decorator.py:533](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L533)
 
 Call the original function with the provided arguments.
 
@@ -245,7 +247,7 @@ The result of the original function call.
 def tool_name() -> str
 ```
 
-Defined in: [src/strands/tools/decorator.py:542](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L542)
+Defined in: [src/strands/tools/decorator.py:549](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L549)
 
 Get the name of the tool.
 
@@ -260,7 +262,7 @@ The tool name as a string.
 def tool_spec() -> ToolSpec
 ```
 
-Defined in: [src/strands/tools/decorator.py:551](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L551)
+Defined in: [src/strands/tools/decorator.py:558](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L558)
 
 Get the tool specification.
 
@@ -275,7 +277,7 @@ The tool specification dictionary containing metadata for Agent integration.
 def tool_spec(value: ToolSpec) -> None
 ```
 
-Defined in: [src/strands/tools/decorator.py:560](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L560)
+Defined in: [src/strands/tools/decorator.py:567](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L567)
 
 Set the tool specification.
 
@@ -296,7 +298,7 @@ This allows runtime modification of the tool’s schema, enabling dynamic tool c
 def tool_type() -> str
 ```
 
-Defined in: [src/strands/tools/decorator.py:585](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L585)
+Defined in: [src/strands/tools/decorator.py:592](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L592)
 
 Get the type of the tool.
 
@@ -312,7 +314,7 @@ async def stream(tool_use: ToolUse, invocation_state: dict[str, Any],
                  **kwargs: Any) -> ToolGenerator
 ```
 
-Defined in: [src/strands/tools/decorator.py:594](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L594)
+Defined in: [src/strands/tools/decorator.py:601](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L601)
 
 Stream the tool with a tool use specification.
 
@@ -343,7 +345,7 @@ Tool events with the last being the tool result.
 def supports_hot_reload() -> bool
 ```
 
-Defined in: [src/strands/tools/decorator.py:711](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L711)
+Defined in: [src/strands/tools/decorator.py:719](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L719)
 
 Check if this tool supports automatic reloading when modified.
 
@@ -358,7 +360,7 @@ Always true for function-based tools.
 def get_display_properties() -> dict[str, str]
 ```
 
-Defined in: [src/strands/tools/decorator.py:720](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L720)
+Defined in: [src/strands/tools/decorator.py:728](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L728)
 
 Get properties to display in UI representations.
 
@@ -379,7 +381,7 @@ def tool(
                                             DecoratedFunctionTool[P, R]]
 ```
 
-Defined in: [src/strands/tools/decorator.py:744](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L744)
+Defined in: [src/strands/tools/decorator.py:752](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/decorator.py#L752)
 
 Decorator that transforms a Python function into a Strands tool.
 

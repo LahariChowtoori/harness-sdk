@@ -3,10 +3,10 @@ Repository session manager implementation.
 ## RepositorySessionManager
 
 ```python
-class RepositorySessionManager(SessionManager)
+class RepositorySessionManager(SessionManager[LocalAgent])
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L28)
+Defined in: [src/strands/session/repository\_session\_manager.py:27](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L27)
 
 Session manager for persisting agents in a SessionRepository.
 
@@ -19,7 +19,7 @@ def __init__(session_id: str, session_repository: SessionRepository,
              **kwargs: Any)
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:40](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L40)
+Defined in: [src/strands/session/repository\_session\_manager.py:39](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L39)
 
 Initialize the RepositorySessionManager.
 
@@ -34,10 +34,11 @@ If no session with the specified session\_id exists yet, it will be created in t
 #### append\_message
 
 ```python
-def append_message(message: Message, agent: "Agent", **kwargs: Any) -> None
+def append_message(message: Message, agent: "LocalAgent",
+                   **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:78](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L78)
+Defined in: [src/strands/session/repository\_session\_manager.py:77](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L77)
 
 Append a message to the agent’s session.
 
@@ -50,11 +51,11 @@ Append a message to the agent’s session.
 #### redact\_latest\_message
 
 ```python
-def redact_latest_message(redact_message: Message, agent: "Agent",
+def redact_latest_message(redact_message: Message, agent: "LocalAgent",
                           **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:97](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L97)
+Defined in: [src/strands/session/repository\_session\_manager.py:96](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L96)
 
 Redact the latest message appended to the session.
 
@@ -67,14 +68,14 @@ Redact the latest message appended to the session.
 #### sync\_agent
 
 ```python
-def sync_agent(agent: "Agent", **kwargs: Any) -> None
+def sync_agent(agent: "LocalAgent", **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:111](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L111)
+Defined in: [src/strands/session/repository\_session\_manager.py:110](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L110)
 
 Serialize and update the agent into the session repository.
 
-Only updates the agent if state has been modified or internal state has changed. This optimization reduces unnecessary I/O operations when the agent processes messages without modifying its state.
+For Agent, only updates if state or internal state has changed. BidiAgent is written on every sync, preserving its existing persistence behavior.
 
 **Arguments**:
 
@@ -84,10 +85,10 @@ Only updates the agent if state has been modified or internal state has changed.
 #### initialize
 
 ```python
-def initialize(agent: "Agent", **kwargs: Any) -> None
+def initialize(agent: "LocalAgent", **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:178](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L178)
+Defined in: [src/strands/session/repository\_session\_manager.py:182](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L182)
 
 Initialize an agent with a session.
 
@@ -102,7 +103,7 @@ Initialize an agent with a session.
 def sync_multi_agent(source: "MultiAgentBase", **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:346](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L346)
+Defined in: [src/strands/session/repository\_session\_manager.py:359](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L359)
 
 Serialize and update the multi-agent state into the session repository.
 
@@ -117,58 +118,11 @@ Serialize and update the multi-agent state into the session repository.
 def initialize_multi_agent(source: "MultiAgentBase", **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/session/repository\_session\_manager.py:355](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L355)
+Defined in: [src/strands/session/repository\_session\_manager.py:368](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L368)
 
 Initialize multi-agent state from the session repository.
 
 **Arguments**:
 
 -   `source` - Multi-agent source object to restore state into
--   `**kwargs` - Additional keyword arguments for future extensibility.
-
-#### initialize\_bidi\_agent
-
-```python
-def initialize_bidi_agent(agent: "BidiAgent", **kwargs: Any) -> None
-```
-
-Defined in: [src/strands/session/repository\_session\_manager.py:376](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L376)
-
-Initialize a bidirectional agent with a session.
-
-**Arguments**:
-
--   `agent` - BidiAgent to initialize from the session
--   `**kwargs` - Additional keyword arguments for future extensibility.
-
-#### append\_bidi\_message
-
-```python
-def append_bidi_message(message: Message, agent: "BidiAgent",
-                        **kwargs: Any) -> None
-```
-
-Defined in: [src/strands/session/repository\_session\_manager.py:435](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L435)
-
-Append a message to the bidirectional agent’s session.
-
-**Arguments**:
-
--   `message` - Message to add to the agent in the session
--   `agent` - BidiAgent to append the message to
--   `**kwargs` - Additional keyword arguments for future extensibility.
-
-#### sync\_bidi\_agent
-
-```python
-def sync_bidi_agent(agent: "BidiAgent", **kwargs: Any) -> None
-```
-
-Defined in: [src/strands/session/repository\_session\_manager.py:454](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py#L454)
-
-Serialize and update the bidirectional agent into the session repository.
-
-**Arguments**:
-
--   `agent` - BidiAgent to sync to the session.
 -   `**kwargs` - Additional keyword arguments for future extensibility.

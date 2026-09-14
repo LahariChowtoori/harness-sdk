@@ -12,19 +12,25 @@ Defined in: [src/strands/sandbox/errors.py:9](https://github.com/strands-agents/
 
 Raised by sandbox execution when the configured `timeout` elapses.
 
+`stdout` and `stderr` hold whatever the process wrote before it was killed.
+
 #### \_\_init\_\_
 
 ```python
-def __init__(seconds: float | None) -> None
+def __init__(seconds: float | None,
+             stdout: str = "",
+             stderr: str = "") -> None
 ```
 
-Defined in: [src/strands/sandbox/errors.py:12](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/sandbox/errors.py#L12)
+Defined in: [src/strands/sandbox/errors.py:15](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/sandbox/errors.py#L15)
 
-Initialize the error with the timeout duration.
+Initialize the error with the timeout duration and the output captured so far.
 
 **Arguments**:
 
 -   `seconds` - The timeout duration, in seconds, that elapsed.
+-   `stdout` - Standard output captured before the kill.
+-   `stderr` - Standard error captured before the kill.
 
 ## SandboxPathNotFoundError
 
@@ -32,7 +38,7 @@ Initialize the error with the timeout duration.
 class SandboxPathNotFoundError(FileNotFoundError)
 ```
 
-Defined in: [src/strands/sandbox/errors.py:21](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/sandbox/errors.py#L21)
+Defined in: [src/strands/sandbox/errors.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/sandbox/errors.py#L28)
 
 Raised by :meth:`~strands.sandbox.base.Sandbox.list_files` when the path does not exist.
 
@@ -44,7 +50,7 @@ Distinguishes genuine absence (a missing path, or a file where a directory was e
 def __init__(path: str) -> None
 ```
 
-Defined in: [src/strands/sandbox/errors.py:29](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/sandbox/errors.py#L29)
+Defined in: [src/strands/sandbox/errors.py:36](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/sandbox/errors.py#L36)
 
 Initialize the error with the missing path.
 

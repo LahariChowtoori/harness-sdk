@@ -14,7 +14,7 @@ def make_shell(
         description: str = SANDBOX_SHELL_DESCRIPTION) -> DecoratedFunctionTool
 ```
 
-Defined in: [src/strands/vended\_tools/shell/shell.py:29](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/shell/shell.py#L29)
+Defined in: [src/strands/vended\_tools/shell/shell.py:30](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/shell/shell.py#L30)
 
 Create a stateless, sandbox-routed shell tool.
 

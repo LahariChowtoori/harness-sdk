@@ -56,7 +56,7 @@ Print text events to stdout.
 class BidiTextIO()
 ```
 
-Defined in: [src/strands/experimental/bidi/io/text.py:65](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L65)
+Defined in: [src/strands/experimental/bidi/io/text.py:56](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L56)
 
 Handle text input and output to and from bidi agent.
 
@@ -68,7 +68,7 @@ Accepts input from stdin and outputs to stdout.
 def __init__(**config: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/io/text.py:71](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L71)
+Defined in: [src/strands/experimental/bidi/io/text.py:62](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L62)
 
 Initialize I/O.
 
@@ -84,7 +84,7 @@ Initialize I/O.
 def input() -> _BidiTextInput
 ```
 
-Defined in: [src/strands/experimental/bidi/io/text.py:81](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L81)
+Defined in: [src/strands/experimental/bidi/io/text.py:72](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L72)
 
 Return text processing BidiInput.
 
@@ -94,6 +94,6 @@ Return text processing BidiInput.
 def output() -> _BidiTextOutput
 ```
 
-Defined in: [src/strands/experimental/bidi/io/text.py:85](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L85)
+Defined in: [src/strands/experimental/bidi/io/text.py:76](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L76)
 
 Return text processing BidiOutput.

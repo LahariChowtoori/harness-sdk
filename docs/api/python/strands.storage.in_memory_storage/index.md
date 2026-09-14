@@ -28,7 +28,7 @@ data = await storage.read("sessions/abc/state.json")
 def __init__() -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:32](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L32)
+Defined in: [src/strands/storage/in\_memory\_storage.py:34](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L34)
 
 Initialize an empty in-memory store.
 
@@ -38,7 +38,7 @@ Initialize an empty in-memory store.
 async def write(key: str, data: bytes) -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:37](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L37)
+Defined in: [src/strands/storage/in\_memory\_storage.py:39](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L39)
 
 Store data under key, overwriting any existing value.
 
@@ -57,7 +57,7 @@ Store data under key, overwriting any existing value.
 async def read(key: str) -> bytes | None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:51](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L51)
+Defined in: [src/strands/storage/in\_memory\_storage.py:53](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L53)
 
 Retrieve the bytes previously stored under key.
 
@@ -79,7 +79,7 @@ The stored bytes, or None if no value exists for key.
 async def delete(key: str) -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:68](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L68)
+Defined in: [src/strands/storage/in\_memory\_storage.py:70](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L70)
 
 Delete the value stored under key. A no-op if the key does not exist.
 
@@ -97,7 +97,7 @@ Delete the value stored under key. A no-op if the key does not exist.
 async def list(query: str = "") -> builtins.list[str]
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:81](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L81)
+Defined in: [src/strands/storage/in\_memory\_storage.py:83](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L83)
 
 List keys matching the given prefix.
 
@@ -119,7 +119,7 @@ Matching keys sorted ascending.
 async def search(query: str) -> builtins.list[StorageSearchResult]
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:98](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L98)
+Defined in: [src/strands/storage/in\_memory\_storage.py:100](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L100)
 
 Search stored content by keyword token-overlap scoring.
 
@@ -137,7 +137,7 @@ All matches with relevance scores, ranked best-first.
 def namespace(prefix: str) -> _NamespacedStorage
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:109](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L109)
+Defined in: [src/strands/storage/in\_memory\_storage.py:111](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L111)
 
 Return a view of this storage with all keys prefixed.
 
@@ -155,6 +155,6 @@ A namespaced storage view.
 def clear() -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:120](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L120)
+Defined in: [src/strands/storage/in\_memory\_storage.py:122](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L122)
 
 Remove all stored entries.

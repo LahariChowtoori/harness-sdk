@@ -2,7 +2,7 @@
 function configureLogging(customLogger): void;
 ```
 
-Defined in: [src/logging/logger.ts:44](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/logging/logger.ts#L44)
+Defined in: [src/logging/logger.ts:44](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/logging/logger.ts#L44)
 
 Configures the global logger.
 

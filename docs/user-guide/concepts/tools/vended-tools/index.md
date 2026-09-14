@@ -11,7 +11,7 @@ import { Agent } from '@strands-agents/sdk'
 import { bash } from '@strands-agents/sdk/vended-tools/bash'
 import { fileEditor } from '@strands-agents/sdk/vended-tools/file-editor'
 import { httpRequest } from '@strands-agents/sdk/vended-tools/http-request'
-import { notebook } from '@strands-agents/sdk/vended-tools/notebook'
+import { notebook, makeNotebook } from '@strands-agents/sdk/vended-tools/notebook'
 
 const agent = new Agent({
   tools: [bash, fileEditor, httpRequest, notebook],
@@ -24,11 +24,11 @@ const agent = new Agent({
 | --- | --- | --- |
 | [File Editor](#file-editor) | View, create, and edit files | Python, TypeScript (Node.js) |
 | [HTTP Request](#http-request) | Make HTTP requests to external APIs | Python, TypeScript (Node.js 22+, browsers) |
-| [Notebook](#notebook) | Manage persistent text notebooks | TypeScript (Node.js, browsers) |
+| [Notebook](#notebook) | Manage persistent text notebooks | Python, TypeScript (Node.js, browsers) |
 | [Bash](#bash) | Execute shell commands with persistent sessions | Python, TypeScript (Node.js, Unix/Linux/macOS) |
 | [Sleep](#sleep) | Pause execution for a bounded, cancellable duration | Python, TypeScript (Node.js, browsers) |
 | [Stop](#stop-experimental) | Gracefully end the agent loop when the task is complete | Python, TypeScript (Node.js, browsers) |
-| [Web Fetch](#web-fetch) | Fetch a URL and return cleaned markdown for a model to read | Python |
+| [Web Fetch](#web-fetch) | Fetch a URL and return cleaned markdown for a model to read | Python, TypeScript (Node.js) |
 
 ### File Editor
 
@@ -129,10 +129,11 @@ agent = Agent(tools=[tool])
 
 A scratchpad the agent can read and write across invocations. The most effective use is giving the agent a notebook at the start of a task and instructing it to plan its work there — it can break the task into steps, check things off as it goes, and always have a clear picture of what’s left. Notebook state is part of the agent’s state, so it persists automatically with [Session Management](/docs/user-guide/concepts/agents/session-management/index.md).
 
-*Supported in: Node.js, browsers.*
+*Supported in: Node.js, modern browsers (TypeScript); all platforms (Python).*
 
 **Example - Task Management:**
 
+(( tab "TypeScript" ))
 ```typescript
 import { Agent } from '@strands-agents/sdk'
 import { notebook } from '@strands-agents/sdk/vended-tools/notebook'
@@ -147,9 +148,21 @@ const agent = new Agent({
 // The agent uses the notebook to plan and track its work
 await agent.invoke('Write a project plan for building a personal budget tracker app')
 ```
+(( /tab "TypeScript" ))
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.vended_tools import notebook
+
+agent = Agent(tools=[notebook])
+agent('Create a notebook called "tasks" with "# Daily Tasks" and add "- [ ] Review code" to it')
+```
+(( /tab "Python" ))
 
 **Example - State Persistence:**
 
+(( tab "TypeScript" ))
 ```typescript
 import { Agent, SessionManager, FileStorage } from '@strands-agents/sdk'
 import { notebook } from '@strands-agents/sdk/vended-tools/notebook'
@@ -171,6 +184,49 @@ await agent.invoke('Add "- Build a web scraper" to the ideas notebook')
 const restoredAgent = new Agent({ tools: [notebook], sessionManager: session })
 await restoredAgent.invoke('Read the ideas notebook')
 ```
+(( /tab "TypeScript" ))
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.vended_tools import notebook
+
+agent = Agent(tools=[notebook])
+agent('Create a notebook called "tasks" with "# Daily Tasks" and add "- [ ] Review code" to it')
+
+# Read the notebook contents directly off agent state.
+notebooks = agent.state.get("notebooks") or {}
+print(notebooks.get("tasks"))
+```
+(( /tab "Python" ))
+
+**Example - Custom configuration:**
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { makeNotebook } from '@strands-agents/sdk/vended-tools/notebook'
+
+const notes = makeNotebook({
+  name: 'notes',
+  maxNotebookSizeBytes: 64 * 1024, // 64 KiB
+})
+const agent = new Agent({ tools: [notes] })
+```
+(( /tab "TypeScript" ))
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.vended_tools import make_notebook
+
+notes = make_notebook(
+    name="notes",
+    max_notebook_size_bytes=64 * 1024,  # 64 KiB
+)
+agent = Agent(tools=[notes])
+```
+(( /tab "Python" ))
 
 📖 [Full API Reference](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/notebook/README.md)
 
@@ -343,28 +399,77 @@ result = agent("Summarize the changes in ./CHANGELOG.md")
 
 ### Web Fetch
 
-Fetches an HTTP(S) URL and returns its content. Two modes are available, configured at construction time via `make_web_fetch`:
+Fetches an HTTP(S) URL and returns its content. Two modes are available, configured at construction time via `make_web_fetch` / `makeWebFetch`:
 
 -   **`agentic`** (default) — HTML is converted to markdown and passed to an analyst agent that answers a `prompt`, so the full page never enters the main agent’s context. Use when targeted answers are needed about potentially large pages.
 -   **`markdown`** — HTML is converted to clean markdown with scripts, styles, and noise stripped. Use when the agent needs full pages for reasoning.
 
-The tool delegates all networking to an `httpx.AsyncClient`. Use the `make_web_fetch` factory to supply a pre-configured client with custom timeouts, redirects, proxies, or caching. The `max_bytes` parameter caps the HTTP response size (default 5 MiB); `max_content_chars` caps the extracted content delivered to the model or analyst (default 50,000 characters). For `mode='agentic'`, the factory also accepts a `model` for the analyst; the agent’s own model is used when none is supplied.
+The `max_bytes` / `maxBytes` parameter caps the HTTP response size (default 5 MiB); `max_content_chars` / `maxContentChars` caps the extracted content delivered to the model or analyst (default 50,000 characters). For `mode='agentic'` / `mode: 'agentic'`, the factory also accepts a `model` for the analyst; the agent’s own model is used when none is supplied.
 
-*Supported in: Python (all platforms).*
+The Python tool delegates all networking to an `httpx.AsyncClient`. Use the `make_web_fetch` factory to supply a pre-configured client with custom timeouts, redirects, proxies, or caching.
+
+*Supported in: Node.js (TypeScript); Python (all platforms).*
 
 Install required
 
+(( tab "Python" ))
 `web_fetch` requires the optional `web-fetch` extra:
 
 ```bash
 pip install 'strands-agents[web-fetch]'
 ```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+HTML conversion requires the optional `turndown` peer dependency:
+
+```bash
+npm install turndown
+```
+(( /tab "TypeScript" ))
 
 Security posture
 
-`web_fetch` accepts only `http://` and `https://` URLs and caps response bodies at 5 MiB by default. Egress control belongs at the layer that encapsulates the agent — a sandbox, microVM, or network policy — where it can be enforced consistently across all tools, including `shell`.
+Web fetch accepts only `http://` and `https://` URLs and caps response bodies at 5 MiB by default. Egress control belongs at the layer that encapsulates the agent — a sandbox, microVM, or network policy — where it can be enforced consistently across all tools, including `shell`.
 
 **Example:**
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { webFetch } from '@strands-agents/sdk/vended-tools/web-fetch'
+
+const agent = new Agent({ tools: [webFetch] })
+await agent.invoke('Summarize https://example.com/blog/post')
+```
+
+Reading the full page as markdown:
+
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { makeWebFetch } from '@strands-agents/sdk/vended-tools/web-fetch'
+
+const webFetch = makeWebFetch({ mode: 'markdown' })
+const agent = new Agent({ tools: [webFetch] })
+await agent.invoke('Read https://example.com/docs and explain the architecture')
+```
+
+Tighter response cap with a dedicated analyst model:
+
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { makeWebFetch } from '@strands-agents/sdk/vended-tools/web-fetch'
+import { BedrockModel } from '@strands-agents/sdk/models/bedrock'
+
+const webFetch = makeWebFetch({
+  mode: 'agentic',
+  maxBytes: 1 * 1024 * 1024,
+  maxContentChars: 25_000,
+  model: new BedrockModel({ modelId: 'us.amazon.nova-micro-v1:0' }),
+})
+const agent = new Agent({ tools: [webFetch] })
+```
+(( /tab "TypeScript" ))
 
 (( tab "Python" ))
 ```python
@@ -381,12 +486,12 @@ Reading the full page as markdown:
 from strands import Agent
 from strands.vended_tools import make_web_fetch
 
-tool = make_web_fetch(mode="markdown")
-agent = Agent(tools=[tool])
+web_fetch = make_web_fetch(mode="markdown")
+agent = Agent(tools=[web_fetch])
 agent("Read https://example.com/docs and then explain the architecture")
 ```
 
-Dedicated analyst model and tighter response cap:
+Tighter response cap with a dedicated analyst model and custom transport:
 
 ```python
 import httpx
@@ -394,16 +499,18 @@ from strands import Agent
 from strands.models import BedrockModel
 from strands.vended_tools import make_web_fetch
 
-tool = make_web_fetch(
+web_fetch = make_web_fetch(
     mode="agentic",
     client=httpx.AsyncClient(timeout=10.0),
     max_bytes=1 * 1024 * 1024,
     max_content_chars=25_000,
     model=BedrockModel(model_id="us.amazon.nova-micro-v1:0"),
 )
-agent = Agent(tools=[tool])
+agent = Agent(tools=[web_fetch])
 ```
 (( /tab "Python" ))
+
+📖 [Full API Reference](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/web-fetch/README.md)
 
 ---
 
@@ -469,11 +576,13 @@ Tool names are stable and will not change. In minor versions, a tool’s descrip
 - [harness-sdk/strands-ts/src/vended-tools/http-request/http-request.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/http-request/http-request.ts)
 - [harness-sdk/strands-ts/src/vended-tools/notebook/notebook.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/notebook/notebook.ts)
 - [harness-sdk/strands-ts/src/vended-tools/sleep/sleep.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/sleep/sleep.ts)
+- [harness-sdk/strands-ts/src/vended-tools/web-fetch/web-fetch.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/web-fetch/web-fetch.ts)
 - [harness-sdk/strands-ts/src/experimental/vended-tools/stop/stop.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/experimental/vended-tools/stop/stop.ts)
 
 ### Python
 
 - [harness-sdk/strands-py/src/strands/vended_tools/http_request/http_request.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/http_request/http_request.py)
+- [harness-sdk/strands-py/src/strands/vended_tools/notebook/notebook.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/notebook/notebook.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/shell/shell.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/shell/shell.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/sleep/sleep.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/sleep/sleep.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/web_fetch/web_fetch.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/web_fetch/web_fetch.py)

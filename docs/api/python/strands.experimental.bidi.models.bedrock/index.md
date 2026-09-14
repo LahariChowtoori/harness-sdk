@@ -12,13 +12,81 @@ Nova Sonic specifics:
 
 Note, BedrockNovaSonicModel is only supported for Python 3.12+
 
+## \_ResponseState
+
+```python
+@dataclass
+class _ResponseState()
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:168](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L168)
+
+Track transcript state for one Nova event stream.
+
+**Attributes**:
+
+-   `role` - Role of the current content block.
+-   `generation_stage` - Generation stage of the current text block.
+-   `transcript` - Accumulated user transcript or final assistant transcript.
+
+#### append\_transcript
+
+```python
+def append_transcript(delta: str) -> str
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:181](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L181)
+
+Append a transcript block while preserving word boundaries.
+
+#### reset
+
+```python
+def reset() -> None
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:188](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L188)
+
+Reset the response state.
+
+## BedrockNovaSonicAudioStreamConfig
+
+```python
+class BedrockNovaSonicAudioStreamConfig(TypedDict)
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:195](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L195)
+
+Nova Sonic stream options. Audio uses mono PCM.
+
+**Attributes**:
+
+-   `sample_rate` - Sample rate in Hz.
+
+## BedrockNovaSonicAudioConfig
+
+```python
+class BedrockNovaSonicAudioConfig(TypedDict)
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:205](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L205)
+
+Nova Sonic input and output audio options.
+
+Omitted streams use a sample rate of 16000 Hz.
+
+**Attributes**:
+
+-   `input` - Input stream options.
+-   `output` - Output stream options.
+
 ## BedrockNovaSonicModel
 
 ```python
 class BedrockNovaSonicModel(BidiModel, AudioCapable)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:89](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L89)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:219](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L219)
 
 Amazon Bedrock Nova Sonic implementation for bidirectional streaming.
 
@@ -36,11 +104,12 @@ Note, BedrockNovaSonicModel is only supported for Python 3.12+.
 def __init__(*,
              boto_session: Session | None = None,
              region: str | None = None,
-             audio: AudioConfig | None = None,
+             audio: BedrockNovaSonicAudioConfig | None = None,
+             voice: str = "matthew",
              **model_config: Unpack[BidiModelConfig]) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:104](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L104)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:234](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L234)
 
 Initialize Nova Sonic bidirectional model.
 
@@ -49,20 +118,47 @@ Initialize Nova Sonic bidirectional model.
 -   `boto_session` - Boto3 session used to resolve credentials and region.
 -   `region` - AWS region. Cannot be combined with `boto_session`.
 -   `audio` - Audio configuration.
+-   `voice` - Output voice identifier. Defaults to `matthew`.
 -   `**model_config` - Model configuration.
 
 **Raises**:
 
--   `ValueError` - If both `boto_session` and `region` are provided or the resolved region is invalid.
+-   `ValueError` - If audio options or the resolved region are invalid, or both `boto_session` and `region` are provided.
 
-#### audio\_config
+#### update\_config
 
 ```python
-@property
-def audio_config() -> AudioConfig
+@override
+def update_config(**model_config: Unpack[BidiModelConfig]) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:163](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L163)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:289](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L289)
+
+Update the model configuration with the provided arguments.
+
+**Arguments**:
+
+-   `**model_config` - Configuration overrides.
+
+#### get\_config
+
+```python
+@override
+def get_config() -> BidiModelConfig
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:299](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L299)
+
+Return the model configuration by reference.
+
+#### get\_audio\_config
+
+```python
+@override
+def get_audio_config() -> AudioConfig
+```
+
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:304](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L304)
 
 Get the resolved audio configuration.
 
@@ -75,7 +171,7 @@ async def start(system_prompt: str | None = None,
                 **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:167](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L167)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:327](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L327)
 
 Establish bidirectional connection to Nova Sonic.
 
@@ -96,7 +192,7 @@ Establish bidirectional connection to Nova Sonic.
 async def receive() -> AsyncGenerator[BidiOutputEvent, None]
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:304](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L304)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:464](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L464)
 
 Receive Nova Sonic events and convert to provider-agnostic format.
 
@@ -110,7 +206,7 @@ Receive Nova Sonic events and convert to provider-agnostic format.
 async def send(content: BidiInputEvent | ToolResultEvent) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:355](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L355)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:513](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L513)
 
 Unified send method for all content types. Sends the given content to Nova Sonic.
 
@@ -130,7 +226,7 @@ Dispatches to appropriate internal handler based on content type.
 async def stop() -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:501](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L501)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:659](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L659)
 
 Close Nova Sonic connection with proper cleanup sequence.
 
@@ -143,7 +239,7 @@ async def restart(system_prompt: str | None = None,
                   **restart_kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/bedrock.py:538](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L538)
+Defined in: [src/strands/experimental/bidi/models/bedrock.py:696](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/bedrock.py#L696)
 
 Restart by closing the connection and starting a new one, replaying messages.
 

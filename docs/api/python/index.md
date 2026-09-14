@@ -1,6 +1,7 @@
 -   **Agent**
     -   [A2a Agent](/docs/api/python/strands.agent.a2a_agent)
     -   [Agent](/docs/api/python/strands.agent.agent)
+    -   [Agent Metadata](/docs/api/python/strands.agent.agent_metadata)
     -   [Agent Result](/docs/api/python/strands.agent.agent_result)
     -   [Base](/docs/api/python/strands.agent.base)
     -   **Conversation Manager**
@@ -175,6 +176,9 @@
     -   **Http Request**
         -   [Http Request](/docs/api/python/strands.vended_tools.http_request.http_request)
         -   [Types](/docs/api/python/strands.vended_tools.http_request.types)
+    -   **Notebook**
+        -   [Notebook](/docs/api/python/strands.vended_tools.notebook.notebook)
+        -   [Types](/docs/api/python/strands.vended_tools.notebook.types)
     -   **Shell**
         -   [Shell](/docs/api/python/strands.vended_tools.shell.shell)
         -   [Types](/docs/api/python/strands.vended_tools.shell.types)
@@ -191,13 +195,17 @@
         -   **Agent**
             -   [Agent](/docs/api/python/strands.experimental.bidi.agent.agent)
             -   [Loop](/docs/api/python/strands.experimental.bidi.agent.loop)
+        -   **Hooks**
+            -   [Events](/docs/api/python/strands.experimental.bidi.hooks.events)
         -   **Io**
             -   [Overview](/docs/api/python/strands.experimental.bidi.io)
             -   [Audio](/docs/api/python/strands.experimental.bidi.io.audio)
             -   [Text](/docs/api/python/strands.experimental.bidi.io.text)
+            -   [Transcript](/docs/api/python/strands.experimental.bidi.io.transcript)
         -   **Models**
             -   [Overview](/docs/api/python/strands.experimental.bidi.models)
             -   [Bedrock](/docs/api/python/strands.experimental.bidi.models.bedrock)
+            -   [Configs](/docs/api/python/strands.experimental.bidi.models.configs)
             -   [Google](/docs/api/python/strands.experimental.bidi.models.google)
             -   [Model](/docs/api/python/strands.experimental.bidi.models.model)
             -   [Openai](/docs/api/python/strands.experimental.bidi.models.openai)
@@ -206,11 +214,8 @@
         -   **Types**
             -   [Events](/docs/api/python/strands.experimental.bidi.types.events)
             -   [Io](/docs/api/python/strands.experimental.bidi.types.io)
-            -   [Model](/docs/api/python/strands.experimental.bidi.types.model)
     -   **Checkpoint**
         -   [Checkpoint](/docs/api/python/strands.experimental.checkpoint.checkpoint)
-    -   **Hooks**
-        -   [Events](/docs/api/python/strands.experimental.hooks.events)
     -   **Tools**
         -   **Stop**
             -   [Stop](/docs/api/python/strands.experimental.tools.stop.stop)

@@ -65,6 +65,8 @@ Strands offers two built-in session managers for persisting bidirectional stream
 1.  **FileSessionManager**: Stores sessions in the local filesystem
 2.  **S3SessionManager**: Stores sessions in Amazon S3 buckets
 
+Both inherit the shared `RepositorySessionManager` implementation. For a custom backend, implement a [session repository](/docs/user-guide/concepts/agents/session-management/index.md#custom-session-repositories). `SnapshotSessionManager` does not support `BidiAgent`.
+
 ### FileSessionManager
 
 The `FileSessionManager` provides a simple way to persist sessions to the local filesystem:
@@ -124,34 +126,52 @@ agent = BidiAgent(
 
 ### Session Creation
 
-Sessions are created automatically when the agent starts:
+Create the session by constructing a session manager. Passing it to `BidiAgent` initializes the agent’s session data during construction:
 
 ```python
-session_manager = FileSessionManager(session_id="new_session")
-agent = BidiAgent(model=model, session_manager=session_manager)
+from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.models import BedrockNovaSonicModel
+from strands.session import FileSessionManager
 
-# Session created on first start
-await agent.start()
+session_manager = FileSessionManager(session_id="user_123", storage_dir="./sessions/")
+agent = BidiAgent(
+    model=BedrockNovaSonicModel(),
+    agent_id="voice-assistant",
+    session_manager=session_manager,
+)
 ```
 
 ### Session Restoration
 
-When an agent starts with an existing session ID, the conversation history is automatically restored:
+To reload saved messages and application state, construct a new session manager over the same storage and pass it to `BidiAgent` with the same session ID and agent ID. Restoration happens during construction, before `await agent.start()` opens the model connection.
 
 ```python
+from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.models import BedrockNovaSonicModel
+from strands.session import FileSessionManager
+
 # First conversation
-session_manager = FileSessionManager(session_id="user_123")
-agent = BidiAgent(model=model, session_manager=session_manager)
+session_manager = FileSessionManager(session_id="user_123", storage_dir="./sessions/")
+agent = BidiAgent(
+    model=BedrockNovaSonicModel(),
+    agent_id="voice-assistant",
+    session_manager=session_manager,
+)
 await agent.start()
 await agent.send("My name is Alice")
 # ... conversation continues ...
 await agent.stop()
 
-# Later - conversation history restored
-session_manager = FileSessionManager(session_id="user_123")
-agent = BidiAgent(model=model, session_manager=session_manager)
-await agent.start()  # Previous messages automatically loaded
-await agent.send("What's my name?")  # Agent remembers: "Alice"
+# Later: constructing a new agent restores the saved messages and state.
+session_manager = FileSessionManager(session_id="user_123", storage_dir="./sessions/")
+agent = BidiAgent(
+    model=BedrockNovaSonicModel(),
+    agent_id="voice-assistant",
+    session_manager=session_manager,
+)
+await agent.start()
+await agent.send("What's my name?")
+await agent.stop()
 ```
 
 ### Session Updates
@@ -189,24 +209,28 @@ async for event in agent.receive():
 
 ## Integration with Hooks
 
-Session management works seamlessly with hooks:
+Register a message hook after constructing the agent to run it after the session manager’s persistence hooks at the default hook order:
 
 ```python
-from strands.experimental.bidi.hooks.events import BidiMessageAddedEvent
+from strands import LocalAgent
+from strands.experimental.bidi import BidiAgent
+from strands.hooks import MessageAddedEvent
+from strands.session import FileSessionManager
 
-class SessionLogger:
-    async def on_message_added(self, event: BidiMessageAddedEvent):
-        # Message already persisted by session manager
-        print(f"Message persisted: {event.message['role']}")
 
 agent = BidiAgent(
-    model=model,
-    session_manager=session_manager,
-    hooks=[SessionLogger()]
+    session_manager=FileSessionManager(session_id="user_123", storage_dir="./sessions/")
 )
+
+
+async def log_message(event: MessageAddedEvent[LocalAgent]) -> None:
+    print(f"Message persisted: {event.message['role']}")
+
+
+agent.add_hook(log_message)
 ```
 
-The `BidiMessageAddedEvent` is emitted after the message is persisted, ensuring hooks see the saved state.
+The session manager also syncs state when `BidiAgentStopEvent` fires during shutdown.
 
 For best practices on session ID management, session cleanup, error handling, storage considerations, and troubleshooting, see the [Session Management documentation](/docs/user-guide/concepts/agents/session-management/index.md).
 
@@ -235,5 +259,9 @@ For best practices on session ID management, session cleanup, error handling, st
 
 ### Python
 
+- [harness-sdk/strands-py/src/strands/experimental/bidi/agent/agent.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/agent.py)
+- [harness-sdk/strands-py/src/strands/session/session_manager.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/session_manager.py)
+- [harness-sdk/strands-py/src/strands/session/repository_session_manager.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/repository_session_manager.py)
+- [harness-sdk/strands-py/src/strands/types/session.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/session.py)
 - [harness-sdk/strands-py/src/strands/session/file_session_manager.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/file_session_manager.py)
 - [harness-sdk/strands-py/src/strands/session/s3_session_manager.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/session/s3_session_manager.py)

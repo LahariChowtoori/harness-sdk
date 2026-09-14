@@ -31,36 +31,36 @@ You can also install support for specific providers:
 (( tab "Bedrock Nova Sonic" ))
 ```bash
 # With local microphone and speaker I/O
-pip install "strands-agents[bidi,bidi-pyaudio]"
+pip install "strands-agents[bidi,bidi-io,bidi-pyaudio]"
 
-# Without local microphone and speaker I/O
-pip install "strands-agents[bidi]"
+# With terminal text I/O
+pip install "strands-agents[bidi,bidi-io]"
 ```
 (( /tab "Bedrock Nova Sonic" ))
 
 (( tab "OpenAI Realtime" ))
 ```bash
 # With local audio I/O
-pip install "strands-agents[bidi,bidi-pyaudio,bidi-openai]"
+pip install "strands-agents[bidi-io,bidi-openai,bidi-pyaudio]"
 
-# Server-side only
-pip install "strands-agents[bidi,bidi-openai]"
+# With terminal text I/O
+pip install "strands-agents[bidi-io,bidi-openai]"
 ```
 (( /tab "OpenAI Realtime" ))
 
 (( tab "Google Gemini Live" ))
 ```bash
 # With local audio I/O
-pip install "strands-agents[bidi,bidi-pyaudio,bidi-google]"
+pip install "strands-agents[bidi-google,bidi-io,bidi-pyaudio]"
 
-# Server-side only
-pip install "strands-agents[bidi,bidi-google]"
+# With terminal text I/O
+pip install "strands-agents[bidi-google,bidi-io]"
 ```
 (( /tab "Google Gemini Live" ))
 
 Server-Side Deployments
 
-The `bidi-pyaudio` extra provides PyAudio for direct microphone and speaker access. For server deployments where clients handle audio I/O, omit `bidi-pyaudio` and implement custom I/O handlers using the `BidiInput` and `BidiOutput` protocols. See [I/O Channels](/docs/user-guide/concepts/bidirectional-streaming/io/index.md) for details.
+The `bidi-pyaudio` extra provides PyAudio for direct microphone and speaker access. The `bidi-io` extra provides terminal text input and transcript rendering. For server deployments where clients handle audio I/O, omit `bidi-pyaudio` and implement custom I/O handlers using the `BidiInput` and `BidiOutput` protocols. See [I/O Channels](/docs/user-guide/concepts/bidirectional-streaming/io/index.md) for details.
 
 ### Platform-Specific Audio Setup
 
@@ -154,42 +154,16 @@ And that’s it! We now have a voice-enabled agent that can:
 -   Listen to your voice through the microphone
 -   Process speech in real-time
 -   Respond with natural voice output
+-   Display live user and assistant transcripts
 -   Handle interruptions when you start speaking
 
 Stopping the Conversation
 
 The `run()` method runs indefinitely. See [Controlling Conversation Lifecycle](#controlling-conversation-lifecycle) for proper ways to stop conversations.
 
-## Adding Text I/O
+## Live Transcripts
 
-Combine audio with text input/output for debugging or multi-modal interactions:
-
-```python
-import asyncio
-from strands.experimental.bidi import BidiAgent, BidiAudioIO
-from strands.experimental.bidi.io import BidiTextIO
-from strands.experimental.bidi.models import BedrockNovaSonicModel
-
-model = BedrockNovaSonicModel()
-agent = BidiAgent(
-    model=model,
-    system_prompt="You are a helpful assistant."
-)
-
-# Setup both audio and text I/O
-audio_io = BidiAudioIO()
-text_io = BidiTextIO()
-
-async def main():
-    await agent.run(
-        inputs=[audio_io.input()],
-        outputs=[audio_io.output(), text_io.output()]  # Both audio and text
-    )
-
-asyncio.run(main())
-```
-
-Now you’ll see transcripts printed to the console while audio plays through your speakers.
+`BidiAudioIO.output()` displays user and assistant transcripts while audio plays through the speakers. User speech appears in shaded `>` blocks and assistant speech appears as plain text.
 
 ## Controlling Conversation Lifecycle
 
@@ -289,7 +263,7 @@ Each provider has different features, timeout limits, and audio quality. See the
 
 ## Configuring Audio Settings
 
-Customize audio configuration for both the model and I/O:
+Choose supported audio settings on the model and device buffering on the I/O channel:
 
 ```python
 import asyncio
@@ -299,13 +273,8 @@ from strands.experimental.bidi.models import GoogleGeminiLiveModel
 
 # Configure model audio settings
 model = GoogleGeminiLiveModel(
-    provider_config={
-        "audio": {
-            "input_rate": 48000,   # Higher quality input
-            "output_rate": 24000,  # Standard output
-            "voice": "Puck"
-        }
-    }
+    audio={"input": {"sample_rate": 48000}},
+    voice="Puck",
 )
 
 # Configure I/O buffer settings
@@ -327,7 +296,7 @@ async def main():
 asyncio.run(main())
 ```
 
-The I/O automatically configures hardware to match the model’s audio requirements.
+`BidiAudioIO` reads the model’s resolved input and output formats through `get_audio_config()`. You do not need to repeat rates or channel counts on the I/O channel.
 
 ## Handling Interruptions
 

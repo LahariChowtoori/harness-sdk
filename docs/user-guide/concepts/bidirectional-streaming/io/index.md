@@ -82,10 +82,10 @@ Out of the box, Strands provides `BidiAudioIO` to help connect your microphone a
 
 Installation Required
 
-`BidiAudioIO` requires the `bidi-pyaudio` extra and the PortAudio system library:
+`BidiAudioIO` requires the `bidi-io` and `bidi-pyaudio` extras plus the PortAudio system library:
 
 ```bash
-pip install "strands-agents[bidi,bidi-pyaudio]"
+pip install "strands-agents[bidi,bidi-io,bidi-pyaudio]"
 ```
 
 ```python
@@ -110,9 +110,13 @@ async def main():
 asyncio.run(main())
 ```
 
-This creates a voice-enabled agent that captures audio from your microphone, streams it to the model in real-time, and plays responses through your speakers.
+This creates a voice-enabled agent that captures audio from your microphone, streams it to the model in real time, and plays responses through your speakers.
+
+Audio output also displays live transcripts, with user speech in shaded `>` blocks and assistant speech as plain text. The next user prompt appears when response generation finishes or is interrupted.
 
 ### Configurations
+
+Use these options to configure audio devices and buffering:
 
 | Parameter | Description | Example | Default |
 | --- | --- | --- | --- |
@@ -122,6 +126,10 @@ This creates a voice-enabled agent that captures audio from your microphone, str
 | `output_buffer_size` | Maximum number of audio chunks to buffer for speaker playback before dropping oldest. | `2048` | None (unbounded) |
 | `output_device_index` | Specific speaker device ID to use for audio output. | `2` | None (system default) |
 | `output_frames_per_buffer` | Number of audio frames to be written per output callback (affects latency and performance). | `1024` | 512 |
+
+Configure voice and supported sample rates on the model. `BidiAudioIO` reads `model.get_audio_config()`, which returns separate `input` and `output` dictionaries, each containing `sample_rate`, `channels`, and `format`. It uses those values to configure capture and playback, so you do not need to repeat them on the I/O channel.
+
+`BidiAudioIO` requires signed 16-bit little-endian PCM. Starting a device stream with another encoding raises `ValueError`. Use custom I/O for other encodings.
 
 ### Interruption Handling
 
@@ -137,10 +145,10 @@ Strands also provides `BidiTextIO` for terminal-based text input and output usin
 
 Installation Required
 
-`BidiTextIO` is included with the `bidi` extra:
+`BidiTextIO` is included with the `bidi-io` extra:
 
 ```bash
-pip install "strands-agents[bidi]"
+pip install "strands-agents[bidi-io]"
 ```
 
 ```python
@@ -167,8 +175,6 @@ asyncio.run(main())
 
 This creates a text-based agent that reads user input from the terminal and prints transcripts and responses to the console.
 
-Note, the agent provides a preview of what it is about to say before producing the final output. This preview text is prefixed with `Preview:`.
-
 ### Configurations
 
 | Parameter | Description | Example | Default |
@@ -192,7 +198,7 @@ app = FastAPI()
 
 @app.websocket("/text-chat")
 async def text_chat(websocket: WebSocket) -> None:
-    model = OpenAIRealtimeModel(client_config={"api_key": "<OPENAI_API_KEY>"})
+    model = OpenAIRealtimeModel(api_key="<OPENAI_API_KEY>")
     agent = BidiAgent(model=model)
 
     try:
@@ -221,8 +227,8 @@ async def main():
 
     while True:
         output_event = json.loads(await websocket.recv())
-        if output_event["type"] == "bidi_transcript_stream" and output_event["is_final"]:
-            print(output_event["text"])
+        if output_event["type"] == "bidi_transcript_complete":
+            print(output_event["transcript"])
             break
 
     await websocket.close()
@@ -252,3 +258,4 @@ if __name__ == "__main__":
 
 - [harness-sdk/strands-py/src/strands/experimental/bidi/io/text.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py)
 - [harness-sdk/strands-py/src/strands/experimental/bidi/io/audio.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/audio.py)
+- [harness-sdk/strands-py/src/strands/experimental/bidi/io/transcript.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/transcript.py)

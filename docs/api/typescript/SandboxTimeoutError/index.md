@@ -1,6 +1,8 @@
-Defined in: [src/sandbox/errors.ts:11](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/sandbox/errors.ts#L11)
+Defined in: [src/sandbox/errors.ts:13](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/sandbox/errors.ts#L13)
 
 Thrown by sandbox execution when the configured `timeout` elapses.
+
+`stdout` and `stderr` hold whatever the process wrote before it was killed.
 
 ## Extends
 
@@ -11,16 +13,22 @@ Thrown by sandbox execution when the configured `timeout` elapses.
 ### Constructor
 
 ```ts
-new SandboxTimeoutError(seconds): SandboxTimeoutError;
+new SandboxTimeoutError(
+   seconds,
+   stdout?,
+   stderr?
+): SandboxTimeoutError;
 ```
 
-Defined in: [src/sandbox/errors.ts:12](https://github.com/strands-agents/harness-sdk/blob/57d070582e9bd93afb549b4d2f976ce0dbaf03b6/strands-ts/src/sandbox/errors.ts#L12)
+Defined in: [src/sandbox/errors.ts:14](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/sandbox/errors.ts#L14)
 
 #### Parameters
 
-| Parameter | Type |
-| --- | --- |
-| `seconds` | `number` |
+| Parameter | Type | Default value |
+| --- | --- | --- |
+| `seconds` | `number` | `undefined` |
+| `stdout` | `string` | `''` |
+| `stderr` | `string` | `''` |
 
 #### Returns
 
@@ -31,3 +39,23 @@ Defined in: [src/sandbox/errors.ts:12](https://github.com/strands-agents/harness
 ```ts
 Error.constructor
 ```
+
+## Properties
+
+### stdout
+
+```ts
+readonly stdout: string = '';
+```
+
+Defined in: [src/sandbox/errors.ts:16](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/sandbox/errors.ts#L16)
+
+---
+
+### stderr
+
+```ts
+readonly stderr: string = '';
+```
+
+Defined in: [src/sandbox/errors.ts:17](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/sandbox/errors.ts#L17)
