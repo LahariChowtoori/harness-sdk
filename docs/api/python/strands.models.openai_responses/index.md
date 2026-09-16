@@ -79,7 +79,7 @@ Initialize provider instance.
 **Arguments**:
 
 -   `client_args` - Arguments for the OpenAI client. For a complete list of supported arguments, see [https://pypi.org/project/openai/](https://pypi.org/project/openai/). May be combined with `bedrock_mantle_config`; when both are set, the config derives `base_url` and `api_key` (which must not appear in `client_args`).
--   `bedrock_mantle_config` - Route requests through Amazon Bedrock’s Mantle (OpenAI-compatible) endpoint. See :class:`BedrockMantleConfig` for accepted keys. When set, a fresh bearer token is minted on every request.
+-   `bedrock_mantle_config` - Route requests through one of Amazon Bedrock’s OpenAI-compatible endpoints, `bedrock-mantle` (the default) or `bedrock-runtime` via the config’s `endpoint` key. See :class:`BedrockMantleConfig` for accepted keys. When set, a fresh bearer token is minted on every request.
 -   `**model_config` - Configuration options for the OpenAI Responses API model.
 
 #### stateful
@@ -90,7 +90,7 @@ Initialize provider instance.
 def stateful() -> bool
 ```
 
-Defined in: [src/strands/models/openai\_responses.py:213](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L213)
+Defined in: [src/strands/models/openai\_responses.py:215](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L215)
 
 Whether server-side conversation storage is enabled.
 
@@ -103,7 +103,7 @@ Derived from the `stateful` configuration option.
 def update_config(**model_config: Unpack[OpenAIResponsesConfig]) -> None
 ```
 
-Defined in: [src/strands/models/openai\_responses.py:221](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L221)
+Defined in: [src/strands/models/openai\_responses.py:223](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L223)
 
 Update the OpenAI Responses API model configuration with the provided arguments.
 
@@ -118,7 +118,7 @@ Update the OpenAI Responses API model configuration with the provided arguments.
 def get_config() -> OpenAIResponsesConfig
 ```
 
-Defined in: [src/strands/models/openai\_responses.py:231](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L231)
+Defined in: [src/strands/models/openai\_responses.py:233](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L233)
 
 Get the OpenAI Responses API model configuration.
 
@@ -137,7 +137,7 @@ async def count_tokens(
         system_prompt_content: list[SystemContentBlock] | None = None) -> int
 ```
 
-Defined in: [src/strands/models/openai\_responses.py:243](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L243)
+Defined in: [src/strands/models/openai\_responses.py:245](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L245)
 
 Count tokens using the OpenAI Responses API input\_tokens.count endpoint.
 
@@ -168,7 +168,7 @@ async def stream(messages: Messages,
                  **kwargs: Any) -> AsyncGenerator[StreamEvent, None]
 ```
 
-Defined in: [src/strands/models/openai\_responses.py:295](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L295)
+Defined in: [src/strands/models/openai\_responses.py:297](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L297)
 
 Stream conversation with the OpenAI Responses API model.
 
@@ -202,7 +202,7 @@ async def structured_output(
         **kwargs: Any) -> AsyncGenerator[dict[str, T | Any], None]
 ```
 
-Defined in: [src/strands/models/openai\_responses.py:506](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L506)
+Defined in: [src/strands/models/openai\_responses.py:508](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/openai_responses.py#L508)
 
 Get structured output from the OpenAI Responses API model.
 

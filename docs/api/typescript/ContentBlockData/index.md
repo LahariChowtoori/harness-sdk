@@ -33,7 +33,7 @@ type ContentBlockData =
 };
 ```
 
-Defined in: [src/types/messages.ts:178](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/types/messages.ts#L178)
+Defined in: [src/types/messages.ts:178](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/messages.ts#L178)
 
 A block of content within a message. Content blocks can contain text, tool usage requests, tool results, reasoning content, cache points, guard content, or media (audio, image, video, document).
 

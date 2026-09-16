@@ -415,7 +415,7 @@ Result object containing:
 
 -   `ConcurrencyException` - If another invocation is already in progress on this agent instance.
 -   `IdempotencyAbortedError` - If this call is a duplicate of an inflight `idempotency_token` whose primary invocation was aborted before producing a result.
--   `TypeError` - If a value in `limits` is not a positive integer.
+-   `TypeError` - If `limits` contains an unrecognized key or a value that is not a positive integer.
 -   `Exception` - Any exceptions from the agent invocation will be propagated to the caller.
 
 #### invoke\_async
@@ -471,7 +471,7 @@ This method implements the conversational interface with multiple input patterns
 
 -   `ConcurrencyException` - If another invocation is already in progress on this agent instance.
 -   `IdempotencyAbortedError` - If this call is a duplicate of an inflight `idempotency_token` whose primary invocation was aborted before producing a result.
--   `TypeError` - If a value in `limits` is not a positive integer.
+-   `TypeError` - If `limits` contains an unrecognized key or a value that is not a positive integer.
 -   `Exception` - Any exceptions from the agent invocation will be propagated to the caller.
 
 #### structured\_output
@@ -701,7 +701,7 @@ An async iterator that yields events. Each event is a dictionary containing info
 
 -   `ConcurrencyException` - If another invocation is already in progress on this agent instance.
 -   `IdempotencyAbortedError` - If this call is a duplicate of an inflight `idempotency_token` whose primary invocation was aborted before producing a result.
--   `TypeError` - If a value in `limits` is not a positive integer.
+-   `TypeError` - If `limits` contains an unrecognized key or a value that is not a positive integer.
 -   `Exception` - Any exceptions from the agent invocation will be propagated to the caller.
 
 **Example**:
@@ -722,7 +722,7 @@ def take_snapshot(*,
                   app_data: dict[str, Any] | None = None) -> Snapshot
 ```
 
-Defined in: [src/strands/agent/agent.py:1911](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent.py#L1911)
+Defined in: [src/strands/agent/agent.py:1916](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent.py#L1916)
 
 Capture current agent state as an in-memory snapshot.
 
@@ -747,7 +747,7 @@ A Snapshot containing the captured agent state.
 def load_snapshot(snapshot: Snapshot) -> None
 ```
 
-Defined in: [src/strands/agent/agent.py:1959](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent.py#L1959)
+Defined in: [src/strands/agent/agent.py:1964](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent.py#L1964)
 
 Restore agent state from a previously captured snapshot.
 

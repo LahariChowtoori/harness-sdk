@@ -89,6 +89,7 @@
     -   [Local File Storage](/docs/api/python/strands.storage.local_file_storage)
     -   [S3 Storage](/docs/api/python/strands.storage.s3_storage)
     -   **Search**
+        -   [Bm25](/docs/api/python/strands.storage.search.bm25)
         -   [Keyword](/docs/api/python/strands.storage.search.keyword)
         -   [Types](/docs/api/python/strands.storage.search.types)
     -   [Storage](/docs/api/python/strands.storage.storage)
@@ -212,6 +213,8 @@
         -   **Tools**
             -   [Stop Conversation](/docs/api/python/strands.experimental.bidi.tools.stop_conversation)
         -   **Types**
+            -   [Agent](/docs/api/python/strands.experimental.bidi.types.agent)
+            -   [Content](/docs/api/python/strands.experimental.bidi.types.content)
             -   [Events](/docs/api/python/strands.experimental.bidi.types.events)
             -   [Io](/docs/api/python/strands.experimental.bidi.types.io)
     -   **Checkpoint**

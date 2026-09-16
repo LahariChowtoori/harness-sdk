@@ -26,7 +26,12 @@
   - [prompts](https://strandsagents.com/docs/user-guide/concepts/agents/prompts/index.md): Write system prompts and user messages for Strands agents. Covers multi-modal prompting, direct tool calls, and prompt engineering with agent SOPs.
   - [hooks](https://strandsagents.com/docs/user-guide/concepts/agents/hooks/index.md): Intercept and customize agent behavior at every step. Hooks let you add logging, validation, guardrails, and custom logic to the agent loop.
   - [conversation-management](https://strandsagents.com/docs/user-guide/concepts/agents/conversation-management/index.md): Keep long agent conversations within token limits using sliding window and summarizing conversation managers in the Strands Agents SDK.
-  - [context-management](https://strandsagents.com/docs/user-guide/concepts/context-management/index.md): Manage your agent's context window as conversations grow and tool results accumulate.
+  - Context Management
+    - [Overview](https://strandsagents.com/docs/user-guide/concepts/context-management/index.md): Manage your agent's context window as conversations grow and tool results accumulate.
+    - [built-in-modes](https://strandsagents.com/docs/user-guide/concepts/context-management/built-in-modes/index.md): Auto and agentic context management modes with tuned defaults for most agents.
+    - [custom-strategies](https://strandsagents.com/docs/user-guide/concepts/context-management/custom-strategies/index.md): Build custom context management strategies with the Offload builder API, conditions, targets, and stash configuration.
+    - [presets](https://strandsagents.com/docs/user-guide/concepts/context-management/presets/index.md): Named strategy presets that expand to preconfigured Offload strategies for common context management patterns.
+    - [context-estimation](https://strandsagents.com/docs/user-guide/concepts/context-management/context-estimation/index.md): How the SDK estimates token counts, context window utilization, and context window limits.
   - Memory
     - [Overview](https://strandsagents.com/docs/user-guide/concepts/memory/overview/index.md): Give agents long-term memory across sessions: store facts to configurable backends, recall them via tools or injection, and extract them automatically.
     - [test-memory-store](https://strandsagents.com/docs/user-guide/concepts/memory/test-memory-store/index.md): A zero-infrastructure memory store backed by a local JSON file: no cloud account, lexical recall, and memories that survive across sessions.
@@ -318,6 +323,8 @@
 - [strands.experimental.bidi.models.model](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.model/index.md)
 - [strands.experimental.bidi.models.openai](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.openai/index.md)
 - [strands.experimental.bidi.tools.stop_conversation](https://strandsagents.com/docs/api/python/strands.experimental.bidi.tools.stop_conversation/index.md)
+- [strands.experimental.bidi.types.agent](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.agent/index.md)
+- [strands.experimental.bidi.types.content](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.content/index.md)
 - [strands.experimental.bidi.types.events](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.events/index.md)
 - [strands.experimental.bidi.types.io](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.io/index.md)
 - [strands.experimental.checkpoint.checkpoint](https://strandsagents.com/docs/api/python/strands.experimental.checkpoint.checkpoint/index.md)
@@ -381,6 +388,7 @@
 - [strands.storage.in_memory_storage](https://strandsagents.com/docs/api/python/strands.storage.in_memory_storage/index.md)
 - [strands.storage.local_file_storage](https://strandsagents.com/docs/api/python/strands.storage.local_file_storage/index.md)
 - [strands.storage.s3_storage](https://strandsagents.com/docs/api/python/strands.storage.s3_storage/index.md)
+- [strands.storage.search.bm25](https://strandsagents.com/docs/api/python/strands.storage.search.bm25/index.md)
 - [strands.storage.search.keyword](https://strandsagents.com/docs/api/python/strands.storage.search.keyword/index.md)
 - [strands.storage.search.types](https://strandsagents.com/docs/api/python/strands.storage.search.types/index.md)
 - [strands.storage.storage](https://strandsagents.com/docs/api/python/strands.storage.storage/index.md)
@@ -812,6 +820,7 @@
 
 - [Changelog](https://strandsagents.com/changelog/index.md): All releases across the Harness and Evals SDKs
 - Harness Python
+  - [v1.56.0](https://strandsagents.com/changelog/harness/python-v1.56.0/index.md): Harness Python v1.56.0 (2026-09-15)
   - [v1.55.1](https://strandsagents.com/changelog/harness/python-v1.55.1/index.md): Harness Python v1.55.1 (2026-09-09)
   - [v1.55.0](https://strandsagents.com/changelog/harness/python-v1.55.0/index.md): Harness Python v1.55.0 (2026-09-08)
   - [v1.54.0](https://strandsagents.com/changelog/harness/python-v1.54.0/index.md): Harness Python v1.54.0 (2026-08-27)
@@ -888,8 +897,10 @@
   - [v0.1.1](https://strandsagents.com/changelog/harness/python-v0.1.1/index.md): Harness Python v0.1.1 (2025-05-17)
   - [v0.1.0](https://strandsagents.com/changelog/harness/python-v0.1.0/index.md): Harness Python v0.1.0 (2025-05-16)
 - Harness TypeScript
+  - [v1.18.0](https://strandsagents.com/changelog/harness/typescript-v1.18.0/index.md): Harness TypeScript v1.18.0 (2026-09-15)
   - [v1.17.0](https://strandsagents.com/changelog/harness/typescript-v1.17.0/index.md): Harness TypeScript v1.17.0 (2026-09-08)
   - [v1.16.0](https://strandsagents.com/changelog/harness/typescript-v1.16.0/index.md): Harness TypeScript v1.16.0 (2026-08-31)
+  - [v1.15.0](https://strandsagents.com/changelog/harness/typescript-v1.15.0/index.md): Harness TypeScript v1.15.0 (2026-08-27)
   - [v1.14.0](https://strandsagents.com/changelog/harness/typescript-v1.14.0/index.md): Harness TypeScript v1.14.0 (2026-08-21)
   - [v1.13.0](https://strandsagents.com/changelog/harness/typescript-v1.13.0/index.md): Harness TypeScript v1.13.0 (2026-08-12)
   - [v1.12.0](https://strandsagents.com/changelog/harness/typescript-v1.12.0/index.md): Harness TypeScript v1.12.0 (2026-08-07)
@@ -929,6 +940,7 @@
   - [v0.1.1](https://strandsagents.com/changelog/harness/typescript-v0.1.1/index.md): Harness TypeScript v0.1.1 (2025-12-03)
   - [v0.1.0](https://strandsagents.com/changelog/harness/typescript-v0.1.0/index.md): Harness TypeScript v0.1.0 (2025-12-03)
 - Evals
+  - [v1.3.0](https://strandsagents.com/changelog/evals/v1.3.0/index.md): Evals v1.3.0 (2026-09-15)
   - [v1.2.0](https://strandsagents.com/changelog/evals/v1.2.0/index.md): Evals v1.2.0 (2026-08-21)
   - [v1.1.1](https://strandsagents.com/changelog/evals/v1.1.1/index.md): Evals v1.1.1 (2026-08-12)
   - [v1.1.0](https://strandsagents.com/changelog/evals/v1.1.0/index.md): Evals v1.1.0 (2026-08-07)

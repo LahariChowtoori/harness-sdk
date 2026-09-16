@@ -119,7 +119,11 @@ The rendered text is a prompt-injection surface. If it interpolates attacker-inf
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (1 shared tag)
 - [Skills](/docs/user-guide/concepts/plugins/skills/index.md) (1 shared tag)
 - [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (1 shared tag)
 - [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (1 shared tag)

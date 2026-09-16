@@ -10083,7 +10083,7 @@ As conversations grow, managing this context becomes increasingly important for 
 
 Quick setup
 
-For most agents, you can skip manual configuration entirely. See [Context Management](/docs/user-guide/concepts/context-management/index.md).
+For most agents, pass `context_manager="auto"``contextManager: "auto"` and skip manual configuration. See [Context Management](/docs/user-guide/concepts/context-management/index.md). When `context_manager``contextManager` is set, the ContextManager owns all context reduction and any co-provided `conversation_manager``conversationManager` is ignored.
 
 ## Built-in Conversation Managers
 
@@ -10572,68 +10572,6 @@ Each conversation manager uses the same reduction logic for proactive compressio
 
 Because `BeforeModelCallEvent` triggers before every model call including calls within a tool-use cycle, this provides automatic in-loop compression. If an agent makes five tool calls in a single invocation and context grows past the threshold between calls three and four, compression triggers before call four.
 
-### Context Window Limit
-
-The threshold check requires the model’s context window size. The SDK auto-populates `contextWindowLimit` from built-in lookup tables ([Python](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/_defaults.py), [TypeScript](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/defaults.ts)) for known models. You can override it manually for models not in the lookup table:
-
-(( tab "Python" ))
-```python
-model = BedrockModel(
-    model_id="my-custom-model",
-    context_window_limit=128_000,
-)
-```
-(( /tab "Python" ))
-
-(( tab "TypeScript" ))
-```typescript
-const model = new BedrockModel({
-  modelId: 'my-custom-model',
-  contextWindowLimit: 128_000,
-})
-```
-(( /tab "TypeScript" ))
-
-Inaccurate compression with default fallback
-
-If `contextWindowLimit` is not set and the model ID is not in the built-in lookup table, the SDK falls back to a default of 200,000 tokens. When the default token limit is used but the model’s actual context window is significantly different, proactive compression will not behave correctly.
-
-### Token Estimation
-
-The agent estimates input tokens using the following strategy:
-
-1.  **Known baseline**: Reads `inputTokens + outputTokens` from the last assistant message’s `metadata.usage`
-2.  **Delta estimation**: Only estimates tokens for new messages added since that assistant message using the model’s `countTokens()` method
-3.  **Cold start fallback**: When no prior usage metadata exists (first call or after session restore without metadata), estimates all messages via `countTokens()`
-
-The `countTokens()` method uses a character-based heuristic to estimate token count by default (characters ÷ 4 for text, characters ÷ 2 for JSON). Some model providers support native token counting APIs for exact counts, which can be enabled on the model. See the Token Counting section on each provider’s page for details and instructions:
-
--   [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md#token-counting)
--   [Anthropic](/docs/user-guide/concepts/model-providers/anthropic/index.md#token-counting)
--   [Google Gemini](/docs/user-guide/concepts/model-providers/google/index.md#token-counting)
--   [OpenAI Responses](/docs/user-guide/concepts/model-providers/openai-responses/index.md#token-counting)
--   [llama.cpp](/docs/user-guide/concepts/model-providers/llamacpp/index.md#token-counting)
-
-### Utilization Estimation
-
-The Model base class provides an `estimate_utilization(input_tokens)``estimateUtilization(inputTokens)` method that computes the fraction of the context window consumed by a given input token count. It uses the model’s configured `context_window_limit``contextWindowLimit` as the denominator, falling back to a default of 200,000 tokens when not set:
-
-(( tab "Python" ))
-```python
-ratio = model.estimate_utilization(input_tokens=projected_tokens)
-# ratio is 0–1+ (above 1.0 means overflow)
-```
-(( /tab "Python" ))
-
-(( tab "TypeScript" ))
-```typescript
-const ratio = model.estimateUtilization(projectedTokens)
-// ratio is 0–1+ (above 1.0 means overflow)
-```
-(( /tab "TypeScript" ))
-
-This method resolves the model’s `context_window_limit``contextWindowLimit` (falling back to the 200,000 default with a warning when not configured) and returns `inputTokens / contextWindowLimit`. The SDK’s built-in conversation managers use this internally for proactive compression decisions, but you can also call it directly when building custom context management logic.
-
 ## Creating a ConversationManager
 
 (( tab "Python" ))
@@ -10720,16 +10658,16 @@ See the [SlidingWindowConversationManager](https://github.com/strands-agents/har
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
 - [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
-- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Storage](/docs/user-guide/concepts/storage/index.md) (1 shared tag)
+- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -14782,12 +14720,12 @@ For guidance on writing safe and responsible prompts, including defending agains
 - [Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (2 shared tags)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (2 shared tags)
 - [Steering (Plugins)](/docs/user-guide/concepts/plugins/steering/index.md) (2 shared tags)
+- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
 - [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Harmfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
 - [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -17239,7 +17177,7 @@ The `BidiAgent` is a specialized agent designed for real-time bidirectional stre
 flowchart TB
     subgraph User
         A[Microphone] --> B[Audio Input]
-        C[Text Input] --> D[Input Events]
+        C[Text Input] --> D[Input Content]
         B --> D
     end
 
@@ -17732,56 +17670,65 @@ async def main():
 asyncio.run(main())
 ```
 
-## Input Event Types
+## Input Types
 
-Events sent to the model via `agent.send()`.
+Send text, audio, or images with `agent.send()`. It accepts a string, a `TextBlock`, `AudioBlock`, or `ImageBlock`, or a dictionary containing exactly one `text`, `audio`, or `image` key.
 
-### BidiTextInputEvent
+### Text
 
 Send text input to the model.
 
 ```python
+from strands.types.content import TextBlock
+
+await agent.send(TextBlock("What is the weather?"))
+
+# Strings and dictionaries are also accepted:
 await agent.send("What is the weather?")
-# Or explicitly:
-from strands.experimental.bidi.types.events import BidiTextInputEvent
-await agent.send(BidiTextInputEvent(text="What is the weather?", role="user"))
+await agent.send({"text": "What is the weather?"})
 ```
 
-### BidiAudioInputEvent
+### Audio
 
-Send audio input to the model. Audio must be base64-encoded.
+Send audio bytes using an audio content block. The model configuration determines the sample rate and channel count for real-time PCM audio.
 
 ```python
-import base64
-from strands.experimental.bidi.types.events import BidiAudioInputEvent
+from pathlib import Path
 
-audio_bytes = record_audio()  # Your audio capture logic
-audio_base64 = base64.b64encode(audio_bytes).decode('utf-8')
+from strands.types.media import AudioBlock
 
-await agent.send(BidiAudioInputEvent(
-    audio=audio_base64,
-    format="pcm",
-    sample_rate=16000,
-    channels=1
-))
+audio_bytes = Path("audio.pcm").read_bytes()
+
+await agent.send(AudioBlock(format="pcm", source={"bytes": audio_bytes}))
+
+# Or use a dictionary:
+await agent.send({
+    "audio": {
+        "format": "pcm",
+        "source": {"bytes": audio_bytes},
+    }
+})
 ```
 
-### BidiImageInputEvent
+### Image
 
-Send image input to the model. Images must be base64-encoded.
+Send image bytes using an image content block.
 
 ```python
-import base64
-from strands.experimental.bidi.types.events import BidiImageInputEvent
+from strands.types.media import ImageBlock
 
 with open("image.jpg", "rb") as f:
     image_bytes = f.read()
-    image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
-await agent.send(BidiImageInputEvent(
-    image=image_base64,
-    mime_type="image/jpeg"
-))
+await agent.send(ImageBlock(format="jpeg", source={"bytes": image_bytes}))
+
+# Or use a dictionary:
+await agent.send({
+    "image": {
+        "format": "jpeg",
+        "source": {"bytes": image_bytes},
+    }
+})
 ```
 
 ## Output Event Types
@@ -18282,8 +18229,12 @@ For details on hook events and usage patterns, see the [Hooks](/docs/user-guide/
 
 ### Python
 
+- [harness-sdk/strands-py/src/strands/experimental/bidi/types/agent.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/agent.py)
+- [harness-sdk/strands-py/src/strands/experimental/bidi/types/content.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/content.py)
+- [harness-sdk/strands-py/src/strands/types/content.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/content.py)
 - [harness-sdk/strands-py/src/strands/experimental/bidi/types/events.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py)
 - [harness-sdk/strands-py/src/strands/experimental/bidi/types/io.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py)
+- [harness-sdk/strands-py/src/strands/types/media.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py)
 
 Source: https://strandsagents.com/docs/user-guide/concepts/bidirectional-streaming/events/index.md
 
@@ -18596,7 +18547,7 @@ For more guidance on performance, errors, and composition, see the [Hooks docume
 - [Bidirectional Streaming Observability](/docs/user-guide/concepts/bidirectional-streaming/observability/index.md) (1 shared tag)
 - [Plugins](/docs/user-guide/concepts/plugins/index.md) (1 shared tag)
 - [Voice & Realtime Quickstart](/docs/user-guide/concepts/bidirectional-streaming/quickstart/index.md) (1 shared tag)
-- [Agent Loop](/docs/user-guide/concepts/agents/agent-loop/index.md) (1 shared tag)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -18848,46 +18799,47 @@ flowchart LR
 
 ## I/O Interfaces
 
-The bidi-agent uses two protocol interfaces that define how data flows in and out of conversations:
+The bidi agent uses two protocol interfaces that define how data flows in and out of conversations:
 
--   `BidiInput`: A callable protocol for reading data from sources (microphone, keyboard, WebSocket) and converting it into `BidiInputEvent` objects that the agent can process.
--   `BidiOutput`: A callable protocol for receiving `BidiOutputEvent` objects from the agent and handling them appropriately (playing audio, displaying text, sending over network).
+-   `BidiInput`: A callable protocol for reading data from sources such as a microphone, keyboard, or WebSocket and returning `BidiAgentInput`.
+-   `BidiOutput`: A callable protocol for receiving `BidiOutputEvent` objects from the agent and handling them appropriately.
 
-Both protocols include optional lifecycle methods (`start` and `stop`) for resource management, allowing you to initialize connections, allocate hardware, or clean up when the conversation begins and ends.
+Both protocols include optional lifecycle methods (`start` and `stop`) for resource management.
 
 Implementation of these protocols will look as follows:
 
 ```python
-from strands.experimental.bidi import BidiAgent
-from strands_tools import stop
+from strands.experimental.bidi import BidiAgent, BidiAgentInput
 from strands.experimental.bidi.types.events import BidiOutputEvent
 from strands.experimental.bidi.types.io import BidiInput, BidiOutput
 
 
 class MyBidiInput(BidiInput):
     async def start(self, agent: BidiAgent) -> None:
-        # start up input resources if required
-        # extract information from agent if required
+        # Initialize input resources or state, using agent as needed.
+        return
 
-    async def __call__(self) -> BidiInputEvent:
-        # await reading input data
-        # format into specific BidiInputEvent
+    async def __call__(self) -> BidiAgentInput:
+        # Read or generate input and return a BidiAgentInput value.
+        return {"text": "Hello"}
 
-    async def stop() -> None:
-        # tear down input resources if required
+    async def stop(self) -> None:
+        # Clean up any input resources or state.
+        return
 
 
 class MyBidiOutput(BidiOutput):
     async def start(self, agent: BidiAgent) -> None:
-        # start up output resources if required
-        # extract information from agent if required
+        # Initialize output resources or state, using agent as needed.
+        return
 
     async def __call__(self, event: BidiOutputEvent) -> None:
-        # extract data from event
-        # await outputing data
+        # Process the event as needed for your application.
+        print(event)
 
-    async def stop() -> None:
-        # tear down output resources if required
+    async def stop(self) -> None:
+        # Clean up any output resources or state.
+        return
 ```
 
 ## I/O Usage
@@ -19058,8 +19010,8 @@ import websockets
 async def main():
     websocket = await websockets.connect("ws://localhost:8000/text-chat")
 
-    input_event = {"type": "bidi_text_input", "text": "Hello, how are you?"}
-    await websocket.send(json.dumps(input_event))
+    input_content = {"text": "Hello, how are you?"}
+    await websocket.send(json.dumps(input_content))
 
     while True:
         output_event = json.loads(await websocket.recv())
@@ -19161,15 +19113,13 @@ if __name__ == "__main__":
 
 ## Cross-Modal Input
 
-Nova Sonic accepts text input at any point during an active voice session, without interrupting or waiting on the audio stream. Send a [`BidiTextInputEvent`](/docs/user-guide/concepts/bidirectional-streaming/events/index.md#biditextinputevent) the same way you would outside of a live conversation:
+Nova Sonic accepts text input at any point during an active voice session, without interrupting or waiting on the audio stream. Send a [text content block](/docs/user-guide/concepts/bidirectional-streaming/events/index.md#text) the same way you would outside of a live conversation:
 
 ```python
-from strands.experimental.bidi.types.events import BidiTextInputEvent
-
-await agent.send(BidiTextInputEvent(text="What's the weather in Seattle?"))
+await agent.send({"text": "What's the weather in Seattle?"})
 ```
 
-Text and audio input can be interleaved freely; sending text does not require pausing the microphone or waiting for the model to finish speaking.
+Text and audio input can be interleaved freely. Sending text does not require pausing the microphone or waiting for the model to finish speaking.
 
 ## Credentials
 
@@ -20771,15 +20721,11 @@ Source: https://strandsagents.com/docs/user-guide/concepts/bidirectional-streami
 
 As conversations grow, your agent’s context window fills with messages, tool results, and system prompts. Without management, this leads to token limit errors, degraded performance, and loss of relevant information.
 
-The SDK ships context management configurations that work out of the box. Pick a mode and the SDK wires up the pieces with tuned defaults. You can use explicit strategy configuration when you need fine-grained control.
+The SDK ships context management that works out of the box. Pick a mode and the SDK wires up an ordered strategy pipeline with tuned defaults.
 
-Migration note
+## Quick start
 
-The `SummarizingConversationManager`, `ContextOffloader`, and `conversation_manager` are superseded by the `ContextManager` strategy API described on this page. They continue to work for now. See [Migrating from the legacy API](#migrating-from-the-legacy-api) if you want to move over.
-
-## Automatic context management
-
-For most agents, enable automatic context management with no further configuration:
+Pass `context_manager="auto"``contextManager: "auto"` and the SDK manages context in the background:
 
 (( tab "Python" ))
 ```python
@@ -20799,18 +20745,103 @@ const agent = new Agent({
 ```
 (( /tab "TypeScript" ))
 
-The `context_manager="auto"``contextManager: "auto"` configuration uses the settings that performed best across [ContextBench](https://arxiv.org/abs/2602.05892) evaluations. On real code investigation tasks, costs dropped 55% while accuracy improved from 68% to 98%. See the [benchmark writeup](/blog/reduced-cost-better-isolation-more-resilience/index.md) for details.
+## How it works
 
--   **Large tool result offloading**: tool results over 1,500 tokens are replaced with a 750-token preview. The full content is stored in the stash, and the agent gets a `retrieve_context` tool to fetch it on demand.
--   **Proactive summarization**: when the context window reaches 85% utilization, older messages are summarized and replaced with a compact summary block. The four most recent matching messages remain unchanged.
+The `context_manager``contextManager` parameter is a first-class agent parameter, not a plugin. It creates a `ContextManager` that owns all context reduction for the agent.
+
+The ContextManager runs strategies as an ordered pipeline. Each strategy sees the output of the previous one. The SDK always appends an emergency truncation strategy as the final step, which only fires when the window is still overflowing after all other strategies have run.
+
+A stash stores all message content on arrival as JSON, before any strategy acts. Truncated or summarized content is preserved and retrievable on demand through the `retrieve_context``retrieve_context` tool, registered by default.
+
+When `context_manager``contextManager` is set, any co-provided `conversation_manager``conversationManager` is ignored. The ContextManager owns overflow recovery and proactive compression internally.
+
+## Choosing a mode
+
+| Value | Behavior |
+| --- | --- |
+| `"auto"` | Background compression with tuned defaults. No model involvement. |
+| `"agentic"` | Model-driven: the model manages its own context. |
+| Custom config | Full control over the strategy pipeline, targets, and conditions. |
+| `false` | No context management. Overflow errors propagate directly. |
+
+See [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) for details on `"auto"` and `"agentic"`. See [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) to build your own pipeline.
+
+## Limitations
+
+**Stateful models.** Stateful models manage conversation state server-side. Setting `context_manager``contextManager` with a stateful model raises an error.
+
+**In-memory stash.** The stash uses in-memory storage by default, which does not persist across process restarts. Configure a durable storage backend when using session management. See [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md#stash).
+
+## Related pages
+
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
+- [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
+- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
+- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+
+
+## Implementation
+
+### Python
+
+- [harness-sdk/strands-py/src/strands/_context_manager/context_manager.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/context_manager.py)
+
+### TypeScript
+
+- [harness-sdk/strands-ts/src/context-manager/context-manager.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/context-manager/context-manager.ts)
+
+Source: https://strandsagents.com/docs/user-guide/concepts/context-management/index.md
+
+---
+
+## Built-in Modes
+
+The SDK ships two built-in context management modes that work out of the box. Both create a `ContextManager` with tuned `Offload` strategies internally, so you don’t have to assemble strategies, thresholds, and storage by hand.
+
+For full control over the strategy pipeline, see [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md). For named shorthand configurations, see [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md).
+
+## Automatic context management
+
+Pass `context_manager="auto"``contextManager: "auto"` and the SDK manages context in the background with no model involvement:
+
+(( tab "Python" ))
+```python
+from strands import Agent
+
+agent = Agent(context_manager="auto")
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
+
+const agent = new Agent({
+  contextManager: 'auto',
+})
+```
+(( /tab "TypeScript" ))
+
+### What it sets up
+
+Two strategies whose defaults scored highest across [ContextBench](https://arxiv.org/abs/2602.05892) evaluations:
+
+-   **Truncate tool results** (threshold: 1,500 tokens, preview: 750 tokens): intercepts large tool results at execution time, stores them in the stash, and keeps a truncated preview in context. Registers a retrieval tool so the agent can fetch full content on demand.
+-   **Summarize on pressure** (utilization: 85%): when the context window reaches 85% capacity, summarizes the oldest messages to free space, preserving the 4 most recent messages verbatim.
 
 ## Agentic context management
 
 Experimental
 
-Agentic context management is experimental and may change in future versions. Use with caution in production environments.
+Agentic context management is experimental and may change in future versions.
 
-Agentic context management lets the model manage its own working memory. It sees how full the context window is and decides when to compress, what to compress, and what to protect.
+Auto mode compresses on a fixed threshold the SDK controls. Agentic mode hands that control to the model. Pass `context_manager="agentic"``contextManager: "agentic"` and the model manages its own working memory: it sees how full the context window is and chooses when to compress, what to compress, and what to protect.
 
 (( tab "Python" ))
 ```python
@@ -20830,9 +20861,13 @@ const agent = new Agent({
 ```
 (( /tab "TypeScript" ))
 
-The model is better positioned than a fixed threshold to know which messages still matter. A coding agent can drop a stale file it already edited while pinning the failing test it is working toward. A threshold cannot tell the difference; it compresses by age. Agentic mode trades tokens for that judgment.
+The model is better positioned than a threshold to know which messages still matter. A coding agent can drop a stale file it already edited while pinning the failing test it is working toward. A threshold cannot tell the difference; it compresses by age. Agentic mode trades tokens for that judgment.
 
-**Token-usage telemetry.** Before each model call, the SDK appends a status block to the latest message:
+### What it sets up
+
+Two things give the model the information and the levers to manage context.
+
+**Token-usage telemetry.** Before each model call, the SDK appends a status block to the latest message reporting how much of the window is in use:
 
 ```plaintext
 <context-status>
@@ -20841,108 +20876,206 @@ The model is better positioned than a fixed threshold to know which messages sti
 </context-status>
 ```
 
-**Three tools the model can call:**
+This is the signal the model acts on. It decides whether the window is full enough to compress, instead of waiting for a fixed cutoff.
 
--   `summarize_context` folds older messages into a model-written summary. The model chooses how many recent messages to keep verbatim and what to target.
--   `truncate_context` drops older messages outright. The model chooses how much history to keep.
--   `pin_context` marks messages that must survive compression.
+**Three tools the model can call**, each a different lever with its own choices:
 
-Use `context_manager="auto"``contextManager: "auto"` for most agents. It manages context in the background without asking the model when to act. Use `context_manager="agentic"``contextManager: "agentic"` when you want the model to judge relevance per message rather than compress on a fixed threshold.
+-   `summarize_context` folds older messages into a model-written summary. The model chooses how many recent messages to keep verbatim, how aggressively to summarize, and whether to target tool results, discussion, or both.
+-   `truncate_context` drops older messages outright when they no longer need preserving. The model again chooses how much recent history to keep and what kind of messages to target.
+-   `pin_context` marks messages that must survive compression: a user constraint, a key fact, the current task. Pinned messages are never evicted by either tool. The model can pin the current exchange, the last few messages, or specific ones.
 
-## Explicit strategy configuration
+Recent messages stay verbatim regardless, and the first user message is always preserved so the conversation stays valid. New tools may be added to agentic mode in future releases.
 
-Experimental
+Behind the tools, agentic mode also configures a `ContextManager` with truncation and summarization strategies. The truncation threshold is higher than auto mode (8,000 tokens versus 1,500), since the model is already managing context and benefits from seeing more tool output inline. Summarization only triggers on overflow (100% utilization), acting as a safety net if the model lets the window fill.
 
-The `ContextManager` strategy API is experimental and may change in future versions.
+### Choosing between auto and agentic
 
-Provide explicit context manager configuration when you need fine-grained control. Strategies are applied in order, and each one sees the output of the previous strategy.
+Use `"auto"` for most agents. It manages context in the background, with no model involvement and no extra tool calls. Reach for `"agentic"` when you want the model itself to decide what stays in context: it judges relevance per message rather than compressing on a fixed threshold. The tradeoff is the tokens the model spends reading telemetry and calling the tools.
+
+## Disabling context management
+
+To turn off all context management (no compression, no offloading), pass `false`:
 
 (( tab "Python" ))
 ```python
 from strands import Agent
-from strands.experimental.context_manager import ContextManager, Offload
-from strands.storage import LocalFileStorage
 
-agent = Agent(
-    context_manager=ContextManager(
-        strategies=[
-            # Offload large tool results; keep a 500-token preview in context
-            Offload.truncate(
-                "tool_results",
-                {"preview_tokens": 500},
-            ).when(threshold=2500),
-            # Summarize older messages when the window reaches 85% utilization
-            Offload.summarize("*").when(
-                utilization=0.85,
-                preserve_recent=2,
-            ),
-        ],
-        # Omit stash for in-memory storage, or provide durable storage.
-        stash={"storage": LocalFileStorage("./artifacts/")},
-    ),
+agent = Agent(context_manager=False)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
+
+const agent = new Agent({
+  contextManager: false,
+})
+```
+(( /tab "TypeScript" ))
+
+The agent runs without any context reduction. Overflow errors propagate directly. This is useful for short conversations or when you handle context externally.
+
+## Related pages
+
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
+- [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
+- [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
+- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
+- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+
+
+## Implementation
+
+### TypeScript
+
+- [harness-sdk/strands-ts/src/agent/agent.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts)
+- [harness-sdk/strands-ts/src/context-manager/context-manager.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/context-manager/context-manager.ts)
+
+### Python
+
+- [harness-sdk/strands-py/src/strands/_context_manager/modes/agentic/agentic_context.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/modes/agentic/agentic_context.py)
+
+Source: https://strandsagents.com/docs/user-guide/concepts/context-management/built-in-modes/index.md
+
+---
+
+## Context Estimation
+
+The SDK estimates how much of the model’s context window is in use so it can trigger compression before overflow. Three pieces work together: the context window limit, token counting, and utilization estimation.
+
+## Context window limit
+
+The threshold check requires the model’s context window size. The SDK auto-populates `context_window_limit``contextWindowLimit` from built-in lookup tables ([Python](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/_defaults.py), [TypeScript](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/defaults.ts)) for known models. Override it manually for models not in the lookup table:
+
+(( tab "Python" ))
+```python
+model = BedrockModel(
+    model_id="my-custom-model",
+    context_window_limit=128_000,
 )
 ```
 (( /tab "Python" ))
 
 (( tab "TypeScript" ))
 ```typescript
-import { Agent, Offload } from '@strands-agents/sdk'
-import { LocalFileStorage } from '@strands-agents/sdk/storage'
+import { BedrockModel } from '@strands-agents/sdk'
 
-const agent = new Agent({
-  contextManager: {
-    strategies: [
-      // Offload large tool results; keep a 500-token preview in context
-      Offload.truncate('toolResults', { previewTokens: 500 }).when({ threshold: 2500 }),
-      // Summarize older messages when the window reaches 85% utilization
-      Offload.summarize('*').when({ utilization: 0.85, preserveRecent: 2 }),
-    ],
-    // Stash keeps originals and registers a retrieve_context tool.
-    // Omit for in-memory storage, or provide durable storage.
-    stash: { storage: new LocalFileStorage('./artifacts/') },
-  },
+const model = new BedrockModel({
+  modelId: 'my-custom-model',
+  contextWindowLimit: 128_000,
 })
 ```
 (( /tab "TypeScript" ))
 
-### Strategy targets
+Inaccurate compression with default fallback
 
-The first argument to `Offload.*` controls what content the strategy considers:
+If
 
--   `"*"`: all eligible text and tool-result content
--   `"tool_results"``"toolResults"`: successful tool result blocks
--   `"tool_result_errors"``"toolResultErrors"`: errored tool results
--   `"assistant_text"``"assistantText"`: assistant text turns
--   `"user_text"``"userText"`: user text turns
--   `["bash", "read_file"]``["tool::bash", "tool::read_file"]`: results from specific named tools
--   `["!read_file"]``["!tool::read_file"]`: everything except `read_file` results
+`context_window_limit``contextWindowLimit`
 
-### Strategy conditions
+is not set and the model ID is not in the built-in lookup table, the SDK falls back to a default of 200,000 tokens. When the actual context window is significantly different, compression thresholds will not behave correctly.
 
-The conditions passed to `.when(...)` control when the strategy runs:
+## Token estimation
 
--   `threshold=N``threshold: N`: run when an individual block exceeds N tokens
--   `utilization=0.85``utilization: 0.85`: run when the context window is at least 85% full
--   `preserve_recent=N``preserveRecent: N`: preserve the N most recent matching messages. A decimal between 0 and 1 preserves that proportion of matching messages
+The agent estimates input tokens using the following strategy:
 
-### Named presets
+1.  **Known baseline**: reads `input_tokens + output_tokens``inputTokens + outputTokens` from the last assistant message’s usage metadata
+2.  **Delta estimation**: estimates tokens for new messages added since that baseline using the model’s `count_tokens()``countTokens()` method
+3.  **Cold start fallback**: when no prior usage metadata exists (first call or after session restore), estimates all messages via `count_tokens()``countTokens()`
 
-Preset names are available in both SDKs. Preset definitions may be tuned between releases.
+The `count_tokens()``countTokens()` method uses a character-based heuristic by default (characters / 4 for text, characters / 2 for JSON). Some model providers support native token counting APIs for exact counts. See the Token Counting section on each provider’s page:
+
+-   [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md#token-counting)
+-   [Anthropic](/docs/user-guide/concepts/model-providers/anthropic/index.md#token-counting)
+-   [Google Gemini](/docs/user-guide/concepts/model-providers/google/index.md#token-counting)
+-   [OpenAI Responses](/docs/user-guide/concepts/model-providers/openai-responses/index.md#token-counting)
+-   [llama.cpp](/docs/user-guide/concepts/model-providers/llamacpp/index.md#token-counting)
+
+## Utilization estimation
+
+The Model base class provides an `estimate_utilization(input_tokens)``estimateUtilization(inputTokens)` method that computes the fraction of the context window consumed by a given input token count:
 
 (( tab "Python" ))
--   `"proactive_summarization"`: summarize older messages at 70% utilization while preserving the newest 70%
--   `"large_tool_offloading"`: truncate tool results over 2,500 tokens to a 1,000-token preview
--   `"overflow_protection"`: truncate older messages when the context window is full while preserving the four most recent messages
--   `"stale_tool_cleanup"`: drop tool results older than five matching messages
+```python
+ratio = model.estimate_utilization(
+    input_tokens=projected_tokens,
+)
+# ratio is 0-1+ (above 1.0 means overflow)
+```
+(( /tab "Python" ))
 
+(( tab "TypeScript" ))
+```typescript
+// Section "utilization_imports" not found in user-guide/concepts/context-management/context-estimation_imports.ts
+
+const ratio = model.estimateUtilization(projectedTokens)
+// ratio is 0-1+ (above 1.0 means overflow)
+```
+(( /tab "TypeScript" ))
+
+The method divides `input_tokens``inputTokens` by the model’s `context_window_limit``contextWindowLimit`, falling back to the 200,000 default with a warning when not configured. A return value above 1.0 means overflow.
+
+Both the built-in [context management modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) and the [conversation managers](/docs/user-guide/concepts/agents/conversation-management/index.md) use this internally for compression decisions. You can also call it directly when building custom logic.
+
+## Related pages
+
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
+- [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
+- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
+- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+
+
+## Implementation
+
+### Python
+
+- [harness-sdk/strands-py/src/strands/models/model.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/model.py)
+
+### TypeScript
+
+- [harness-sdk/strands-ts/src/models/model.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/model.ts)
+
+Source: https://strandsagents.com/docs/user-guide/concepts/context-management/context-estimation/index.md
+
+---
+
+## Custom Strategies
+
+When the [built-in modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) don’t fit, build a custom strategy pipeline. Define which content to reduce, how to reduce it, and when each strategy fires.
+
+## Strategy pipeline
+
+Strategies run as an ordered pipeline. Each strategy sees the output of the previous one, so order determines priority. If two strategies target the same content, the first one to shrink it below the next strategy’s threshold wins.
+
+The SDK always appends an emergency truncation strategy as the final step. It only fires when the context window is still overflowing after all user strategies have run.
+
+(( tab "Python" ))
 ```python
 from strands import Agent
+from strands.experimental.context_manager import Offload
 
 agent = Agent(
     context_manager={
         "strategies": [
-            "large_tool_offloading",
-            "proactive_summarization",
+            Offload.truncate("tool_results").when(
+                threshold=2000,
+            ),
+            Offload.summarize("*").when(
+                utilization=0.8,
+                preserve_recent=4,
+            ),
         ],
     },
 )
@@ -20950,152 +21083,426 @@ agent = Agent(
 (( /tab "Python" ))
 
 (( tab "TypeScript" ))
--   `"proactiveSummarization"`: summarize older messages at 70% utilization while preserving the newest 70%
--   `"largeToolOffloading"`: truncate tool results over 2,500 tokens to a 1,000-token preview
--   `"overflowProtection"`: truncate older messages when the context window is full while preserving the four most recent messages
--   `"staleToolCleanup"`: drop tool results older than five matching messages
-
 ```typescript
 import { Agent } from '@strands-agents/sdk'
+import { Offload } from '@strands-agents/sdk/experimental'
 
 const agent = new Agent({
   contextManager: {
-    strategies: ['largeToolOffloading', 'proactiveSummarization'],
+    strategies: [
+      Offload.truncate('toolResults').when({
+        threshold: 2000,
+      }),
+      Offload.summarize('*').when({
+        utilization: 0.8,
+        preserveRecent: 4,
+      }),
+    ],
   },
 })
 ```
 (( /tab "TypeScript" ))
 
-### Custom summarization model
+Note
 
-Summarizing history does not require your most capable model. Pass a cheaper model and a custom system prompt through the strategy configuration:
+Both SDKs accept a config object with a `strategies``strategies` key. The SDK constructs the `ContextManager` internally.
+
+## Offload builder
+
+The `Offload` namespace exposes three methods. Each returns a strategy builder that can be chained with `.when()``.when()` to add conditions.
+
+### Truncate
+
+Replaces oversized content with a head/tail preview. The original content is stored in the stash for later retrieval.
 
 (( tab "Python" ))
 ```python
-from strands import Agent
-from strands.experimental.context_manager import ContextManager, Offload
-from strands.models import BedrockModel
+from strands.experimental.context_manager import Offload
 
-agent = Agent(
-    context_manager=ContextManager(
-        strategies=[
-            Offload.summarize(
-                "*",
-                {
-                    "model": BedrockModel(
-                        model_id="us.amazon.nova-lite-v1:0",
-                    ),
-                    "system_prompt": (
-                        "Summarize preserving tool outputs, errors, and IDs."
-                    ),
-                },
-            ).when(utilization=0.85, preserve_recent=2),
-        ],
-        stash=False,
-    ),
+Offload.truncate(
+    "tool_results",
+    {"preview_tokens": 750},
+).when(threshold=1500)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Offload } from '@strands-agents/sdk/experimental'
+
+Offload.truncate('toolResults', {
+  previewTokens: 750,
+}).when({ threshold: 1500 })
+```
+(( /tab "TypeScript" ))
+
+**Truncate configuration:**
+
+| Parameter | Python | TypeScript | Default |
+| --- | --- | --- | --- |
+| Preview size | `preview_tokens` | `previewTokens` | 1,000 |
+| Preview mode | `preview` | `preview` | `"head_tail"` / `"headTail"` |
+
+Preview modes: `"head"`, `"tail"`, `"head_tail"``"headTail"`.
+
+### Summarize
+
+Replaces content with an LLM-generated summary. Uses the agent’s model by default.
+
+(( tab "Python" ))
+```python
+from strands.experimental.context_manager import Offload
+
+Offload.summarize("*").when(
+    utilization=0.85,
+    preserve_recent=4,
 )
 ```
 (( /tab "Python" ))
 
 (( tab "TypeScript" ))
 ```typescript
-import { Agent, Offload } from '@strands-agents/sdk'
-import { BedrockModel } from '@strands-agents/sdk'
+import { Offload } from '@strands-agents/sdk/experimental'
+
+Offload.summarize('*').when({
+  utilization: 0.85,
+  preserveRecent: 4,
+})
+```
+(( /tab "TypeScript" ))
+
+**Summarize configuration:**
+
+| Parameter | Python | TypeScript | Default |
+| --- | --- | --- | --- |
+| Model | `model` | `model` | Agent’s model |
+| System prompt | `system_prompt` | `systemPrompt` | Built-in |
+
+### Drop
+
+Removes matching content entirely. No preview, no stash entry.
+
+(( tab "Python" ))
+```python
+from strands.experimental.context_manager import Offload
+
+Offload.drop("tool_results").when(preserve_recent=5)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Offload } from '@strands-agents/sdk/experimental'
+
+Offload.drop('toolResults').when({
+  preserveRecent: 5,
+})
+```
+(( /tab "TypeScript" ))
+
+## Conditions
+
+Chain `.when()``.when()` to control when a strategy fires. Conditions determine the granularity of the strategy, not the method.
+
+| Condition | Granularity | Behavior |
+| --- | --- | --- |
+| `threshold``threshold` only | Per-block, eager | Acts on each block above this token size on message arrival |
+| `utilization``utilization` only | Message-level, batch | Removes/summarizes oldest messages when utilization exceeded |
+| Both | Message-level | Targets messages with blocks over the threshold, fires at utilization |
+| `preserve_recent``preserveRecent` | — | Number of most recent matching messages to skip |
+
+`preserve_recent``preserveRecent`
+
+accepts an integer (absolute count) or a float between 0 and 1 (ratio of matching messages, e.g., `0.7` keeps 70%).
+
+### Per-block example
+
+Fire eagerly on individual blocks over 2,000 tokens:
+
+(( tab "Python" ))
+```python
+from strands.experimental.context_manager import Offload
+
+Offload.truncate("tool_results").when(threshold=2000)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Offload } from '@strands-agents/sdk/experimental'
+
+Offload.truncate('toolResults').when({
+  threshold: 2000,
+})
+```
+(( /tab "TypeScript" ))
+
+### Message-level example
+
+Summarize oldest messages when the window reaches 85%:
+
+(( tab "Python" ))
+```python
+from strands.experimental.context_manager import Offload
+
+Offload.summarize("*").when(
+    utilization=0.85,
+    preserve_recent=4,
+)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Offload } from '@strands-agents/sdk/experimental'
+
+Offload.summarize('*').when({
+  utilization: 0.85,
+  preserveRecent: 4,
+})
+```
+(( /tab "TypeScript" ))
+
+### Combined example
+
+Target tool results over 1,500 tokens, but only fire when the window reaches 90%:
+
+(( tab "Python" ))
+```python
+from strands.experimental.context_manager import Offload
+
+Offload.truncate("tool_results").when(
+    threshold=1500,
+    utilization=0.9,
+)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Offload } from '@strands-agents/sdk/experimental'
+
+Offload.truncate('toolResults').when({
+  threshold: 1500,
+  utilization: 0.9,
+})
+```
+(( /tab "TypeScript" ))
+
+## Targets
+
+Targets specify which content a strategy applies to.
+
+| Target | Python | TypeScript |
+| --- | --- | --- |
+| All content | `"*"` | `"*"` |
+| Tool results | `"tool_results"` | `"toolResults"` |
+| Failed tool results | `"tool_result_errors"` | `"toolResultErrors"` |
+| Assistant text | `"assistant_text"` | `"assistantText"` |
+| User text | `"user_text"` | `"userText"` |
+| Specific tools | `["tool::bash", "tool::read_file"]` | `["tool::bash", "tool::read_file"]` |
+| Exclude tools | `["!tool::bash"]` | `["!tool::bash"]` |
+
+Tool name lists use the `tool::` prefix. Prefix a name with `!` to exclude it (apply to all tools *except* the listed ones).
+
+## Stash
+
+The stash stores all message content on arrival as JSON, before any strategy runs. Truncated or summarized content can be retrieved on demand through the `retrieve_context``retrieve_context` tool, which the SDK registers by default.
+
+Stash uses in-memory storage by default. Configure it through the `stash``stash` key:
+
+-   Omit or pass `true` for defaults (in-memory storage)
+-   Pass a config with a custom storage backend
+-   Pass `false` to disable stash entirely
+
+(( tab "Python" ))
+```python
+from strands import Agent
+
+# Disable stash and retrieval tool
+agent = Agent(
+    context_manager={
+        "stash": False,
+    },
+)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
 
 const agent = new Agent({
   contextManager: {
-    strategies: [
-      Offload.summarize('*', {
-        model: new BedrockModel({ modelId: 'us.amazon.nova-lite-v1:0' }),
-        systemPrompt: 'Summarize preserving tool outputs, errors, and IDs.',
-      }).when({ utilization: 0.85, preserveRecent: 2 }),
-    ],
     stash: false,
   },
 })
 ```
 (( /tab "TypeScript" ))
 
-## Storage backends
+## Emergency truncation
 
-The `ContextManager` uses in-memory stash storage by default. Content does not persist across process restarts. Provide a durable storage backend when the stash needs to survive restarts:
+Every strategy pipeline ends with an emergency truncation strategy, appended automatically. It fires only when the context window is still overflowing after all user strategies have run. When it fires, it drops the oldest 20% of non-head messages.
 
-(( tab "Python" ))
-```python
-from strands.storage import LocalFileStorage, S3Storage
-
-# Local filesystem
-stash = {"storage": LocalFileStorage("./artifacts/")}
-
-# S3, using ambient AWS credentials
-stash = {"storage": S3Storage("my-bucket", prefix="agent-stash/")}
-```
-(( /tab "Python" ))
-
-(( tab "TypeScript" ))
-```typescript
-import { LocalFileStorage, S3Storage } from '@strands-agents/sdk/storage'
-
-// Local filesystem
-const stashLocal = { storage: new LocalFileStorage('./artifacts/') }
-
-// S3, using ambient AWS credentials
-const stashS3 = { storage: new S3Storage('my-bucket', { prefix: 'agent-stash/' }) }
-```
-(( /tab "TypeScript" ))
-
-Pass one of these `stash` values in your explicit context manager configuration. See [Storage](/docs/user-guide/concepts/storage/index.md) for the full storage backend reference.
-
-## Limitations
-
-**Stateful models**: Setting `context_manager``contextManager` with a stateful model raises a `ValueError``Error`. Stateful models manage conversation state server-side.
-
-## Migrating from the legacy API
-
-If you currently use `SummarizingConversationManager`, `ContextOffloader`, or `conversation_manager`, use these examples as starting points. Review the strategy conditions and preservation settings for your workload because the new API does not map one-to-one to every legacy option.
-
-(( tab "Python" ))
--   `SummarizingConversationManager(...)`: `Offload.summarize("*").when(utilization=0.85, preserve_recent=4)`
--   `ContextOffloader(max_result_tokens=2500, preview_tokens=500)`: `Offload.truncate("tool_results", {"preview_tokens": 500})` `.when(threshold=2500)`
--   `conversation_manager=SlidingWindowConversationManager(...)`: there is no exact message-count equivalent. Use `Offload.drop` or `Offload.truncate` with utilization and preservation conditions that match your workload.
--   `context_manager="auto"`: unchanged
-(( /tab "Python" ))
-
-(( tab "TypeScript" ))
--   `new SummarizingConversationManager(...)`: `Offload.summarize("*").when({ utilization: 0.85, preserveRecent: 4 })`
--   `new ContextOffloader({ maxResultTokens: 2500, previewTokens: 500 })`: `Offload.truncate("toolResults", { previewTokens: 500 })` `.when({ threshold: 2500 })`
--   `conversationManager: new SlidingWindowConversationManager(...)`: there is no exact message-count equivalent. Use `Offload.drop` or `Offload.truncate` with utilization and preservation conditions that match your workload.
--   `contextManager: "auto"`: unchanged
-(( /tab "TypeScript" ))
+Emergency truncation intentionally ignores pinned messages so an all-pinned overflow is still recoverable. Regular strategies respect pins.
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
+- [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
 - [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
 - [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
 - [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
 - [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
-- [Skills](/docs/user-guide/concepts/plugins/skills/index.md) (1 shared tag)
 
 
 ## Implementation
 
 ### Python
 
-- [harness-sdk/strands-py/src/strands/_context_manager/context_manager.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/context_manager.py)
-- [harness-sdk/strands-py/src/strands/_context_manager/strategies/offload/__init__.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/strategies/offload/__init__.py)
-- [harness-sdk/strands-py/src/strands/experimental/context_manager/__init__.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/context_manager/__init__.py)
+- [harness-sdk/strands-py/src/strands/_context_manager/strategies/offload/base.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/strategies/offload/base.py)
+- [harness-sdk/strands-py/src/strands/_context_manager/strategies/offload/truncate.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/strategies/offload/truncate.py)
+- [harness-sdk/strands-py/src/strands/_context_manager/strategies/offload/summarize.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/strategies/offload/summarize.py)
 
 ### TypeScript
 
-- [harness-sdk/strands-ts/src/context-manager/context-manager.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/context-manager/context-manager.ts)
+- [harness-sdk/strands-ts/src/context-manager/strategies/offload/base.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/context-manager/strategies/offload/base.ts)
+- [harness-sdk/strands-ts/src/context-manager/strategies/offload/index.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/context-manager/strategies/offload/index.ts)
+
+Source: https://strandsagents.com/docs/user-guide/concepts/context-management/custom-strategies/index.md
+
+---
+
+## Strategy Presets
+
+Named strategy presets are shorthand for preconfigured `Offload` strategies. Pass a preset name string in the strategies array instead of building the strategy by hand.
+
+Preset expansions are internal defaults and may change between releases as tuning improves. The preset *name* is the stable contract. Use raw `Offload.*` strategies when you need a pinned configuration.
+
+## Available presets
+
+| Preset | Python | TypeScript |
+| --- | --- | --- |
+| Proactive summarization | `"proactive_summarization"` | `"proactiveSummarization"` |
+| Large tool offloading | `"large_tool_offloading"` | `"largeToolOffloading"` |
+| Overflow protection | `"overflow_protection"` | `"overflowProtection"` |
+| Stale tool cleanup | `"stale_tool_cleanup"` | `"staleToolCleanup"` |
+
+**Proactive summarization** summarizes the oldest 30% of messages when the context window reaches 70% capacity.
+
+**Large tool offloading** truncates individual tool results over 2,500 tokens to a 1,000-token preview, eagerly on message arrival.
+
+**Overflow protection** truncates the oldest messages when the context window is full, keeping the 4 most recent.
+
+**Stale tool cleanup** drops tool results more than 5 messages old.
+
+## Using presets
+
+Pass preset name strings in the `strategies``strategies` array:
+
+(( tab "Python" ))
+```python
+from strands import Agent
+
+agent = Agent(
+    context_manager={
+        "strategies": [
+            "proactive_summarization",
+            "large_tool_offloading",
+        ],
+    },
+)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
+
+const agent = new Agent({
+  contextManager: {
+    strategies: [
+      'proactiveSummarization',
+      'largeToolOffloading',
+    ],
+  },
+})
+```
+(( /tab "TypeScript" ))
+
+## Mixing presets and custom strategies
+
+Combine named presets with raw `Offload` strategies in the same array. Order matters: strategies run as a pipeline, and each sees the output of the previous.
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.experimental.context_manager import Offload
+
+agent = Agent(
+    context_manager={
+        "strategies": [
+            "large_tool_offloading",
+            Offload.summarize("*").when(
+                utilization=0.9,
+                preserve_recent=2,
+            ),
+        ],
+    },
+)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { Offload } from '@strands-agents/sdk/experimental'
+
+const agent = new Agent({
+  contextManager: {
+    strategies: [
+      'largeToolOffloading',
+      Offload.summarize('*').when({
+        utilization: 0.9,
+        preserveRecent: 2,
+      }),
+    ],
+  },
+})
+```
+(( /tab "TypeScript" ))
+
+The preset handles large tool results eagerly, and the custom summarization strategy compresses remaining content at 90% utilization.
+
+## Related pages
+
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
+- [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
+- [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
+- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
+- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+
+
+## Implementation
+
+### Python
+
+- [harness-sdk/strands-py/src/strands/_context_manager/presets.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/_context_manager/presets.py)
+
+### TypeScript
+
 - [harness-sdk/strands-ts/src/context-manager/presets.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/context-manager/presets.ts)
 
-Source: https://strandsagents.com/docs/user-guide/concepts/context-management/index.md
+Source: https://strandsagents.com/docs/user-guide/concepts/context-management/presets/index.md
 
 ---
 
@@ -24902,7 +25309,7 @@ const model = new BedrockModel({
 
 Mantle is not a separate service or model catalog: it is Amazon Bedrock’s second endpoint family, [`bedrock-mantle`](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html), which serves Bedrock-hosted models through OpenAI-compatible APIs. The two families serve different, overlapping model sets: many models are only on the standard `bedrock-runtime` endpoint that `BedrockModel` uses, some model lines are only on `bedrock-mantle`, and some are on both. AWS lists which endpoint serves each model in [endpoint availability by model](https://docs.aws.amazon.com/bedrock/latest/userguide/models-endpoint-availability.html).
 
-Pick your provider by where the model is served. When it is on `bedrock-runtime`, use `BedrockModel` as described on the rest of this page (AWS recommends that endpoint when a model is on both). When it is served through Mantle, connect with the SDK’s [OpenAI Responses provider](/docs/user-guide/concepts/model-providers/openai-responses/index.md) instead, in one of the two ways below.
+Pick your provider by where the model is served. When it is on `bedrock-runtime`, use `BedrockModel` as described on the rest of this page (AWS recommends that endpoint when a model is on both). When it is served through Mantle, connect with the SDK’s [OpenAI Responses provider](/docs/user-guide/concepts/model-providers/openai-responses/index.md) instead, in one of the two ways below. In Python, that provider can also target `bedrock-runtime`; see [Choosing the Endpoint](#choosing-the-endpoint).
 
 #### Connecting with AWS Credentials
 
@@ -24943,6 +25350,28 @@ Requires the optional dependency: `npm install @aws/bedrock-token-generator`
 (( /tab "TypeScript" ))
 
 Omit the region to resolve it from your AWS environment. The config also accepts AWS credentials to forward to the token generator (`credentials_provider``credentials`, a botocore CredentialProviderstatic identity or provider function) and a token-lifetime override (`expiry``expiresInSeconds`). In Python, `boto_session` can also supply the region from a configured profile.
+
+#### Choosing the Endpoint
+
+The config targets `bedrock-mantle` by default. In Python, set `endpoint` to `bedrock-runtime`, which is where the OpenAI GPT models are served through [cross-Region inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html) profile ids such as `global.openai.gpt-5.6-luna`:
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.models.openai_responses import OpenAIResponsesModel
+
+model = OpenAIResponsesModel(
+    model_id="global.openai.gpt-5.6-luna",
+    bedrock_mantle_config={"endpoint": "bedrock-runtime", "region": "us-east-1"},
+)
+
+agent = Agent(model=model)
+response = agent("What is 2+2?")
+print(response)
+```
+(( /tab "Python" ))
+
+AWS compares what the two endpoints support in [endpoints supported by Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/endpoints.html).
 
 #### Connecting with a Bedrock API Key
 
@@ -25295,6 +25724,7 @@ The `model_config` configures the underlying model selected for inference. The s
 | `max_tokens` | Maximum number of tokens to generate before stopping | `1028` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.max_tokens) |
 | `model_id` | ID of a model to use | `claude-sonnet-4-6` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.model) |
 | `params` | Additional pass-through parameters | `{"metadata": {"user_id": "u1"}}` | [reference](https://platform.claude.com/docs/en/api/messages/create) |
+| `anthropic_tools` | [Built-in tools](#built-in-tools), appended to the agent’s function tools | `[{"type": "web_search_20260318", "name": "web_search"}]` | [reference](https://platform.claude.com/docs/en/docs/agents-and-tools/tool-use/overview) |
 | `cache_config` | Enables [prompt caching](#prompt-caching) on the system prompt and the conversation | `CacheConfig(ttl="1h")` | [reference](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) |
 | `cache_tools` | Caches the tool definitions | `"default"` or `CacheToolsConfig(ttl="1h")` | [reference](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) |
 (( /tab "Python" ))
@@ -25306,6 +25736,7 @@ The `model_config` configures the underlying model selected for inference. The s
 | `maxTokens` | Maximum tokens to generate | `1028` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.max_tokens) |
 | `stopSequences` | Sequences that stop generation | `['END']` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.stop_sequences) |
 | `params` | Additional pass-through parameters | `{ metadata: { user_id: 'u1' } }` | [reference](https://platform.claude.com/docs/en/api/messages/create) |
+| `anthropicTools` | [Built-in tools](#built-in-tools), appended to the agent’s function tools | `[{ type: 'web_search_20260318', name: 'web_search' }]` | [reference](https://platform.claude.com/docs/en/docs/agents-and-tools/tool-use/overview) |
 | `cacheConfig` | Enables [prompt caching](#prompt-caching) on the tool definitions, the system prompt, and the conversation | `{ ttl: '1h' }` | [reference](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) |
 (( /tab "TypeScript" ))
 
@@ -25436,6 +25867,57 @@ console.log(`Sentiment: ${review.sentiment}`)
 (( /tab "TypeScript" ))
 
 For schema patterns, error handling, and per-invocation overrides, see [Structured Output](/docs/user-guide/concepts/agents/structured-output/index.md).
+
+### Built-in Tools
+
+(( tab "Python" ))
+Anthropic’s built-in server-side tools (web search, web fetch, code execution) can be passed via the `anthropic_tools` config option. These are appended alongside any function tools registered on the agent.
+
+```python
+from strands import Agent
+from strands.models.anthropic import AnthropicModel
+
+model = AnthropicModel(
+    client_args={"api_key": "<KEY>"},
+    model_id="claude-sonnet-4-6",
+    max_tokens=1028,
+    anthropic_tools=[{"type": "web_search_20260318", "name": "web_search", "max_uses": 5}],
+)
+
+agent = Agent(model=model)
+response = agent("What are the latest AI news today?")
+print(response)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+Anthropic’s built-in server-side tools (web search, web fetch, code execution) can be passed via the `anthropicTools` config option. These are appended alongside any function tools registered on the agent.
+
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { AnthropicModel } from '@strands-agents/sdk/models/anthropic'
+
+const model = new AnthropicModel({
+  apiKey: '<KEY>',
+  modelId: 'claude-sonnet-4-6',
+  maxTokens: 1028,
+  anthropicTools: [{ type: 'web_search_20260318', name: 'web_search', max_uses: 5 }],
+})
+
+const agent = new Agent({ model })
+const response = await agent.invoke('What are the latest AI news today?')
+console.log(response)
+```
+(( /tab "TypeScript" ))
+
+Web search results are surfaced as citations on the response text when Claude calls the tool directly (`allowed_callers: ["direct"]`). On `web_search_20260318` the default is dynamic filtering, which runs the search inside code execution and returns no citations. For available built-in tools and their versioned `type` strings, see the [Anthropic tool use documentation](https://platform.claude.com/docs/en/docs/agents-and-tools/tool-use/overview).
+
+Limitations:
+
+-   The raw server-tool blocks (search results, fetched pages, code output) are not kept in the conversation history, so on a later turn the model cannot refer back to them and will call the tool again if it needs them.
+-   When Anthropic pauses a long-running server-tool turn, the model provider resumes it automatically, up to 10 times per request, before the response reaches the agent loop. If the turn is still paused after that, the provider raises an error.
+-   Server tools are not sent when a specific tool call is forced (`tool_choice` of `any` or `tool`), which includes the forced structured-output retry; the model can only use them on turns where it is free to choose.
+-   Server-tool calls are billed separately by Anthropic and are not included in Strands usage metrics.
 
 ### Prompt Caching
 
@@ -33712,7 +34194,7 @@ class AsyncConfigPlugin implements Plugin {
 - [Tool Executors](/docs/user-guide/concepts/tools/executors/index.md) (1 shared tag)
 - [Retry Strategies](/docs/user-guide/concepts/agents/retry-strategies/index.md) (1 shared tag)
 - [Bidirectional Streaming Hooks](/docs/user-guide/concepts/bidirectional-streaming/hooks/index.md) (1 shared tag)
-- [Steering (Plugins)](/docs/user-guide/concepts/plugins/steering/index.md) (1 shared tag)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -33852,7 +34334,11 @@ The rendered text is a prompt-injection surface. If it interpolates attacker-inf
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (1 shared tag)
 - [Skills](/docs/user-guide/concepts/plugins/skills/index.md) (1 shared tag)
 - [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (1 shared tag)
 - [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (1 shared tag)
@@ -33918,7 +34404,11 @@ For non-text content, the plugin replaces the result with a descriptive placehol
 
 Quick setup
 
-You can enable a pre-configured `ContextOffloader` alongside summarization-based context management with a single parameter. See [Context Management](/docs/user-guide/concepts/context-management/index.md).
+The [ContextManager](/docs/user-guide/concepts/context-management/index.md) includes built-in offloading strategies with stash and retrieval. For most agents, pass `context_manager="auto"``contextManager: "auto"` instead of configuring `ContextOffloader` separately.
+
+Note
+
+`ContextOffloader` is for agents that configure offloading independently of `context_manager``contextManager`. When `context_manager``contextManager` is set, its built-in strategies handle offloading and this plugin is not needed.
 
 Pass a `ContextOffloader` instance to your agent’s `plugins` list with a [Storage](/docs/user-guide/concepts/storage/index.md) backend:
 
@@ -34309,16 +34799,16 @@ const agent = new Agent({
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
 - [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
 - [Steering (Plugins)](/docs/user-guide/concepts/plugins/steering/index.md) (2 shared tags)
 - [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -34760,8 +35250,8 @@ const plugin = new GoalLoop({
 - [Interrupts](/docs/user-guide/concepts/interrupts/index.md) (2 shared tags)
 - [Interventions](/docs/user-guide/concepts/agents/interventions/index.md) (2 shared tags)
 - [Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (1 shared tag)
-- [Tool Executors](/docs/user-guide/concepts/tools/executors/index.md) (1 shared tag)
 - [Skills](/docs/user-guide/concepts/plugins/skills/index.md) (1 shared tag)
+- [Tool Executors](/docs/user-guide/concepts/tools/executors/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -35179,15 +35669,15 @@ Use skills when you want a single agent that can handle a wide range of tasks by
 ## Related pages
 
 - [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
-- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
 - [Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
+- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (1 shared tag)
 - [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
 - [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
-- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (1 shared tag)
-- [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (1 shared tag)
 - [Steering (Plugins)](/docs/user-guide/concepts/plugins/steering/index.md) (1 shared tag)
-- [GoalLoop](/docs/user-guide/concepts/plugins/goal-loop/index.md) (1 shared tag)
-- [Agent Configuration](/docs/user-guide/concepts/experimental/agent-config/index.md) (1 shared tag)
 
 
 ## Implementation
@@ -35368,9 +35858,9 @@ Traditional prompting requires front-loading all instructions into a single prom
 
 ## Related pages
 
+- [GoalLoop](/docs/user-guide/concepts/plugins/goal-loop/index.md) (2 shared tags)
 - [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (2 shared tags)
 - [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (2 shared tags)
-- [GoalLoop](/docs/user-guide/concepts/plugins/goal-loop/index.md) (2 shared tags)
 - [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
@@ -49003,10 +49493,10 @@ asyncio.run(main())
 - [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
 - [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md
 
@@ -49128,10 +49618,10 @@ asyncio.run(main())
 - [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
 - [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md
 
@@ -50532,10 +51022,10 @@ Evaluate completion of complex, multi-step processes.
 - [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
 - [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md
 
@@ -50914,10 +51404,10 @@ Evaluation: Above and beyond (1.0) - Comprehensive, proactive, anticipates issue
 - [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
 - [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md
 
@@ -51384,10 +51874,10 @@ Verify that agents respect declared dependencies.
 - [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
 - [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md
 
@@ -52359,10 +52849,10 @@ The `OutputEvaluator` returns `EvaluationOutput` objects with:
 - [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
 - [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (1 shared tag)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (1 shared tag)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md
 
@@ -60604,6 +61094,19 @@ There are several ways to send traces, metrics, and logs to CloudWatch. Please v
 
 -   Please ensure Transaction Search is enabled in CloudWatch.
 
+## Third-party observability backends
+
+Because Strands emits standard OpenTelemetry spans, you can point them at whichever observability backend you already use. Set the OTLP endpoint and headers (see [Environment Variables](#environment-variables)) to your provider, or follow the provider’s own Strands guide:
+
+| Backend | Integration guide |
+| --- | --- |
+| Langfuse | [Observability for Strands Agents with Langfuse](https://langfuse.com/docs/integrations/strands-agents) |
+| Arize Phoenix | [Strands Agents Tracing](https://arize.com/docs/phoenix/integrations/python/strands-agents/strands-agents-tracing) |
+| Braintrust | [Strands Agent SDK](https://www.braintrust.dev/docs/integrations/sdk-integrations/strands-agent) |
+| LangSmith | [Trace Strands Agents applications](https://docs.langchain.com/langsmith/trace-with-strands-agents) |
+
+Any OpenTelemetry-compatible backend works the same way: Strands does not require a specific provider, so you keep your existing tracing setup when you adopt it.
+
 ## Related pages
 
 - [Evaluating Remote Traces](/docs/user-guide/evals-sdk/how-to/trace_providers/index.md) (1 shared tag)
@@ -62112,12 +62615,12 @@ Only after validation, process the request to:
 - [Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (2 shared tags)
 - [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (2 shared tags)
 - [Steering (Plugins)](/docs/user-guide/concepts/plugins/steering/index.md) (2 shared tags)
+- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
 - [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Harmfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
 - [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 
 Source: https://strandsagents.com/docs/user-guide/safety-security/prompt-engineering/index.md
 
@@ -62255,14 +62758,14 @@ Stripping the trailing tool-call content closes the direct-dispatch path. It doe
 
 - [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (2 shared tags)
 - [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (2 shared tags)
+- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
 - [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Harmfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
 - [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
 - [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
 - [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
-- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
-- [Harmfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
 
 
 ## Implementation

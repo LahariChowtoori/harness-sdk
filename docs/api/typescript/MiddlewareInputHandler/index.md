@@ -2,7 +2,7 @@
 type MiddlewareInputHandler<TContext> = (context) => TContext | Promise<TContext>;
 ```
 
-Defined in: [src/middleware/types.ts:75](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/middleware/types.ts#L75)
+Defined in: [src/middleware/types.ts:75](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/middleware/types.ts#L75)
 
 Handler for Input phase — transforms context before execution.
 

@@ -111,7 +111,7 @@ Priority on simultaneous trip (highest first): `turns`, `total_tokens`, `output_
 class ConcurrentInvocationMode(str, Enum)
 ```
 
-Defined in: [src/strands/types/agent.py:125](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/agent.py#L125)
+Defined in: [src/strands/types/agent.py:132](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/agent.py#L132)
 
 Mode controlling concurrent invocation behavior.
 

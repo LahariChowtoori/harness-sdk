@@ -2,7 +2,7 @@
 type InjectionTrigger = "userTurn" | "everyTurn";
 ```
 
-Defined in: [src/injection/types.ts:16](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/injection/types.ts#L16)
+Defined in: [src/injection/types.ts:16](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/injection/types.ts#L16)
 
 Determines when injection runs before a model call.
 

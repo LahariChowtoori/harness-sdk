@@ -16,7 +16,7 @@ Key improvements over custom WebSocket implementation:
 class GoogleGeminiLiveAudioStreamConfig(TypedDict)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:78](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L78)
+Defined in: [src/strands/experimental/bidi/models/google.py:76](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L76)
 
 Gemini Live input stream options. Audio uses mono PCM.
 
@@ -30,7 +30,7 @@ Gemini Live input stream options. Audio uses mono PCM.
 class GoogleGeminiLiveAudioConfig(TypedDict)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:88](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L88)
+Defined in: [src/strands/experimental/bidi/models/google.py:86](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L86)
 
 Gemini Live audio options. Output is mono PCM at 24000 Hz.
 
@@ -46,7 +46,7 @@ Omitting the input stream uses a sample rate of 16000 Hz.
 class GoogleGeminiLiveModel(BidiModel, AudioCapable)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:100](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L100)
+Defined in: [src/strands/experimental/bidi/models/google.py:98](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L98)
 
 Google Gemini Live implementation using the official Google GenAI SDK.
 
@@ -62,7 +62,7 @@ def __init__(*,
              **model_config: Unpack[BidiModelConfig]) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:108](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L108)
+Defined in: [src/strands/experimental/bidi/models/google.py:106](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L106)
 
 Initialize the Google Gemini Live bidirectional model.
 
@@ -84,7 +84,7 @@ Initialize the Google Gemini Live bidirectional model.
 def update_config(**model_config: Unpack[BidiModelConfig]) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:153](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L153)
+Defined in: [src/strands/experimental/bidi/models/google.py:151](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L151)
 
 Update the model configuration with the provided arguments.
 
@@ -99,7 +99,7 @@ Update the model configuration with the provided arguments.
 def get_config() -> BidiModelConfig
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:163](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L163)
+Defined in: [src/strands/experimental/bidi/models/google.py:161](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L161)
 
 Return the model configuration by reference.
 
@@ -110,7 +110,7 @@ Return the model configuration by reference.
 def get_audio_config() -> AudioConfig
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:168](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L168)
+Defined in: [src/strands/experimental/bidi/models/google.py:166](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L166)
 
 Get the resolved audio configuration.
 
@@ -123,7 +123,7 @@ async def start(system_prompt: str | None = None,
                 **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:189](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L189)
+Defined in: [src/strands/experimental/bidi/models/google.py:187](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L187)
 
 Establish bidirectional connection with Gemini Live API.
 
@@ -140,17 +140,17 @@ Establish bidirectional connection with Gemini Live API.
 async def receive() -> AsyncGenerator[BidiOutputEvent, None]
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:260](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L260)
+Defined in: [src/strands/experimental/bidi/models/google.py:258](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L258)
 
 Receive Gemini Live API events and convert to provider-agnostic format.
 
 #### send
 
 ```python
-async def send(content: BidiInputEvent | ToolResultEvent) -> None
+async def send(content: BidiContentBlock | ToolResultBlock) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:511](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L511)
+Defined in: [src/strands/experimental/bidi/models/google.py:509](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L509)
 
 Unified send method for all content types. Sends the given inputs to the Gemini Live API.
 
@@ -158,11 +158,11 @@ Dispatches to appropriate internal handler based on content type.
 
 **Arguments**:
 
--   `content` - Typed event (BidiTextInputEvent, BidiAudioInputEvent, BidiImageInputEvent, or ToolResultEvent).
+-   `content` - A TextBlock, AudioBlock, ImageBlock, or ToolResultBlock.
 
 **Raises**:
 
--   `ValueError` - If content type not supported (e.g., image content).
+-   `ValueError` - If content type not supported.
 
 #### stop
 
@@ -170,7 +170,7 @@ Dispatches to appropriate internal handler based on content type.
 async def stop() -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:610](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L610)
+Defined in: [src/strands/experimental/bidi/models/google.py:612](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L612)
 
 Close Gemini Live API connection.
 
@@ -183,7 +183,7 @@ async def restart(system_prompt: str | None = None,
                   **restart_kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/google.py:630](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L630)
+Defined in: [src/strands/experimental/bidi/models/google.py:632](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/google.py#L632)
 
 Restart by closing the connection and resuming the same session via its handle.
 

@@ -1,4 +1,4 @@
-Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:129](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L129)
+Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:129](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L129)
 
 Implements a sliding window strategy for managing conversation history.
 
@@ -22,7 +22,7 @@ Registers hooks for:
 new SlidingWindowConversationManager(config?): SlidingWindowConversationManager;
 ```
 
-Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:145](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L145)
+Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:145](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L145)
 
 Initialize the sliding window conversation manager.
 
@@ -48,7 +48,7 @@ Initialize the sliding window conversation manager.
 protected readonly _compressionThreshold: number;
 ```
 
-Defined in: [src/conversation-manager/conversation-manager.ts:112](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/conversation-manager/conversation-manager.ts#L112)
+Defined in: [src/conversation-manager/conversation-manager.ts:112](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/conversation-manager/conversation-manager.ts#L112)
 
 #### Inherited from
 
@@ -62,7 +62,7 @@ Defined in: [src/conversation-manager/conversation-manager.ts:112](https://githu
 readonly name: "strands:sliding-window-conversation-manager" = 'strands:sliding-window-conversation-manager';
 ```
 
-Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:138](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L138)
+Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:138](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L138)
 
 Unique identifier for this conversation manager.
 
@@ -78,7 +78,7 @@ Unique identifier for this conversation manager.
 initAgent(agent): void;
 ```
 
-Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:162](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L162)
+Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:162](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L162)
 
 Initialize the plugin by registering hooks with the agent.
 
@@ -110,7 +110,7 @@ Registers:
 reduce(options): boolean;
 ```
 
-Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:182](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L182)
+Defined in: [src/conversation-manager/sliding-window-conversation-manager.ts:182](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/conversation-manager/sliding-window-conversation-manager.ts#L182)
 
 Reduce the conversation history.
 

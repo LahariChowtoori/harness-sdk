@@ -9,7 +9,7 @@ type ModelStreamEvent =
   | ModelRedactionEventData;
 ```
 
-Defined in: [src/models/streaming.ts:19](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/streaming.ts#L19)
+Defined in: [src/models/streaming.ts:19](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/streaming.ts#L19)
 
 Union type representing all possible streaming events from a model provider. This is a discriminated union where each event has a unique type field.
 

@@ -4,12 +4,12 @@ Type definitions for bidirectional streaming that extends Strands’ existing st
 
 Key features:
 
--   Audio input/output events with standardized formats
+-   Audio output events with standardized formats
 -   Interruption detection and handling
 -   Connection lifecycle management
 -   Provider-agnostic event types
 -   Type-safe discriminated unions with TypedEvent
--   JSON-serializable events (audio/images stored as base64 strings)
+-   JSON-serializable output events (audio stored as base64 strings)
 
 Audio format normalization:
 
@@ -17,7 +17,7 @@ Audio format normalization:
 -   Describes sample rates in Hz
 -   Normalizes channel configurations (mono/stereo)
 -   Abstracts provider-specific encodings
--   Audio data stored as base64-encoded strings for JSON compatibility
+-   Audio output stored as base64-encoded strings for JSON compatibility
 
 #### AudioChannel
 
@@ -46,185 +46,13 @@ Reason for the model ending its response generation.
 -   “interrupted”: Model was interrupted by the user.
 -   “tool\_use”: Model is requesting a tool use.
 
-## BidiTextInputEvent
-
-```python
-class BidiTextInputEvent(TypedEvent)
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:94](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L94)
-
-Text input event for sending text to the model.
-
-Used for sending text content through the send() method.
-
-**Arguments**:
-
--   `text` - The text content to send to the model.
--   `role` - The role of the message sender (default: “user”).
-
-#### \_\_init\_\_
-
-```python
-def __init__(text: str, role: Role = "user")
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:104](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L104)
-
-Initialize text input event.
-
-#### text
-
-```python
-@property
-def text() -> str
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:115](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L115)
-
-The text content to send to the model.
-
-#### role
-
-```python
-@property
-def role() -> Role
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:120](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L120)
-
-The role of the message sender.
-
-## BidiAudioInputEvent
-
-```python
-class BidiAudioInputEvent(TypedEvent)
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:125](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L125)
-
-Audio input event for sending audio to the model.
-
-Used for sending audio data through the send() method.
-
-**Arguments**:
-
--   `audio` - Base64-encoded audio string to send to model.
--   `format` - Audio format from SUPPORTED\_AUDIO\_FORMATS.
--   `sample_rate` - Number of audio samples per second in Hz.
--   `channels` - Channel count from SUPPORTED\_CHANNELS.
-
-#### \_\_init\_\_
-
-```python
-def __init__(audio: str, format: AudioFormat | str, sample_rate: int,
-             channels: AudioChannel)
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:137](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L137)
-
-Initialize audio input event.
-
-#### audio
-
-```python
-@property
-def audio() -> str
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:156](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L156)
-
-Base64-encoded audio string.
-
-#### format
-
-```python
-@property
-def format() -> AudioFormat
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:161](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L161)
-
-Audio encoding format.
-
-#### sample\_rate
-
-```python
-@property
-def sample_rate() -> int
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:166](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L166)
-
-Number of audio samples per second in Hz.
-
-#### channels
-
-```python
-@property
-def channels() -> AudioChannel
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:171](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L171)
-
-Number of audio channels (1=mono, 2=stereo).
-
-## BidiImageInputEvent
-
-```python
-class BidiImageInputEvent(TypedEvent)
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:176](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L176)
-
-Image input event for sending images/video frames to the model.
-
-Used for sending image data through the send() method.
-
-**Arguments**:
-
--   `image` - Base64-encoded image string.
--   `mime_type` - MIME type (e.g., “image/jpeg”, “image/png”).
-
-#### \_\_init\_\_
-
-```python
-def __init__(image: str, mime_type: str)
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:186](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L186)
-
-Initialize image input event.
-
-#### image
-
-```python
-@property
-def image() -> str
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:201](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L201)
-
-Base64-encoded image string.
-
-#### mime\_type
-
-```python
-@property
-def mime_type() -> str
-```
-
-Defined in: [src/strands/experimental/bidi/types/events.py:206](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L206)
-
-MIME type of the image (e.g., “image/jpeg”, “image/png”).
-
 ## BidiConnectionStartEvent
 
 ```python
 class BidiConnectionStartEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:216](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L216)
+Defined in: [src/strands/experimental/bidi/types/events.py:94](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L94)
 
 Streaming connection established and ready for interaction.
 
@@ -239,7 +67,7 @@ Streaming connection established and ready for interaction.
 def __init__(connection_id: str, model: str)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:224](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L224)
+Defined in: [src/strands/experimental/bidi/types/events.py:102](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L102)
 
 Initialize connection start event.
 
@@ -250,7 +78,7 @@ Initialize connection start event.
 def connection_id() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:235](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L235)
+Defined in: [src/strands/experimental/bidi/types/events.py:113](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L113)
 
 Unique identifier for this streaming connection.
 
@@ -261,7 +89,7 @@ Unique identifier for this streaming connection.
 def model() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:240](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L240)
+Defined in: [src/strands/experimental/bidi/types/events.py:118](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L118)
 
 Model identifier (e.g., ‘gpt-realtime’, ‘gemini-2.0-flash-live’).
 
@@ -271,7 +99,7 @@ Model identifier (e.g., ‘gpt-realtime’, ‘gemini-2.0-flash-live’).
 class BidiConnectionRestartEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:245](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L245)
+Defined in: [src/strands/experimental/bidi/types/events.py:123](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L123)
 
 Agent is restarting the model connection.
 
@@ -291,7 +119,7 @@ def __init__(reason: Literal["timeout", "scheduled"],
              turn_interrupted: bool = False)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:260](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L260)
+Defined in: [src/strands/experimental/bidi/types/events.py:138](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L138)
 
 Initialize connection restart event.
 
@@ -302,7 +130,7 @@ Initialize connection restart event.
 def reason() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:277](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L277)
+Defined in: [src/strands/experimental/bidi/types/events.py:155](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L155)
 
 What triggered the restart (“timeout” or “scheduled”).
 
@@ -313,7 +141,7 @@ What triggered the restart (“timeout” or “scheduled”).
 def timeout_error() -> "BidiModelTimeoutError | None"
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:282](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L282)
+Defined in: [src/strands/experimental/bidi/types/events.py:160](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L160)
 
 Model timeout error on the reactive path; None when scheduled.
 
@@ -324,7 +152,7 @@ Model timeout error on the reactive path; None when scheduled.
 def turn_interrupted() -> bool
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:287](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L287)
+Defined in: [src/strands/experimental/bidi/types/events.py:165](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L165)
 
 True if the restart cut an in-progress or owed turn that will not be answered.
 
@@ -334,7 +162,7 @@ True if the restart cut an in-progress or owed turn that will not be answered.
 class BidiConnectionWarningEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:292](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L292)
+Defined in: [src/strands/experimental/bidi/types/events.py:170](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L170)
 
 Agent is approaching a proactive reconnect.
 
@@ -350,7 +178,7 @@ Emitted by the proactive reconnect timer before a reconnect; informational only.
 def __init__(time_left_s: float)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:301](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L301)
+Defined in: [src/strands/experimental/bidi/types/events.py:179](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L179)
 
 Initialize connection warning event.
 
@@ -361,7 +189,7 @@ Initialize connection warning event.
 def time_left_s() -> float
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:311](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L311)
+Defined in: [src/strands/experimental/bidi/types/events.py:189](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L189)
 
 Approximate seconds until the scheduled reconnect.
 
@@ -371,7 +199,7 @@ Approximate seconds until the scheduled reconnect.
 class BidiResponseStartEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:316](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L316)
+Defined in: [src/strands/experimental/bidi/types/events.py:194](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L194)
 
 Model starts generating a response.
 
@@ -385,7 +213,7 @@ Model starts generating a response.
 def __init__(response_id: str)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:323](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L323)
+Defined in: [src/strands/experimental/bidi/types/events.py:201](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L201)
 
 Initialize response start event.
 
@@ -396,7 +224,7 @@ Initialize response start event.
 def response_id() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:328](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L328)
+Defined in: [src/strands/experimental/bidi/types/events.py:206](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L206)
 
 Unique identifier for this response.
 
@@ -406,7 +234,7 @@ Unique identifier for this response.
 class BidiAudioStreamEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:333](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L333)
+Defined in: [src/strands/experimental/bidi/types/events.py:211](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L211)
 
 Streaming audio output from the model.
 
@@ -424,7 +252,7 @@ def __init__(audio: str, format: AudioFormat, sample_rate: int,
              channels: AudioChannel)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:343](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L343)
+Defined in: [src/strands/experimental/bidi/types/events.py:221](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L221)
 
 Initialize audio stream event.
 
@@ -435,7 +263,7 @@ Initialize audio stream event.
 def audio() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:362](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L362)
+Defined in: [src/strands/experimental/bidi/types/events.py:240](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L240)
 
 Base64-encoded audio string.
 
@@ -446,7 +274,7 @@ Base64-encoded audio string.
 def format() -> AudioFormat
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:367](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L367)
+Defined in: [src/strands/experimental/bidi/types/events.py:245](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L245)
 
 Audio encoding format.
 
@@ -457,7 +285,7 @@ Audio encoding format.
 def sample_rate() -> int
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:372](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L372)
+Defined in: [src/strands/experimental/bidi/types/events.py:250](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L250)
 
 Number of audio samples per second in Hz.
 
@@ -468,7 +296,7 @@ Number of audio samples per second in Hz.
 def channels() -> AudioChannel
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:377](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L377)
+Defined in: [src/strands/experimental/bidi/types/events.py:255](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L255)
 
 Number of audio channels (1=mono, 2=stereo).
 
@@ -478,7 +306,7 @@ Number of audio channels (1=mono, 2=stereo).
 class BidiTranscriptStreamEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:382](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L382)
+Defined in: [src/strands/experimental/bidi/types/events.py:260](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L260)
 
 Incremental transcription of user or assistant speech.
 
@@ -493,7 +321,7 @@ Incremental transcription of user or assistant speech.
 def __init__(delta: str, role: Role)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:390](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L390)
+Defined in: [src/strands/experimental/bidi/types/events.py:268](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L268)
 
 Initialize transcript stream event.
 
@@ -504,7 +332,7 @@ Initialize transcript stream event.
 def delta() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:401](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L401)
+Defined in: [src/strands/experimental/bidi/types/events.py:279](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L279)
 
 The incremental transcript text.
 
@@ -515,7 +343,7 @@ The incremental transcript text.
 def role() -> Role
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:406](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L406)
+Defined in: [src/strands/experimental/bidi/types/events.py:284](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L284)
 
 The role of the message sender.
 
@@ -525,7 +353,7 @@ The role of the message sender.
 class BidiTranscriptCompleteEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:411](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L411)
+Defined in: [src/strands/experimental/bidi/types/events.py:289](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L289)
 
 Complete transcript for one user or assistant turn.
 
@@ -540,7 +368,7 @@ Complete transcript for one user or assistant turn.
 def __init__(transcript: str, role: Role)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:419](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L419)
+Defined in: [src/strands/experimental/bidi/types/events.py:297](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L297)
 
 Initialize transcript complete event.
 
@@ -551,7 +379,7 @@ Initialize transcript complete event.
 def transcript() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:430](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L430)
+Defined in: [src/strands/experimental/bidi/types/events.py:308](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L308)
 
 The complete transcript text.
 
@@ -562,7 +390,7 @@ The complete transcript text.
 def role() -> Role
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:435](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L435)
+Defined in: [src/strands/experimental/bidi/types/events.py:313](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L313)
 
 The role of the speaker.
 
@@ -572,7 +400,7 @@ The role of the speaker.
 class BidiInterruptionEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:440](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L440)
+Defined in: [src/strands/experimental/bidi/types/events.py:318](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L318)
 
 Model generation was interrupted.
 
@@ -586,7 +414,7 @@ Model generation was interrupted.
 def __init__(reason: Literal["user_speech", "error"])
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:447](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L447)
+Defined in: [src/strands/experimental/bidi/types/events.py:325](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L325)
 
 Initialize interruption event.
 
@@ -597,7 +425,7 @@ Initialize interruption event.
 def reason() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:457](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L457)
+Defined in: [src/strands/experimental/bidi/types/events.py:335](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L335)
 
 Why the interruption occurred.
 
@@ -607,7 +435,7 @@ Why the interruption occurred.
 class BidiResponseCompleteEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:462](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L462)
+Defined in: [src/strands/experimental/bidi/types/events.py:340](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L340)
 
 Model finished generating response.
 
@@ -622,7 +450,7 @@ Model finished generating response.
 def __init__(response_id: str, stop_reason: StopReason)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:470](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L470)
+Defined in: [src/strands/experimental/bidi/types/events.py:348](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L348)
 
 Initialize response complete event.
 
@@ -633,7 +461,7 @@ Initialize response complete event.
 def response_id() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:485](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L485)
+Defined in: [src/strands/experimental/bidi/types/events.py:363](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L363)
 
 Unique identifier for this response.
 
@@ -644,7 +472,7 @@ Unique identifier for this response.
 def stop_reason() -> StopReason
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:490](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L490)
+Defined in: [src/strands/experimental/bidi/types/events.py:368](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L368)
 
 Why the response ended.
 
@@ -654,7 +482,7 @@ Why the response ended.
 class ModalityUsage(dict)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:495](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L495)
+Defined in: [src/strands/experimental/bidi/types/events.py:373](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L373)
 
 Token usage for a specific modality.
 
@@ -670,7 +498,7 @@ Token usage for a specific modality.
 class BidiUsageEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:509](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L509)
+Defined in: [src/strands/experimental/bidi/types/events.py:387](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L387)
 
 Token usage event with modality breakdown for bidirectional streaming.
 
@@ -696,7 +524,7 @@ def __init__(input_tokens: int,
              cache_write_input_tokens: int | None = None)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:524](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L524)
+Defined in: [src/strands/experimental/bidi/types/events.py:402](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L402)
 
 Initialize usage event.
 
@@ -707,7 +535,7 @@ Initialize usage event.
 def input_tokens() -> int
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:549](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L549)
+Defined in: [src/strands/experimental/bidi/types/events.py:427](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L427)
 
 Total tokens used for all input modalities.
 
@@ -718,7 +546,7 @@ Total tokens used for all input modalities.
 def output_tokens() -> int
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:554](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L554)
+Defined in: [src/strands/experimental/bidi/types/events.py:432](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L432)
 
 Total tokens used for all output modalities.
 
@@ -729,7 +557,7 @@ Total tokens used for all output modalities.
 def total_tokens() -> int
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:559](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L559)
+Defined in: [src/strands/experimental/bidi/types/events.py:437](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L437)
 
 Sum of input and output tokens.
 
@@ -740,7 +568,7 @@ Sum of input and output tokens.
 def modality_details() -> list[ModalityUsage]
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:564](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L564)
+Defined in: [src/strands/experimental/bidi/types/events.py:442](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L442)
 
 Optional list of token usage per modality.
 
@@ -751,7 +579,7 @@ Optional list of token usage per modality.
 def cache_read_input_tokens() -> int | None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:569](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L569)
+Defined in: [src/strands/experimental/bidi/types/events.py:447](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L447)
 
 Optional tokens read from cache.
 
@@ -762,7 +590,7 @@ Optional tokens read from cache.
 def cache_write_input_tokens() -> int | None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:574](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L574)
+Defined in: [src/strands/experimental/bidi/types/events.py:452](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L452)
 
 Optional tokens written to cache.
 
@@ -772,7 +600,7 @@ Optional tokens written to cache.
 class BidiConnectionCloseEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:579](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L579)
+Defined in: [src/strands/experimental/bidi/types/events.py:457](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L457)
 
 Streaming connection closed.
 
@@ -789,7 +617,7 @@ def __init__(connection_id: str,
                              "complete", "user_request"])
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:587](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L587)
+Defined in: [src/strands/experimental/bidi/types/events.py:465](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L465)
 
 Initialize connection close event.
 
@@ -800,7 +628,7 @@ Initialize connection close event.
 def connection_id() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:602](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L602)
+Defined in: [src/strands/experimental/bidi/types/events.py:480](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L480)
 
 Unique identifier for this streaming connection.
 
@@ -811,7 +639,7 @@ Unique identifier for this streaming connection.
 def reason() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:607](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L607)
+Defined in: [src/strands/experimental/bidi/types/events.py:485](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L485)
 
 Why the interruption occurred.
 
@@ -821,7 +649,7 @@ Why the interruption occurred.
 class BidiErrorEvent(TypedEvent)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:612](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L612)
+Defined in: [src/strands/experimental/bidi/types/events.py:490](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L490)
 
 Error occurred during the session.
 
@@ -838,7 +666,7 @@ Stores the full Exception object as an instance attribute for debugging while ke
 def __init__(error: Exception, details: dict[str, Any] | None = None)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:624](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L624)
+Defined in: [src/strands/experimental/bidi/types/events.py:502](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L502)
 
 Initialize error event.
 
@@ -849,7 +677,7 @@ Initialize error event.
 def error() -> Exception
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:643](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L643)
+Defined in: [src/strands/experimental/bidi/types/events.py:521](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L521)
 
 The original exception that occurred.
 
@@ -862,7 +690,7 @@ Can be used for re-raising or type-based error handling.
 def code() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:651](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L651)
+Defined in: [src/strands/experimental/bidi/types/events.py:529](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L529)
 
 Error code derived from exception class name.
 
@@ -873,7 +701,7 @@ Error code derived from exception class name.
 def message() -> str
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:656](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L656)
+Defined in: [src/strands/experimental/bidi/types/events.py:534](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L534)
 
 Human-readable error message from the exception.
 
@@ -884,13 +712,9 @@ Human-readable error message from the exception.
 def details() -> dict[str, Any] | None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/events.py:661](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L661)
+Defined in: [src/strands/experimental/bidi/types/events.py:539](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py#L539)
 
 Additional error context beyond the exception itself.
-
-#### BidiInputEvent
-
-Union of different bidi input event types.
 
 #### BidiOutputEvent
 

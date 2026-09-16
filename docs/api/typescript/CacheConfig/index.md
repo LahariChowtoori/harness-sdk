@@ -1,4 +1,4 @@
-Defined in: [src/models/model.ts:73](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L73)
+Defined in: [src/models/model.ts:73](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L73)
 
 Configuration for prompt caching.
 
@@ -12,7 +12,7 @@ Providers consume only the fields they support.
 optional strategy?: "auto" | "anthropic";
 ```
 
-Defined in: [src/models/model.ts:82](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L82)
+Defined in: [src/models/model.ts:82](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L82)
 
 Whether to skip caching for models that do not support it.
 
@@ -33,7 +33,7 @@ Whether to skip caching for models that do not support it.
 optional ttl?: CacheTTL;
 ```
 
-Defined in: [src/models/model.ts:94](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L94)
+Defined in: [src/models/model.ts:94](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L94)
 
 TTL for every cache point, overridden by a per-section TTL. Provider default when omitted.
 
@@ -47,7 +47,7 @@ Bedrock requires checkpoint TTLs to be non-increasing across `toolConfig`, syste
 optional toolsTTL?: boolean | CacheTTL;
 ```
 
-Defined in: [src/models/model.ts:101](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L101)
+Defined in: [src/models/model.ts:101](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L101)
 
 Cache the tool definitions. A TTL sets this section’s duration; `false` disables it.
 
@@ -65,7 +65,7 @@ true
 optional systemPromptTTL?: boolean | CacheTTL;
 ```
 
-Defined in: [src/models/model.ts:110](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L110)
+Defined in: [src/models/model.ts:110](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L110)
 
 Cache the system prompt, auto-injecting a cache point at its end so repeated calls with the same static system prefix hit the cache. A TTL sets this section’s duration; `true` (the default) reads the value from `ttl`; `false` disables systemPrompt cache injection.
 
@@ -83,7 +83,7 @@ true
 optional messagesTTL?: boolean | CacheTTL;
 ```
 
-Defined in: [src/models/model.ts:118](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L118)
+Defined in: [src/models/model.ts:118](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L118)
 
 Cache the conversation prefix, on the last user message. A TTL sets this section’s duration; `false` disables it.
 
@@ -101,6 +101,6 @@ true
 optional cacheKey?: string | false;
 ```
 
-Defined in: [src/models/model.ts:128](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/models/model.ts#L128)
+Defined in: [src/models/model.ts:128](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/model.ts#L128)
 
 Stable identity a prompt-cache-routing provider (OpenAI, LiteLLM) uses as its cache key. Left unset, it is derived per request as `strands-<sessionId>` whenever the agent has a session manager, so repeat runs of a session share a cache prefix with no key management. Set it to a string to pin your own key; set it to `false` to opt out of routing entirely. The resolved key (whether set or derived from the session id) is transmitted to the provider. Because the derived key is resolved per request, it is not reflected in `getConfig()`.

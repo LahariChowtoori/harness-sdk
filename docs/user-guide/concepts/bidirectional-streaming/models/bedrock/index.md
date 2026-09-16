@@ -57,15 +57,13 @@ if __name__ == "__main__":
 
 ## Cross-Modal Input
 
-Nova Sonic accepts text input at any point during an active voice session, without interrupting or waiting on the audio stream. Send a [`BidiTextInputEvent`](/docs/user-guide/concepts/bidirectional-streaming/events/index.md#biditextinputevent) the same way you would outside of a live conversation:
+Nova Sonic accepts text input at any point during an active voice session, without interrupting or waiting on the audio stream. Send a [text content block](/docs/user-guide/concepts/bidirectional-streaming/events/index.md#text) the same way you would outside of a live conversation:
 
 ```python
-from strands.experimental.bidi.types.events import BidiTextInputEvent
-
-await agent.send(BidiTextInputEvent(text="What's the weather in Seattle?"))
+await agent.send({"text": "What's the weather in Seattle?"})
 ```
 
-Text and audio input can be interleaved freely; sending text does not require pausing the microphone or waiting for the model to finish speaking.
+Text and audio input can be interleaved freely. Sending text does not require pausing the microphone or waiting for the model to finish speaking.
 
 ## Credentials
 

@@ -64,6 +64,17 @@ strategy = KeywordSearchStrategy()
 results = await strategy.search(storage, "dark mode toggle")
 ```
 
+#### index
+
+```python
+async def index(storage: Storage, key: str, data: bytes,
+                **kwargs: Any) -> None
+```
+
+Defined in: [src/strands/storage/search/keyword.py:64](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/search/keyword.py#L64)
+
+No-op — keyword search scans storage on the fly.
+
 #### search
 
 ```python
@@ -71,7 +82,7 @@ async def search(storage: Storage, query: str,
                  **kwargs: Any) -> builtins.list[StorageSearchResult]
 ```
 
-Defined in: [src/strands/storage/search/keyword.py:62](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/search/keyword.py#L62)
+Defined in: [src/strands/storage/search/keyword.py:67](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/search/keyword.py#L67)
 
 Search content in storage by keyword token-overlap scoring.
 

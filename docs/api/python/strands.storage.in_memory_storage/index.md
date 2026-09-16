@@ -6,7 +6,7 @@ In-memory storage implementation.
 class InMemoryStorage()
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:16](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L16)
+Defined in: [src/strands/storage/in\_memory\_storage.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L18)
 
 Map-backed storage for testing and short-lived processes.
 
@@ -25,12 +25,19 @@ data = await storage.read("sessions/abc/state.json")
 #### \_\_init\_\_
 
 ```python
-def __init__() -> None
+def __init__(
+        *,
+        search_strategy: SearchStrategy[InMemoryStorage] | None = None
+) -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:34](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L34)
+Defined in: [src/strands/storage/in\_memory\_storage.py:36](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L36)
 
 Initialize an empty in-memory store.
+
+**Arguments**:
+
+-   `search_strategy` - Optional search strategy. When set, `write()` automatically indexes entries and `search()` delegates to the strategy instead of the default keyword scan.
 
 #### write
 
@@ -38,7 +45,7 @@ Initialize an empty in-memory store.
 async def write(key: str, data: bytes) -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:39](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L39)
+Defined in: [src/strands/storage/in\_memory\_storage.py:48](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L48)
 
 Store data under key, overwriting any existing value.
 
@@ -57,7 +64,7 @@ Store data under key, overwriting any existing value.
 async def read(key: str) -> bytes | None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:53](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L53)
+Defined in: [src/strands/storage/in\_memory\_storage.py:68](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L68)
 
 Retrieve the bytes previously stored under key.
 
@@ -79,7 +86,7 @@ The stored bytes, or None if no value exists for key.
 async def delete(key: str) -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:70](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L70)
+Defined in: [src/strands/storage/in\_memory\_storage.py:85](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L85)
 
 Delete the value stored under key. A no-op if the key does not exist.
 
@@ -97,7 +104,7 @@ Delete the value stored under key. A no-op if the key does not exist.
 async def list(query: str = "") -> builtins.list[str]
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:83](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L83)
+Defined in: [src/strands/storage/in\_memory\_storage.py:98](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L98)
 
 List keys matching the given prefix.
 
@@ -119,9 +126,11 @@ Matching keys sorted ascending.
 async def search(query: str) -> builtins.list[StorageSearchResult]
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:100](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L100)
+Defined in: [src/strands/storage/in\_memory\_storage.py:115](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L115)
 
-Search stored content by keyword token-overlap scoring.
+Search stored content using the configured strategy.
+
+Delegates to the search strategy when one is set, otherwise falls back to keyword token-overlap scoring.
 
 **Arguments**:
 
@@ -137,7 +146,7 @@ All matches with relevance scores, ranked best-first.
 def namespace(prefix: str) -> _NamespacedStorage
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:111](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L111)
+Defined in: [src/strands/storage/in\_memory\_storage.py:131](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L131)
 
 Return a view of this storage with all keys prefixed.
 
@@ -155,6 +164,6 @@ A namespaced storage view.
 def clear() -> None
 ```
 
-Defined in: [src/strands/storage/in\_memory\_storage.py:122](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L122)
+Defined in: [src/strands/storage/in\_memory\_storage.py:142](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/in_memory_storage.py#L142)
 
 Remove all stored entries.

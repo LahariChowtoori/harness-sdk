@@ -6,7 +6,7 @@ Amazon S3 storage implementation.
 class S3Storage()
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L18)
+Defined in: [src/strands/storage/s3\_storage.py:19](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L19)
 
 Persists bytes as objects in an Amazon S3 bucket.
 
@@ -29,10 +29,11 @@ def __init__(bucket: str,
              prefix: str = "",
              region_name: str | None = None,
              boto_session: Any = None,
-             boto_client_config: Any = None) -> None
+             boto_client_config: Any = None,
+             search_strategy: SearchStrategy[S3Storage] | None = None) -> None
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:33](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L33)
+Defined in: [src/strands/storage/s3\_storage.py:34](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L34)
 
 Initialize S3 storage.
 
@@ -43,6 +44,7 @@ Initialize S3 storage.
 -   `region_name` - AWS region override.
 -   `boto_session` - Pre-configured boto3 session. Cannot combine with region\_name.
 -   `boto_client_config` - Botocore Config object for the S3 client.
+-   `search_strategy` - Optional search strategy. When set, `write()` automatically indexes entries and `search()` delegates to the strategy instead of the default keyword scan.
 
 **Raises**:
 
@@ -54,7 +56,7 @@ Initialize S3 storage.
 async def write(key: str, data: bytes) -> None
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:65](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L65)
+Defined in: [src/strands/storage/s3\_storage.py:71](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L71)
 
 Store data as an S3 object.
 
@@ -73,7 +75,7 @@ Store data as an S3 object.
 async def read(key: str) -> bytes | None
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:84](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L84)
+Defined in: [src/strands/storage/s3\_storage.py:96](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L96)
 
 Read an S3 object.
 
@@ -95,7 +97,7 @@ The object contents as bytes, or None if the key does not exist.
 async def delete(key: str) -> None
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:111](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L111)
+Defined in: [src/strands/storage/s3\_storage.py:123](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L123)
 
 Delete an S3 object. No-op if the key does not exist.
 
@@ -113,7 +115,7 @@ Delete an S3 object. No-op if the key does not exist.
 async def list(query: str = "") -> builtins.list[str]
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:129](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L129)
+Defined in: [src/strands/storage/s3\_storage.py:141](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L141)
 
 List S3 objects matching the given prefix.
 
@@ -137,9 +139,11 @@ Matching keys sorted ascending, with the storage-level prefix stripped.
 async def search(query: str) -> builtins.list[StorageSearchResult]
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:180](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L180)
+Defined in: [src/strands/storage/s3\_storage.py:192](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L192)
 
-Search stored content by keyword token-overlap scoring.
+Search stored content using the configured strategy.
+
+Delegates to the search strategy when one is set, otherwise falls back to keyword token-overlap scoring.
 
 **Arguments**:
 
@@ -155,7 +159,7 @@ All matches with relevance scores, ranked best-first.
 def namespace(prefix: str) -> _NamespacedStorage
 ```
 
-Defined in: [src/strands/storage/s3\_storage.py:193](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L193)
+Defined in: [src/strands/storage/s3\_storage.py:211](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/storage/s3_storage.py#L211)
 
 Return a view of this storage with all keys prefixed.
 

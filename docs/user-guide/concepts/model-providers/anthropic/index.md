@@ -86,6 +86,7 @@ The `model_config` configures the underlying model selected for inference. The s
 | `max_tokens` | Maximum number of tokens to generate before stopping | `1028` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.max_tokens) |
 | `model_id` | ID of a model to use | `claude-sonnet-4-6` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.model) |
 | `params` | Additional pass-through parameters | `{"metadata": {"user_id": "u1"}}` | [reference](https://platform.claude.com/docs/en/api/messages/create) |
+| `anthropic_tools` | [Built-in tools](#built-in-tools), appended to the agent’s function tools | `[{"type": "web_search_20260318", "name": "web_search"}]` | [reference](https://platform.claude.com/docs/en/docs/agents-and-tools/tool-use/overview) |
 | `cache_config` | Enables [prompt caching](#prompt-caching) on the system prompt and the conversation | `CacheConfig(ttl="1h")` | [reference](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) |
 | `cache_tools` | Caches the tool definitions | `"default"` or `CacheToolsConfig(ttl="1h")` | [reference](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) |
 (( /tab "Python" ))
@@ -97,6 +98,7 @@ The `model_config` configures the underlying model selected for inference. The s
 | `maxTokens` | Maximum tokens to generate | `1028` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.max_tokens) |
 | `stopSequences` | Sequences that stop generation | `['END']` | [reference](https://platform.claude.com/docs/en/api/messages/create#create.stop_sequences) |
 | `params` | Additional pass-through parameters | `{ metadata: { user_id: 'u1' } }` | [reference](https://platform.claude.com/docs/en/api/messages/create) |
+| `anthropicTools` | [Built-in tools](#built-in-tools), appended to the agent’s function tools | `[{ type: 'web_search_20260318', name: 'web_search' }]` | [reference](https://platform.claude.com/docs/en/docs/agents-and-tools/tool-use/overview) |
 | `cacheConfig` | Enables [prompt caching](#prompt-caching) on the tool definitions, the system prompt, and the conversation | `{ ttl: '1h' }` | [reference](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) |
 (( /tab "TypeScript" ))
 
@@ -227,6 +229,57 @@ console.log(`Sentiment: ${review.sentiment}`)
 (( /tab "TypeScript" ))
 
 For schema patterns, error handling, and per-invocation overrides, see [Structured Output](/docs/user-guide/concepts/agents/structured-output/index.md).
+
+### Built-in Tools
+
+(( tab "Python" ))
+Anthropic’s built-in server-side tools (web search, web fetch, code execution) can be passed via the `anthropic_tools` config option. These are appended alongside any function tools registered on the agent.
+
+```python
+from strands import Agent
+from strands.models.anthropic import AnthropicModel
+
+model = AnthropicModel(
+    client_args={"api_key": "<KEY>"},
+    model_id="claude-sonnet-4-6",
+    max_tokens=1028,
+    anthropic_tools=[{"type": "web_search_20260318", "name": "web_search", "max_uses": 5}],
+)
+
+agent = Agent(model=model)
+response = agent("What are the latest AI news today?")
+print(response)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+Anthropic’s built-in server-side tools (web search, web fetch, code execution) can be passed via the `anthropicTools` config option. These are appended alongside any function tools registered on the agent.
+
+```typescript
+import { Agent } from '@strands-agents/sdk'
+import { AnthropicModel } from '@strands-agents/sdk/models/anthropic'
+
+const model = new AnthropicModel({
+  apiKey: '<KEY>',
+  modelId: 'claude-sonnet-4-6',
+  maxTokens: 1028,
+  anthropicTools: [{ type: 'web_search_20260318', name: 'web_search', max_uses: 5 }],
+})
+
+const agent = new Agent({ model })
+const response = await agent.invoke('What are the latest AI news today?')
+console.log(response)
+```
+(( /tab "TypeScript" ))
+
+Web search results are surfaced as citations on the response text when Claude calls the tool directly (`allowed_callers: ["direct"]`). On `web_search_20260318` the default is dynamic filtering, which runs the search inside code execution and returns no citations. For available built-in tools and their versioned `type` strings, see the [Anthropic tool use documentation](https://platform.claude.com/docs/en/docs/agents-and-tools/tool-use/overview).
+
+Limitations:
+
+-   The raw server-tool blocks (search results, fetched pages, code output) are not kept in the conversation history, so on a later turn the model cannot refer back to them and will call the tool again if it needs them.
+-   When Anthropic pauses a long-running server-tool turn, the model provider resumes it automatically, up to 10 times per request, before the response reaches the agent loop. If the turn is still paused after that, the provider raises an error.
+-   Server tools are not sent when a specific tool call is forced (`tool_choice` of `any` or `tool`), which includes the forced structured-output retry; the model can only use them on turns where it is free to choose.
+-   Server-tool calls are billed separately by Anthropic and are not included in Strands usage metrics.
 
 ### Prompt Caching
 

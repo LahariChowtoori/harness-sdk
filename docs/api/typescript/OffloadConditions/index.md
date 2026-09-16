@@ -1,4 +1,4 @@
-Defined in: [src/context-manager/strategies/offload/base.ts:51](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/context-manager/strategies/offload/base.ts#L51)
+Defined in: [src/context-manager/strategies/offload/base.ts:51](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/strategies/offload/base.ts#L51)
 
 **`Experimental`**
 
@@ -20,7 +20,7 @@ When multiple strategies target the same content, they don’t conflict — stra
 optional threshold?: number;
 ```
 
-Defined in: [src/context-manager/strategies/offload/base.ts:53](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/context-manager/strategies/offload/base.ts#L53)
+Defined in: [src/context-manager/strategies/offload/base.ts:53](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/strategies/offload/base.ts#L53)
 
 **`Experimental`**
 
@@ -34,7 +34,7 @@ Token threshold above which individual blocks are offloaded.
 optional utilization?: number;
 ```
 
-Defined in: [src/context-manager/strategies/offload/base.ts:56](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/context-manager/strategies/offload/base.ts#L56)
+Defined in: [src/context-manager/strategies/offload/base.ts:56](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/strategies/offload/base.ts#L56)
 
 **`Experimental`**
 
@@ -48,7 +48,7 @@ Context utilization ratio (0-1+) above which the strategy fires.
 optional preserveRecent?: number;
 ```
 
-Defined in: [src/context-manager/strategies/offload/base.ts:63](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/context-manager/strategies/offload/base.ts#L63)
+Defined in: [src/context-manager/strategies/offload/base.ts:63](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/strategies/offload/base.ts#L63)
 
 **`Experimental`**
 

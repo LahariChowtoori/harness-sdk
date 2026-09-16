@@ -14,7 +14,7 @@ As conversations grow, managing this context becomes increasingly important for 
 
 Quick setup
 
-For most agents, you can skip manual configuration entirely. See [Context Management](/docs/user-guide/concepts/context-management/index.md).
+For most agents, pass `context_manager="auto"``contextManager: "auto"` and skip manual configuration. See [Context Management](/docs/user-guide/concepts/context-management/index.md). When `context_manager``contextManager` is set, the ContextManager owns all context reduction and any co-provided `conversation_manager``conversationManager` is ignored.
 
 ## Built-in Conversation Managers
 
@@ -503,68 +503,6 @@ Each conversation manager uses the same reduction logic for proactive compressio
 
 Because `BeforeModelCallEvent` triggers before every model call including calls within a tool-use cycle, this provides automatic in-loop compression. If an agent makes five tool calls in a single invocation and context grows past the threshold between calls three and four, compression triggers before call four.
 
-### Context Window Limit
-
-The threshold check requires the model’s context window size. The SDK auto-populates `contextWindowLimit` from built-in lookup tables ([Python](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/models/_defaults.py), [TypeScript](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/defaults.ts)) for known models. You can override it manually for models not in the lookup table:
-
-(( tab "Python" ))
-```python
-model = BedrockModel(
-    model_id="my-custom-model",
-    context_window_limit=128_000,
-)
-```
-(( /tab "Python" ))
-
-(( tab "TypeScript" ))
-```typescript
-const model = new BedrockModel({
-  modelId: 'my-custom-model',
-  contextWindowLimit: 128_000,
-})
-```
-(( /tab "TypeScript" ))
-
-Inaccurate compression with default fallback
-
-If `contextWindowLimit` is not set and the model ID is not in the built-in lookup table, the SDK falls back to a default of 200,000 tokens. When the default token limit is used but the model’s actual context window is significantly different, proactive compression will not behave correctly.
-
-### Token Estimation
-
-The agent estimates input tokens using the following strategy:
-
-1.  **Known baseline**: Reads `inputTokens + outputTokens` from the last assistant message’s `metadata.usage`
-2.  **Delta estimation**: Only estimates tokens for new messages added since that assistant message using the model’s `countTokens()` method
-3.  **Cold start fallback**: When no prior usage metadata exists (first call or after session restore without metadata), estimates all messages via `countTokens()`
-
-The `countTokens()` method uses a character-based heuristic to estimate token count by default (characters ÷ 4 for text, characters ÷ 2 for JSON). Some model providers support native token counting APIs for exact counts, which can be enabled on the model. See the Token Counting section on each provider’s page for details and instructions:
-
--   [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md#token-counting)
--   [Anthropic](/docs/user-guide/concepts/model-providers/anthropic/index.md#token-counting)
--   [Google Gemini](/docs/user-guide/concepts/model-providers/google/index.md#token-counting)
--   [OpenAI Responses](/docs/user-guide/concepts/model-providers/openai-responses/index.md#token-counting)
--   [llama.cpp](/docs/user-guide/concepts/model-providers/llamacpp/index.md#token-counting)
-
-### Utilization Estimation
-
-The Model base class provides an `estimate_utilization(input_tokens)``estimateUtilization(inputTokens)` method that computes the fraction of the context window consumed by a given input token count. It uses the model’s configured `context_window_limit``contextWindowLimit` as the denominator, falling back to a default of 200,000 tokens when not set:
-
-(( tab "Python" ))
-```python
-ratio = model.estimate_utilization(input_tokens=projected_tokens)
-# ratio is 0–1+ (above 1.0 means overflow)
-```
-(( /tab "Python" ))
-
-(( tab "TypeScript" ))
-```typescript
-const ratio = model.estimateUtilization(projectedTokens)
-// ratio is 0–1+ (above 1.0 means overflow)
-```
-(( /tab "TypeScript" ))
-
-This method resolves the model’s `context_window_limit``contextWindowLimit` (falling back to the 200,000 default with a warning when not configured) and returns `inputTokens / contextWindowLimit`. The SDK’s built-in conversation managers use this internally for proactive compression decisions, but you can also call it directly when building custom context management logic.
-
 ## Creating a ConversationManager
 
 (( tab "Python" ))
@@ -651,16 +589,16 @@ See the [SlidingWindowConversationManager](https://github.com/strands-agents/har
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
 - [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (2 shared tags)
-- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Storage](/docs/user-guide/concepts/storage/index.md) (1 shared tag)
+- [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 
 
 ## Implementation

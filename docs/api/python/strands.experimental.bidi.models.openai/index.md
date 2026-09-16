@@ -14,7 +14,7 @@ OpenAI documents a 60 minute limit on realtime sessions ([docs](https://platform
 class OpenAIRealtimeModel(BidiModel, AudioCapable)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:103](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L103)
+Defined in: [src/strands/experimental/bidi/models/openai.py:102](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L102)
 
 OpenAI Realtime API implementation for bidirectional streaming.
 
@@ -32,7 +32,7 @@ def __init__(*,
              **model_config: Unpack[BidiModelConfig]) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:114](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L114)
+Defined in: [src/strands/experimental/bidi/models/openai.py:113](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L113)
 
 Initialize OpenAI Realtime bidirectional model.
 
@@ -56,7 +56,7 @@ Initialize OpenAI Realtime bidirectional model.
 def update_config(**model_config: Unpack[BidiModelConfig]) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:181](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L181)
+Defined in: [src/strands/experimental/bidi/models/openai.py:180](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L180)
 
 Update the model configuration with the provided arguments.
 
@@ -75,7 +75,7 @@ Update the model configuration with the provided arguments.
 def get_config() -> BidiModelConfig
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:196](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L196)
+Defined in: [src/strands/experimental/bidi/models/openai.py:195](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L195)
 
 Return the model configuration by reference.
 
@@ -86,7 +86,7 @@ Return the model configuration by reference.
 def get_audio_config() -> AudioConfig
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:201](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L201)
+Defined in: [src/strands/experimental/bidi/models/openai.py:200](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L200)
 
 Get the resolved audio configuration.
 
@@ -99,7 +99,7 @@ async def start(system_prompt: str | None = None,
                 **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:226](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L226)
+Defined in: [src/strands/experimental/bidi/models/openai.py:225](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L225)
 
 Establish bidirectional connection to OpenAI Realtime API.
 
@@ -116,17 +116,17 @@ Establish bidirectional connection to OpenAI Realtime API.
 async def receive() -> AsyncGenerator[BidiOutputEvent, None]
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:433](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L433)
+Defined in: [src/strands/experimental/bidi/models/openai.py:432](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L432)
 
 Receive OpenAI events and convert to Strands TypedEvent format.
 
 #### send
 
 ```python
-async def send(content: BidiInputEvent | ToolResultEvent) -> None
+async def send(content: BidiContentBlock | ToolResultBlock) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:704](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L704)
+Defined in: [src/strands/experimental/bidi/models/openai.py:703](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L703)
 
 Unified send method for all content types. Sends the given content to OpenAI.
 
@@ -134,7 +134,7 @@ Dispatches to appropriate internal handler based on content type.
 
 **Arguments**:
 
--   `content` - Typed event (BidiTextInputEvent, BidiAudioInputEvent, BidiImageInputEvent, or ToolResultEvent).
+-   `content` - A TextBlock, AudioBlock, ImageBlock, or ToolResultBlock.
 
 **Raises**:
 
@@ -146,7 +146,7 @@ Dispatches to appropriate internal handler based on content type.
 async def stop() -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:787](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L787)
+Defined in: [src/strands/experimental/bidi/models/openai.py:785](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L785)
 
 Close session and cleanup resources.
 
@@ -159,7 +159,7 @@ async def restart(system_prompt: str | None = None,
                   **restart_kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/openai.py:804](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L804)
+Defined in: [src/strands/experimental/bidi/models/openai.py:802](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/openai.py#L802)
 
 Restart by closing the connection and starting a new one, replaying history.
 

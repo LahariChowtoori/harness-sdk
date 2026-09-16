@@ -303,7 +303,7 @@ For more guidance on performance, errors, and composition, see the [Hooks docume
 - [Bidirectional Streaming Observability](/docs/user-guide/concepts/bidirectional-streaming/observability/index.md) (1 shared tag)
 - [Plugins](/docs/user-guide/concepts/plugins/index.md) (1 shared tag)
 - [Voice & Realtime Quickstart](/docs/user-guide/concepts/bidirectional-streaming/quickstart/index.md) (1 shared tag)
-- [Agent Loop](/docs/user-guide/concepts/agents/agent-loop/index.md) (1 shared tag)
+- [Context Offloader](/docs/user-guide/concepts/plugins/context-offloader/index.md) (1 shared tag)
 
 
 ## Implementation

@@ -8,7 +8,7 @@ The agent loop handles the events received from the model and executes tools whe
 class _BidiAgentLoop()
 ```
 
-Defined in: [src/strands/experimental/bidi/agent/loop.py:78](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L78)
+Defined in: [src/strands/experimental/bidi/agent/loop.py:77](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L77)
 
 Agent loop.
 
@@ -27,7 +27,7 @@ Agent loop.
 def __init__(agent: "BidiAgent") -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/agent/loop.py:93](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L93)
+Defined in: [src/strands/experimental/bidi/agent/loop.py:92](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L92)
 
 Initialize members of the agent loop.
 
@@ -43,7 +43,7 @@ Note, before receiving events from the loop, the user must call `start`.
 async def start(invocation_state: dict[str, Any] | None = None) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/agent/loop.py:142](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L142)
+Defined in: [src/strands/experimental/bidi/agent/loop.py:141](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L141)
 
 Start the agent loop.
 
@@ -63,25 +63,25 @@ The agent model is started as part of this call.
 async def stop() -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/agent/loop.py:198](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L198)
+Defined in: [src/strands/experimental/bidi/agent/loop.py:197](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L197)
 
 Stop the agent loop.
 
 #### send
 
 ```python
-async def send(event: BidiInputEvent | ToolResultEvent) -> None
+async def send(content: BidiContentBlock | ToolResultBlock) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/agent/loop.py:232](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L232)
+Defined in: [src/strands/experimental/bidi/agent/loop.py:231](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L231)
 
-Send model event.
+Send a content block to the model.
 
-Additionally, add text input to messages array.
+Text input is also added to the conversation history.
 
 **Arguments**:
 
--   `event` - User input event or tool result.
+-   `content` - User input or tool result to send.
 
 **Raises**:
 
@@ -93,7 +93,7 @@ Additionally, add text input to messages array.
 async def receive() -> AsyncGenerator[BidiOutputEvent, None]
 ```
 
-Defined in: [src/strands/experimental/bidi/agent/loop.py:262](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L262)
+Defined in: [src/strands/experimental/bidi/agent/loop.py:260](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/loop.py#L260)
 
 Receive model and tool call events.
 

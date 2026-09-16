@@ -23,7 +23,7 @@ Extract configs and setup prompt session.
 #### \_\_call\_\_
 
 ```python
-async def __call__() -> BidiTextInputEvent
+async def __call__() -> TextBlock
 ```
 
 Defined in: [src/strands/experimental/bidi/io/text.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/text.py#L28)

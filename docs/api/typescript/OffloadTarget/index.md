@@ -8,7 +8,7 @@ type OffloadTarget =
   | string[];
 ```
 
-Defined in: [src/context-manager/strategies/offload/base.ts:35](https://github.com/strands-agents/harness-sdk/blob/d1e1d0acbb3718d71741eceedee029cda695dcfd/strands-ts/src/context-manager/strategies/offload/base.ts#L35)
+Defined in: [src/context-manager/strategies/offload/base.ts:35](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/strategies/offload/base.ts#L35)
 
 **`Experimental`**
 

@@ -1258,7 +1258,7 @@ const model = new BedrockModel({
 
 Mantle is not a separate service or model catalog: it is Amazon Bedrock’s second endpoint family, [`bedrock-mantle`](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html), which serves Bedrock-hosted models through OpenAI-compatible APIs. The two families serve different, overlapping model sets: many models are only on the standard `bedrock-runtime` endpoint that `BedrockModel` uses, some model lines are only on `bedrock-mantle`, and some are on both. AWS lists which endpoint serves each model in [endpoint availability by model](https://docs.aws.amazon.com/bedrock/latest/userguide/models-endpoint-availability.html).
 
-Pick your provider by where the model is served. When it is on `bedrock-runtime`, use `BedrockModel` as described on the rest of this page (AWS recommends that endpoint when a model is on both). When it is served through Mantle, connect with the SDK’s [OpenAI Responses provider](/docs/user-guide/concepts/model-providers/openai-responses/index.md) instead, in one of the two ways below.
+Pick your provider by where the model is served. When it is on `bedrock-runtime`, use `BedrockModel` as described on the rest of this page (AWS recommends that endpoint when a model is on both). When it is served through Mantle, connect with the SDK’s [OpenAI Responses provider](/docs/user-guide/concepts/model-providers/openai-responses/index.md) instead, in one of the two ways below. In Python, that provider can also target `bedrock-runtime`; see [Choosing the Endpoint](#choosing-the-endpoint).
 
 #### Connecting with AWS Credentials
 
@@ -1299,6 +1299,28 @@ Requires the optional dependency: `npm install @aws/bedrock-token-generator`
 (( /tab "TypeScript" ))
 
 Omit the region to resolve it from your AWS environment. The config also accepts AWS credentials to forward to the token generator (`credentials_provider``credentials`, a botocore CredentialProviderstatic identity or provider function) and a token-lifetime override (`expiry``expiresInSeconds`). In Python, `boto_session` can also supply the region from a configured profile.
+
+#### Choosing the Endpoint
+
+The config targets `bedrock-mantle` by default. In Python, set `endpoint` to `bedrock-runtime`, which is where the OpenAI GPT models are served through [cross-Region inference](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html) profile ids such as `global.openai.gpt-5.6-luna`:
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.models.openai_responses import OpenAIResponsesModel
+
+model = OpenAIResponsesModel(
+    model_id="global.openai.gpt-5.6-luna",
+    bedrock_mantle_config={"endpoint": "bedrock-runtime", "region": "us-east-1"},
+)
+
+agent = Agent(model=model)
+response = agent("What is 2+2?")
+print(response)
+```
+(( /tab "Python" ))
+
+AWS compares what the two endpoints support in [endpoints supported by Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/endpoints.html).
 
 #### Connecting with a Bedrock API Key
 

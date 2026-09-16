@@ -14,7 +14,7 @@ Supported document formats.
 class Location(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L18)
+Defined in: [src/strands/types/media.py:19](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L19)
 
 A location for a document.
 
@@ -26,7 +26,7 @@ This type is a generic location for a document. Its usage is determined by the u
 class S3Location(Location)
 ```
 
-Defined in: [src/strands/types/media.py:27](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L27)
+Defined in: [src/strands/types/media.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L28)
 
 A storage location in an Amazon S3 bucket.
 
@@ -54,7 +54,7 @@ Supported audio formats.
 class AudioSource(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:70](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L70)
+Defined in: [src/strands/types/media.py:71](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L71)
 
 Contains the content of an audio block.
 
@@ -71,7 +71,7 @@ Only one of `bytes` or `location` should be specified.
 class AudioContent(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:84](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L84)
+Defined in: [src/strands/types/media.py:85](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L85)
 
 Audio to include in a message.
 
@@ -80,13 +80,39 @@ Audio to include in a message.
 -   `format` - The format of the audio.
 -   `source` - The source containing the audio content.
 
+## AudioBlock
+
+```python
+@dataclass
+class AudioBlock()
+```
+
+Defined in: [src/strands/types/media.py:102](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L102)
+
+Audio content for a message.
+
+**Attributes**:
+
+-   `format` - Audio format.
+-   `source` - Source containing the audio.
+
+#### to\_dict
+
+```python
+def to_dict() -> _AudioBlockData
+```
+
+Defined in: [src/strands/types/media.py:113](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L113)
+
+Return the dictionary form of this block.
+
 ## DocumentSource
 
 ```python
 class DocumentSource(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:96](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L96)
+Defined in: [src/strands/types/media.py:118](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L118)
 
 Contains the content of a document.
 
@@ -103,7 +129,7 @@ Only one of `bytes` or `s3Location` should be specified.
 class DocumentContent(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:110](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L110)
+Defined in: [src/strands/types/media.py:132](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L132)
 
 A document to include in a message.
 
@@ -123,7 +149,7 @@ Supported image formats.
 class ImageSource(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:130](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L130)
+Defined in: [src/strands/types/media.py:152](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L152)
 
 Contains the content of an image.
 
@@ -140,7 +166,7 @@ Only one of `bytes` or `s3Location` should be specified.
 class ImageContent(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:144](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L144)
+Defined in: [src/strands/types/media.py:166](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L166)
 
 An image to include in a message.
 
@@ -148,6 +174,32 @@ An image to include in a message.
 
 -   `format` - The format of the image (e.g., “png”, “jpeg”).
 -   `source` - The source containing the image’s binary content.
+
+## ImageBlock
+
+```python
+@dataclass
+class ImageBlock()
+```
+
+Defined in: [src/strands/types/media.py:183](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L183)
+
+Image content for a message.
+
+**Attributes**:
+
+-   `format` - Image format.
+-   `source` - Source containing the image.
+
+#### to\_dict
+
+```python
+def to_dict() -> _ImageBlockData
+```
+
+Defined in: [src/strands/types/media.py:194](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L194)
+
+Return the dictionary form of this block.
 
 #### VideoFormat
 
@@ -159,7 +211,7 @@ Supported video formats.
 class VideoSource(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:160](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L160)
+Defined in: [src/strands/types/media.py:203](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L203)
 
 Contains the content of a video.
 
@@ -176,7 +228,7 @@ Only one of `bytes` or `s3Location` should be specified.
 class VideoContent(TypedDict)
 ```
 
-Defined in: [src/strands/types/media.py:174](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L174)
+Defined in: [src/strands/types/media.py:217](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/media.py#L217)
 
 A video to include in a message.
 

@@ -42,7 +42,11 @@ For non-text content, the plugin replaces the result with a descriptive placehol
 
 Quick setup
 
-You can enable a pre-configured `ContextOffloader` alongside summarization-based context management with a single parameter. See [Context Management](/docs/user-guide/concepts/context-management/index.md).
+The [ContextManager](/docs/user-guide/concepts/context-management/index.md) includes built-in offloading strategies with stash and retrieval. For most agents, pass `context_manager="auto"``contextManager: "auto"` instead of configuring `ContextOffloader` separately.
+
+Note
+
+`ContextOffloader` is for agents that configure offloading independently of `context_manager``contextManager`. When `context_manager``contextManager` is set, its built-in strategies handle offloading and this plugin is not needed.
 
 Pass a `ContextOffloader` instance to your agent’s `plugins` list with a [Storage](/docs/user-guide/concepts/storage/index.md) backend:
 
@@ -433,16 +437,16 @@ const agent = new Agent({
 
 ## Related pages
 
+- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (2 shared tags)
+- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (2 shared tags)
 - [Context Management](/docs/user-guide/concepts/context-management/index.md) (2 shared tags)
+- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (2 shared tags)
+- [Strategy Presets](/docs/user-guide/concepts/context-management/presets/index.md) (2 shared tags)
 - [Conversation Management](/docs/user-guide/concepts/agents/conversation-management/index.md) (2 shared tags)
 - [Steering (Plugins)](/docs/user-guide/concepts/plugins/steering/index.md) (2 shared tags)
 - [Context Injector](/docs/user-guide/concepts/plugins/context-injector/index.md) (1 shared tag)
 - [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
 - [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
 
 
 ## Implementation

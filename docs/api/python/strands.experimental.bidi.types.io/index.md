@@ -9,7 +9,7 @@ Defines callable protocols for input and output channels that can be used with B
 class BidiInput(Protocol)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L18)
+Defined in: [src/strands/experimental/bidi/types/io.py:19](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L19)
 
 Protocol for bidirectional input callables.
 
@@ -21,7 +21,7 @@ Input callables read data from a source (microphone, camera, websocket, etc.) an
 async def start(agent: "BidiAgent") -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:25](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L25)
+Defined in: [src/strands/experimental/bidi/types/io.py:26](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L26)
 
 Start input.
 
@@ -31,23 +31,23 @@ Start input.
 async def stop() -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:29](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L29)
+Defined in: [src/strands/experimental/bidi/types/io.py:30](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L30)
 
 Stop input.
 
 #### \_\_call\_\_
 
 ```python
-def __call__() -> Awaitable[BidiInputEvent]
+def __call__() -> Awaitable[BidiAgentInput]
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:33](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L33)
+Defined in: [src/strands/experimental/bidi/types/io.py:34](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L34)
 
 Read input data from the source.
 
 **Returns**:
 
-Awaitable that resolves to an input event (audio, text, image, etc.)
+Awaitable that resolves to input content (audio, text, image, etc.)
 
 ## BidiOutput
 
@@ -56,7 +56,7 @@ Awaitable that resolves to an input event (audio, text, image, etc.)
 class BidiOutput(Protocol)
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:43](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L43)
+Defined in: [src/strands/experimental/bidi/types/io.py:44](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L44)
 
 Protocol for bidirectional output callables.
 
@@ -68,7 +68,7 @@ Output callables receive events from the agent and handle them appropriately (pl
 async def start(agent: "BidiAgent") -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:50](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L50)
+Defined in: [src/strands/experimental/bidi/types/io.py:51](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L51)
 
 Start output.
 
@@ -78,7 +78,7 @@ Start output.
 async def stop() -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:54](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L54)
+Defined in: [src/strands/experimental/bidi/types/io.py:55](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L55)
 
 Stop output.
 
@@ -88,7 +88,7 @@ Stop output.
 def __call__(event: BidiOutputEvent) -> Awaitable[None]
 ```
 
-Defined in: [src/strands/experimental/bidi/types/io.py:58](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L58)
+Defined in: [src/strands/experimental/bidi/types/io.py:59](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L59)
 
 Process output events from the agent.
 

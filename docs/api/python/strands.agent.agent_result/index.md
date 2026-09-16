@@ -9,7 +9,7 @@ This module defines the AgentResult class which encapsulates the complete respon
 class AgentResult()
 ```
 
-Defined in: [src/strands/agent/agent\_result.py:20](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L20)
+Defined in: [src/strands/agent/agent\_result.py:21](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L21)
 
 Represents the last result of invoking an agent with a prompt.
 
@@ -30,7 +30,7 @@ Represents the last result of invoking an agent with a prompt.
 def context_size() -> int | None
 ```
 
-Defined in: [src/strands/agent/agent\_result.py:44](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L44)
+Defined in: [src/strands/agent/agent\_result.py:45](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L45)
 
 Most recent context size in tokens from the last LLM call.
 
@@ -45,7 +45,7 @@ The total prompt the model processed on the most recent cycle, including cached 
 def projected_context_size() -> int | None
 ```
 
-Defined in: [src/strands/agent/agent\_result.py:54](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L54)
+Defined in: [src/strands/agent/agent\_result.py:55](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L55)
 
 Projected context size for the next model call.
 
@@ -59,7 +59,7 @@ The projected token count (total prompt including cached tokens plus generated o
 def __str__() -> str
 ```
 
-Defined in: [src/strands/agent/agent\_result.py:63](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L63)
+Defined in: [src/strands/agent/agent\_result.py:64](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L64)
 
 Return a string representation of the agent result.
 
@@ -80,7 +80,7 @@ String representation based on the priority order above.
 def from_dict(cls, data: dict[str, Any]) -> "AgentResult"
 ```
 
-Defined in: [src/strands/agent/agent\_result.py:96](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L96)
+Defined in: [src/strands/agent/agent\_result.py:97](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L97)
 
 Rehydrate an AgentResult from persisted JSON.
 
@@ -102,9 +102,11 @@ AgentResult instance
 def to_dict() -> dict[str, Any]
 ```
 
-Defined in: [src/strands/agent/agent\_result.py:122](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L122)
+Defined in: [src/strands/agent/agent\_result.py:123](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent_result.py#L123)
 
 Convert this AgentResult to JSON-serializable dictionary.
+
+Binary values in `message` (for example Converse `redactedContent` blobs) are base64-encoded with the same helpers used by session persistence.
 
 **Returns**:
 

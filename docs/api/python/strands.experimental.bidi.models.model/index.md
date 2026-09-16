@@ -157,7 +157,7 @@ The stream continues until the connection is closed or an error occurs.
 
 ```python
 @abc.abstractmethod
-async def send(content: BidiInputEvent | ToolResultEvent) -> None
+async def send(content: BidiContentBlock | ToolResultBlock) -> None
 ```
 
 Defined in: [src/strands/experimental/bidi/models/model.py:139](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L139)
@@ -168,20 +168,19 @@ Transmits user input or tool results to the model during an active streaming ses
 
 **Arguments**:
 
--   `content` - The content to send. Must be one of:
-    
-    -   BidiTextInputEvent: Text message from the user
-    -   BidiAudioInputEvent: Audio data for speech input
-    -   BidiImageInputEvent: Image data for visual understanding
-    -   ToolResultEvent: Result from a tool execution
+-   `content` - A TextBlock, AudioBlock, ImageBlock, or ToolResultBlock.
 
 **Example**:
 
 ```plaintext
-await model.send(BidiTextInputEvent(text="Hello", role="user"))
-await model.send(BidiAudioInputEvent(audio=bytes, format="pcm", sample_rate=16000, channels=1))
-await model.send(BidiImageInputEvent(image=bytes, mime_type="image/jpeg", encoding="raw"))
-await model.send(ToolResultEvent(tool_result))
+from strands.types.content import TextBlock
+from strands.types.media import AudioBlock, ImageBlock
+from strands.types.tools import ToolResultBlock
+
+await model.send(TextBlock("Hello"))
+await model.send(AudioBlock(format="pcm", source=\{"bytes": audio_bytes}))
+await model.send(ImageBlock(format="jpeg", source=\{"bytes": image_bytes}))
+await model.send(ToolResultBlock(tool_use_id="call-1", status="success", content=[\{"text": "Done"}]))
 ```
 
 ## BidiModelTimeoutError
@@ -190,7 +189,7 @@ await model.send(ToolResultEvent(tool_result))
 class BidiModelTimeoutError(Exception)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/model.py:168](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L168)
+Defined in: [src/strands/experimental/bidi/models/model.py:167](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L167)
 
 Model timeout error.
 
@@ -202,7 +201,7 @@ Bidirectional models are often configured with a connection time limit. Bedrock 
 def __init__(message: str, **restart_config: Any) -> None
 ```
 
-Defined in: [src/strands/experimental/bidi/models/model.py:176](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L176)
+Defined in: [src/strands/experimental/bidi/models/model.py:175](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L175)
 
 Initialize error.
 
@@ -218,7 +217,7 @@ Initialize error.
 class AudioCapable(Protocol)
 ```
 
-Defined in: [src/strands/experimental/bidi/models/model.py:189](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L189)
+Defined in: [src/strands/experimental/bidi/models/model.py:188](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L188)
 
 Protocol for models that support audio input and output.
 
@@ -228,6 +227,6 @@ Protocol for models that support audio input and output.
 def get_audio_config() -> AudioConfig
 ```
 
-Defined in: [src/strands/experimental/bidi/models/model.py:192](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L192)
+Defined in: [src/strands/experimental/bidi/models/model.py:191](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/models/model.py#L191)
 
 Get the resolved audio configuration.
