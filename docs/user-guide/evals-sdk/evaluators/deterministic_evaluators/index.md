@@ -1,17 +1,17 @@
 ## Overview
 
-Deterministic evaluators provide fast, code-based evaluation without LLM judges. They perform exact checks on outputs, trajectories, and environment state — making them ideal for regression testing, CI/CD pipelines, and cases where evaluation criteria are objective and well-defined.
+Deterministic evaluators provide fast, code-based evaluation without LLM judges. They perform exact checks on outputs, trajectories, and environment state, making them a good fit for regression testing, CI/CD pipelines, and cases where evaluation criteria are objective and well-defined.
 
-## Key Features
+## Key features
 
--   **No LLM Required**: Pure code-based evaluation — fast and free
+-   **No LLM Required**: Pure code-based evaluation, fast and free
 -   **Deterministic Results**: Same input always produces the same score
 -   **Multiple Check Types**: Output matching, tool call verification, and state comparison
 -   **Async Support**: All evaluators support both sync and async evaluation
 
-## Available Evaluators
+## Available evaluators
 
-### Output Evaluators
+### Output evaluators
 
 #### `Equals`
 
@@ -61,7 +61,7 @@ evaluator = StartsWith(value="The capital", case_sensitive=False)
 -   `value` (required): The prefix to check.
 -   `case_sensitive` (optional, default `True`): Whether the check is case-sensitive.
 
-### Trajectory Evaluators
+### Trajectory evaluators
 
 #### `ToolCalled`
 
@@ -77,7 +77,23 @@ evaluator = ToolCalled(tool_name="calculator")
 
 -   `tool_name` (required): Name of the tool to check for.
 
-### Environment State Evaluators
+#### `SkillInvoked`
+
+Checks if a specific skill was invoked in the trajectory. A refused load does not count as invoked, since the agent never received the skill. Skill signals are recognized for the Strands `AgentSkills` plugin and several other harnesses (see the [skill evaluators](/docs/user-guide/evals-sdk/evaluators/skill_selection_accuracy_evaluator/index.md) for the full list).
+
+```python
+from strands_evals.evaluators import SkillInvoked
+
+evaluator = SkillInvoked(skill_name="pdf-processing")
+```
+
+**Parameters:**
+
+-   `skill_name` (required): Name of the skill to check for.
+
+Scores `1.0` when a successful load of the named skill is found, else `0.0`. The `reason` distinguishes a skill that was never requested from one that was requested but whose load failed.
+
+### Environment state evaluators
 
 #### `StateEquals`
 
@@ -98,7 +114,7 @@ evaluator = StateEquals(name="temperature")
 -   `name` (required): Name of the environment state to check.
 -   `value` (optional): Expected value. If `None`, uses `expected_environment_state` from the evaluation case.
 
-## Usage Example
+## Usage example
 
 ```python
 import asyncio
@@ -134,9 +150,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## Combining with LLM Evaluators
+## Combining with LLM evaluators
 
-Deterministic evaluators work well alongside LLM-based evaluators for comprehensive assessment:
+Deterministic evaluators pair well with LLM-based evaluators, combining fast exact checks with nuanced quality judgment:
 
 ```python
 from strands_evals.evaluators import Contains, HelpfulnessEvaluator, CorrectnessEvaluator
@@ -148,14 +164,14 @@ evaluators = [
 ]
 ```
 
-## Best Practices
+## Best practices
 
 1.  **Use for regression testing**: Deterministic evaluators are ideal for CI/CD since they’re fast and don’t require API calls
 2.  **Combine with LLM evaluators**: Use deterministic checks as a first pass, then LLM evaluators for nuanced assessment
 3.  **Case sensitivity**: Use `case_sensitive=False` when exact casing doesn’t matter
 4.  **State verification**: Use `StateEquals` when your agent modifies external state through tools
 
-## Related Evaluators
+## Related evaluators
 
 -   [**OutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): LLM-based output evaluation with custom rubrics
 -   [**TrajectoryEvaluator**](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md): LLM-based trajectory evaluation
@@ -163,10 +179,10 @@ evaluators = [
 
 ## Related pages
 
-- [Tool Parameter Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
-- [Tool Selection Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
-- [Trajectory Evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
-- [Tool Simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (1 shared tag)
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)
+- [Tool parameter accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
+- [Tool selection accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
+- [Trajectory evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Tool simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
+- [Recovery strategy evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)

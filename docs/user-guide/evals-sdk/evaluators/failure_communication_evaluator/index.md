@@ -2,7 +2,7 @@
 
 The `FailureCommunicationEvaluator` assesses how well an agent communicates failures to the user when tools or services fail. It uses an LLM-as-judge approach with a five-level scoring rubric to evaluate clarity, actionability, transparency, and tone of failure messages. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/chaos_failure_communication_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the full conversation trace including tool call results and agent responses
 -   **Five-Level Scoring**: Granular scale from “Failure” to “Excellent”
@@ -10,7 +10,7 @@ The `FailureCommunicationEvaluator` assesses how well an agent communicates fail
 -   **Structured Reasoning**: Provides step-by-step reasoning for each evaluation
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 
-## When to Use
+## When to use
 
 Use the `FailureCommunicationEvaluator` when you need to:
 
@@ -20,19 +20,37 @@ Use the `FailureCommunicationEvaluator` when you need to:
 -   Measure user trust maintenance during failures
 -   Compare failure communication across agent configurations
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the full conversation trace including tool call results and agent responses.
 
 ## Parameters
 
+### `version` (optional)
+
+-   **Type**: `str`
+-   **Default**: `"v0"`
+-   **Description**: Prompt template version for the judge’s system prompt.
+
 ### `model` (optional)
 
 -   **Type**: `Model | str | None`
--   **Default**: `None` (uses default Bedrock model)
+-   **Default**: `None` (uses the default Bedrock model)
 -   **Description**: The model to use as the judge.
 
-## Scoring System
+### `system_prompt` (optional)
+
+-   **Type**: `str | None`
+-   **Default**: `None` (uses the built-in prompt for the selected `version`)
+-   **Description**: Overrides the judge’s system prompt.
+
+### `name` (optional)
+
+-   **Type**: `str | None`
+-   **Default**: `None`
+-   **Description**: Custom evaluator name shown in the evaluation report.
+
+## Scoring system
 
 | Rating | Score | Description |
 | --- | --- | --- |
@@ -46,7 +64,7 @@ A response passes the evaluation if the score is >= 0.5.
 
 When no tool failures occur during the session, the evaluator produces a neutral score of 0.5, since there are no failures to assess communication quality against.
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -109,7 +127,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `FailureCommunicationEvaluator` returns `EvaluationOutput` objects with:
 
@@ -118,7 +136,7 @@ The `FailureCommunicationEvaluator` returns `EvaluationOutput` objects with:
 -   **reason**: Step-by-step reasoning explaining the evaluation
 -   **label**: One of the categorical labels (e.g., “Good”, “Excellent”)
 
-## What Gets Evaluated
+## What gets evaluated
 
 The evaluator examines:
 
@@ -130,7 +148,7 @@ The evaluator examines:
     -   Is it transparent about what went wrong (without exposing internals)?
     -   Is the tone appropriate (not dismissive, not alarming)?
 
-## Best Practices
+## Best practices
 
 1.  **Include Tool Failures in Test Cases**: The evaluator needs tool failures in the trace to assess communication quality
 2.  **Capture Complete Sessions**: Include all conversation turns and tool call results in the trajectory
@@ -138,23 +156,23 @@ The evaluator examines:
 4.  **Combine with Other Evaluators**: Use alongside `RecoveryStrategyEvaluator` and `PartialCompletionEvaluator`
 5.  **Provide System Prompts with Failure Guidance**: Agents with explicit failure-handling instructions tend to score higher
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Single Tool Failure
+### Pattern 1: Single tool failure
 
 Evaluate how the agent communicates a single tool timeout or error.
 
-### Pattern 2: Multiple Tool Failures
+### Pattern 2: Multiple tool failures
 
 Assess communication quality when several tools fail simultaneously.
 
-### Pattern 3: Graceful Degradation
+### Pattern 3: Graceful degradation
 
 Measure how the agent explains partial results when some tools succeed and others fail.
 
-## Example Scenarios
+## Example scenarios
 
-### Scenario 1: Excellent Communication
+### Scenario 1: Excellent communication
 
 ```plaintext
 Tool: search_flights -> Timeout
@@ -164,7 +182,7 @@ can help you explore alternative options like checking a different travel date."
 Evaluation: Excellent (1.0) - Clear, transparent, actionable
 ```
 
-### Scenario 2: Good Communication
+### Scenario 2: Good communication
 
 ```plaintext
 Tool: search_flights -> NetworkError
@@ -173,7 +191,7 @@ Please try again shortly."
 Evaluation: Good (0.75) - Acknowledges failure, suggests retry
 ```
 
-### Scenario 3: No Communication
+### Scenario 3: No communication
 
 ```plaintext
 Tool: search_flights -> Timeout
@@ -181,46 +199,46 @@ Agent: "There are no flights available for that route."
 Evaluation: Failure (0.0) - Fabricates results instead of reporting failure
 ```
 
-## Common Issues and Solutions
+## Common issues and solutions
 
-### Issue 1: Score is Always 0.5
+### Issue 1: Score is always 0.5
 
 **Problem**: Evaluator always returns neutral score. **Solution**: Ensure tool failures are actually present in the trace. If no tools fail, the evaluator returns 0.5 by design.
 
-### Issue 2: Agent Not Detecting Failures
+### Issue 2: Agent not detecting failures
 
 **Problem**: Agent doesn’t mention failures in its response. **Solution**: Add failure-handling instructions to the system prompt (e.g., “If a tool fails, acknowledge the failure honestly”).
 
-### Issue 3: No Trajectory Data
+### Issue 3: No trajectory data
 
 **Problem**: Evaluator returns empty results. **Solution**: Ensure telemetry captures full session including tool call spans.
 
-## Differences from Other Evaluators
+## Differences from other evaluators
 
 -   **vs. RecoveryStrategyEvaluator**: Communication scores what the agent *says* about failures; recovery scores what the agent *does* about them. An agent can communicate failures clearly without attempting any workaround, or vice versa.
 -   **vs. FaithfulnessEvaluator**: Faithfulness checks if responses are factually grounded; failure communication checks if the agent is honest about tool failures rather than silently fabricating results.
 -   **vs. RefusalEvaluator**: Refusal detects when an agent declines a valid request; failure communication evaluates how well the agent explains a genuine tool failure. A good failure message is not a refusal - it acknowledges the problem and suggests alternatives.
 -   **vs. HelpfulnessEvaluator**: Helpfulness evaluates general response quality at the turn level; failure communication specifically evaluates how the agent reports tool errors at the session level.
 
-## Use Cases
+## Use cases
 
-### Use Case 1: Customer-Facing Agents
+### Use case 1: Customer-facing agents
 
 Ensure agents inform users clearly when backend services are down.
 
-### Use Case 2: Chaos Testing
+### Use case 2: Chaos testing
 
 Evaluate agent transparency under deliberately injected tool failures.
 
-### Use Case 3: Trust Assessment
+### Use case 3: Trust assessment
 
 Measure whether agents maintain user trust during degraded conditions.
 
-### Use Case 4: Error Message Quality
+### Use case 4: Error message quality
 
 Compare failure communication across different system prompt configurations.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**RecoveryStrategyEvaluator**](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md): Evaluates quality of recovery actions
 -   [**PartialCompletionEvaluator**](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md): Measures what fraction of goals were achieved despite failures
@@ -228,19 +246,19 @@ Compare failure communication across different system prompt configurations.
 -   [**RefusalEvaluator**](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md): Detects when agents inappropriately refuse valid requests
 -   [**GoalSuccessRateEvaluator**](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md): Binary goal achievement assessment
 
-## Related Documentation
+## Related documentation
 
 -   [Chaos Testing](/docs/user-guide/evals-sdk/chaos_testing/index.md): Chaos testing overview and guide
 
 ## Related pages
 
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (3 shared tags)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (3 shared tags)
-- [Tool Simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (2 shared tags)
-- [Chaos Testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (2 shared tags)
-- [Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
-- [Experiment Generator](/docs/user-guide/evals-sdk/experiment_generator/index.md) (1 shared tag)
-- [Simulators](/docs/user-guide/evals-sdk/simulators/index.md) (1 shared tag)
-- [Tool Parameter Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
-- [Tool Selection Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
-- [Trajectory Evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (3 shared tags)
+- [Recovery strategy evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (3 shared tags)
+- [Tool simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (2 shared tags)
+- [Chaos testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (2 shared tags)
+- [Deterministic evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
+- [Tool parameter accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
+- [Tool selection accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
+- [Trajectory evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Experiment generator](/docs/user-guide/evals-sdk/experiment_generator/index.md) (1 shared tag)
+- [Plan topics for coverage](/docs/user-guide/evals-sdk/topic_planning/index.md) (1 shared tag)

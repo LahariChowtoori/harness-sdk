@@ -2,14 +2,14 @@
 
 The `CorrectnessEvaluator` assesses whether an agent’s response is factually correct. It supports two modes: a basic mode that evaluates correctness from conversation context alone, and a reference mode that compares the response against an expected answer.
 
-## Key Features
+## Key features
 
 -   **Dual Mode**: Basic (3-level) and reference-based (binary) evaluation
 -   **Trace-Level Evaluation**: Evaluates the most recent turn in the conversation
 -   **Automatic Mode Selection**: Switches to reference mode when `expected_assertion` is provided on the case
 -   **Structured Reasoning**: Provides step-by-step reasoning for each evaluation
 
-## When to Use
+## When to use
 
 Use the `CorrectnessEvaluator` when you need to:
 
@@ -18,7 +18,7 @@ Use the `CorrectnessEvaluator` when you need to:
 -   Assess correctness in knowledge-based Q&A scenarios
 -   Validate that agents provide accurate information
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn in the conversation.
 
@@ -48,7 +48,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 -   **Default**: `"v0"`
 -   **Description**: Prompt template version.
 
-## Scoring System
+## Scoring system
 
 ### Basic Mode (no reference)
 
@@ -58,12 +58,12 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 
 A response passes if the score is `1.0`.
 
-### Reference Mode (with `expected_assertion`)
+### Reference mode (with `expected_assertion`)
 
 -   **CORRECT (1.0)**: Response matches the expected answer
 -   **INCORRECT (0.0)**: Response does not match the expected answer
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -133,7 +133,7 @@ asyncio.run(main())
 
 When `expected_assertion` is set on the case, the evaluator automatically switches to reference mode and uses binary CORRECT/INCORRECT scoring.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**OutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Flexible custom rubric evaluation
 -   [**FaithfulnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/faithfulness_evaluator/index.md): Checks if responses are grounded in conversation history

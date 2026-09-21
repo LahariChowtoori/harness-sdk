@@ -1,4 +1,4 @@
-Defined in: [src/errors.ts:39](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/errors.ts#L39)
+Defined in: [src/errors.ts:39](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/errors.ts#L39)
 
 Error thrown when input exceeds the model’s context window.
 
@@ -16,7 +16,7 @@ This error indicates that the combined length of the input (prompt, messages, sy
 new ContextWindowOverflowError(message): ContextWindowOverflowError;
 ```
 
-Defined in: [src/errors.ts:45](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/errors.ts#L45)
+Defined in: [src/errors.ts:45](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/errors.ts#L45)
 
 Creates a new ContextWindowOverflowError.
 

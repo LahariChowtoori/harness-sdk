@@ -121,4 +121,4 @@ const agent = new Agent({ model, memoryManager: new MemoryManager({ stores: [mem
 -   [GitHub](https://github.com/maisieyanz/strands-github-storage)
 -   [npm](https://www.npmjs.com/package/strands-github-storage)
 -   [PyPI](https://pypi.org/project/strands-github-storage/)
--   [Strands Storage docs](/docs/user-guide/concepts/storage/index.md)
+-   [Strands Storage docs](/docs/user-guide/sdk/storage/index.md)

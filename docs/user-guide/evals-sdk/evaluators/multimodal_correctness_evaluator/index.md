@@ -2,14 +2,14 @@
 
 The `MultimodalCorrectnessEvaluator` assesses whether an agent response is factually correct given the image content. It catches errors in objects, counts, colors, positions, readable text, and described actions.
 
-## Key Features
+## Key features
 
 -   **Output-Level Evaluation**: Scores a single agent response per case
 -   **Binary Scoring**: `1.0` for correct, `0.0` if any factual error is found
 -   **Automatic Reference Comparison**: Appends a reference suffix to the rubric when `expected_output` is provided on the case
 -   **Fact-Checking Focus**: Designed to catch factual errors in image descriptions and VQA answers
 
-## When to Use
+## When to use
 
 Use the `MultimodalCorrectnessEvaluator` when you need to:
 
@@ -17,7 +17,7 @@ Use the `MultimodalCorrectnessEvaluator` when you need to:
 -   Measure exact correctness on benchmark tasks with a known answer
 -   Catch small but important errors (off-by-one counts, wrong colors, misread text)
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent response per case.
 
@@ -51,7 +51,13 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 -   **Default**: `None` (uses the built-in default suffix)
 -   **Description**: Override to customize reference-based grading.
 
-## Scoring System
+### `uses_environment_state` (optional)
+
+-   **Type**: `bool`
+-   **Default**: `False`
+-   **Description**: Whether to include environment state in the evaluation prompt, enabling assessment of agent side effects alongside the output.
+
+## Scoring system
 
 | Score | Label | Meaning |
 | --- | --- | --- |
@@ -60,7 +66,7 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 
 A response passes only if the score is `1.0`.
 
-## Basic Usage
+## Basic usage
 
 ### Reference-Free (fact-check against the image)
 
@@ -121,7 +127,7 @@ asyncio.run(main())
 
 When `expected_output` is set, the evaluator automatically appends the reference suffix so the judge compares the response to the reference answer.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**MultimodalOutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md): Parent class with full parameter reference
 -   [**MultimodalFaithfulnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md): Catches hallucinations (claims not verifiable from the image)
@@ -129,13 +135,13 @@ When `expected_output` is set, the evaluator automatically appends the reference
 
 ## Related pages
 
-- [Multimodal Faithfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) (2 shared tags)
-- [Multimodal Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) (2 shared tags)
-- [Multimodal Output Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) (2 shared tags)
-- [Multimodal Overall Quality Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
-- [Google](/docs/user-guide/concepts/model-providers/google/index.md) (1 shared tag)
-- [Vercel](/docs/user-guide/concepts/model-providers/vercel/index.md) (1 shared tag)
-- [OpenAI](/docs/user-guide/concepts/model-providers/openai/index.md) (1 shared tag)
-- [Writer](/docs/user-guide/concepts/model-providers/writer/index.md) (1 shared tag)
-- [Amazon Nova](/docs/user-guide/concepts/model-providers/amazon-nova/index.md) (1 shared tag)
-- [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md) (1 shared tag)
+- [Multimodal faithfulness evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) (2 shared tags)
+- [Multimodal instruction following evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) (2 shared tags)
+- [Multimodal output evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) (2 shared tags)
+- [Multimodal overall quality evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
+- [Google](/docs/user-guide/sdk/model-providers/google/index.md) (1 shared tag)
+- [Vercel](/docs/user-guide/sdk/model-providers/vercel/index.md) (1 shared tag)
+- [OpenAI](/docs/user-guide/sdk/model-providers/openai/index.md) (1 shared tag)
+- [Writer](/docs/user-guide/sdk/model-providers/writer/index.md) (1 shared tag)
+- [Amazon Nova](/docs/user-guide/sdk/model-providers/amazon-nova/index.md) (1 shared tag)
+- [Amazon Bedrock](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md) (1 shared tag)

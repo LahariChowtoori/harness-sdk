@@ -1,6 +1,6 @@
 Trace providers fetch agent execution data from observability backends and convert it into the format the evaluation pipeline expects. This lets you run evaluators against traces from production or staging agents without re-running them.
 
-## Available Providers
+## Available providers
 
 | Provider | Backend | Auth |
 | --- | --- | --- |
@@ -28,7 +28,7 @@ For the OpenSearch provider, install the optional `opensearch` extra:
 pip install strands-agents-evals[opensearch]
 ```
 
-## CloudWatch Provider
+## CloudWatch provider
 
 The `CloudWatchProvider` queries CloudWatch Logs Insights to retrieve OpenTelemetry log records from Bedrock AgentCore runtime log groups.
 
@@ -56,12 +56,12 @@ The `region` parameter falls back to the `AWS_REGION` environment variable, then
 | Parameter | Default | Description |
 | --- | --- | --- |
 | `region` | `AWS_REGION` env var | AWS region for the CloudWatch client |
-| `log_group` | — | Full CloudWatch log group path |
-| `agent_name` | — | Agent name used to discover the log group |
+| `log_group` | `None` | Full CloudWatch log group path |
+| `agent_name` | `None` | Agent name used to discover the log group |
 | `lookback_days` | `30` | How many days back to search for traces |
 | `query_timeout_seconds` | `60.0` | Maximum seconds to wait for a Logs Insights query |
 
-## Langfuse Provider
+## Langfuse provider
 
 The `LangfuseProvider` fetches traces and observations via the Langfuse Python SDK, converting them to typed spans for evaluation.
 
@@ -90,7 +90,7 @@ provider = LangfuseProvider(
 | `host` | `LANGFUSE_HOST` env var or `https://us.cloud.langfuse.com` | Langfuse API host URL |
 | `timeout` | `120` | Request timeout in seconds |
 
-## OpenSearch Provider
+## OpenSearch provider
 
 The `OpenSearchProvider` retrieves agent traces from OpenSearch using [opensearch-genai-observability-sdk-py](https://github.com/opensearch-project/genai-observability-sdk-py). It works with both self-hosted OpenSearch clusters and Amazon OpenSearch Service.
 
@@ -120,7 +120,7 @@ provider = OpenSearchProvider(
 
 Sending traces to OpenSearch
 
-[OpenSearch](https://opensearch.org/) can store and visualize OpenTelemetry traces sent via OTLP. For setup instructions covering self-managed and managed deployments, see the [OpenSearch Observability — Send Data](https://observability.opensearch.org/docs/send-data/) guide or jump straight to [Ingest Your First Traces](https://observability.opensearch.org/docs/get-started/quickstart/first-traces/).
+[OpenSearch](https://opensearch.org/) can store and visualize OpenTelemetry traces sent via OTLP. For setup instructions covering self-managed and managed deployments, see the [OpenSearch Observability: Send Data](https://observability.opensearch.org/docs/send-data/) guide or jump straight to [Ingest Your First Traces](https://observability.opensearch.org/docs/get-started/quickstart/first-traces/).
 
 ### Configuration
 
@@ -131,14 +131,14 @@ Sending traces to OpenSearch
 | `auth` | `None` | `(username, password)` tuple for basic auth, or `RequestsAWSV4SignerAuth` for SigV4 |
 | `verify_certs` | `True` | Whether to verify TLS certificates |
 
-## Running Evaluations on Remote Traces
+## Running evaluations on remote traces
 
 All providers implement the same `TraceProvider` interface with a single method:
 
 ```python
 data = provider.get_evaluation_data(session_id="my-session-id")
-# data.output     -> str (final agent response)
-# data.trajectory -> Session (traces and spans)
+# data["output"]     -> str (final agent response)
+# data["trajectory"] -> Session (traces and spans)
 ```
 
 Pass the provider’s data into the standard `Experiment` pipeline by wrapping it in a task function:
@@ -179,9 +179,9 @@ async def main():
 asyncio.run(main())
 ```
 
-The same pattern works with `LangfuseProvider` or `OpenSearchProvider` — just swap the provider initialization.
+The same pattern works with `LangfuseProvider` or `OpenSearchProvider`: swap the provider initialization.
 
-## Error Handling
+## Error handling
 
 Providers raise specific exceptions when traces cannot be retrieved:
 
@@ -207,18 +207,19 @@ except TraceProviderError as e:
     print(f"Failed to retrieve traces: {e}")
 ```
 
-## Session Mappers
+## Session mappers
 
 Session mappers convert raw telemetry spans into the `Session` format that evaluators consume. While providers handle fetching traces from backends, mappers handle the conversion logic. You typically use mappers directly when working with in-memory spans or third-party instrumentation libraries.
 
-### Available Mappers
+### Available mappers
 
 | Mapper | Use Case |
 | --- | --- |
-| `StrandsInMemorySessionMapper` | Strands SDK in-memory spans (default for local evaluation) |
-| `CloudWatchSessionMapper` | CloudWatch Logs OTEL records |
+| `StrandsInMemorySessionMapper` | Strands Harness SDK in-memory spans (default for local evaluation) |
 | `LangChainOtelSessionMapper` | LangChain apps instrumented with OpenTelemetry |
 | `OpenInferenceSessionMapper` | Apps instrumented with OpenInference (e.g., Arize Phoenix) |
+
+For CloudWatch Logs records, use `CloudWatchProvider` rather than a mapper; the provider fetches the records and converts them in one step.
 
 ### Auto-Detection
 
@@ -233,7 +234,7 @@ mapper = MapperClass()
 session = mapper.map_to_session(spans, session_id="my-session")
 ```
 
-### LangChain OTEL Mapper
+### LangChain OTEL mapper
 
 For LangChain applications instrumented with Traceloop or other OTEL-based instrumentors:
 
@@ -246,7 +247,7 @@ session = mapper.map_to_session(span_dicts, session_id="my-session")
 
 The mapper recognizes LangChain-specific span attributes like `traceloop.entity.name` and maps them to the evaluation `Session` format.
 
-### OpenInference Mapper
+### OpenInference mapper
 
 For applications instrumented with OpenInference (used by Arize Phoenix, LlamaIndex, etc.):
 
@@ -259,7 +260,7 @@ session = mapper.map_to_session(span_dicts, session_id="my-session")
 
 The mapper recognizes OpenInference semantic conventions like `openinference.span.kind` and converts them appropriately.
 
-## Implementing a Custom Provider
+## Implementing a custom provider
 
 Subclass `TraceProvider` and implement `get_evaluation_data` to integrate with any observability backend:
 
@@ -280,7 +281,7 @@ The returned `TaskOutput` must contain:
 -   **`output`**: The final agent response text
 -   **`trajectory`**: A `Session` object containing `Trace` objects with typed spans (`AgentInvocationSpan`, `InferenceSpan`, `ToolExecutionSpan`)
 
-## Related Documentation
+## Related documentation
 
 -   [Getting Started](/docs/user-guide/evals-sdk/quickstart/index.md): Set up your first evaluation experiment
 -   [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Evaluate agent response quality
@@ -289,13 +290,13 @@ The returned `TaskOutput` must contain:
 
 ## Related pages
 
-- [Metrics](/docs/user-guide/observability-evaluation/metrics/index.md) (1 shared tag)
-- [Observability](/docs/user-guide/observability-evaluation/observability/index.md) (1 shared tag)
-- [Task Decorator](/docs/user-guide/evals-sdk/how-to/eval_task/index.md) (1 shared tag)
-- [Traces](/docs/user-guide/observability-evaluation/traces/index.md) (1 shared tag)
-- [Bidirectional Streaming Observability](/docs/user-guide/concepts/bidirectional-streaming/observability/index.md) (1 shared tag)
-- [Logging](/docs/user-guide/observability-evaluation/logs/index.md) (1 shared tag)
-- [Operating Agents in Production](/docs/user-guide/deploy/operating-agents-in-production/index.md) (1 shared tag)
-- [Root Cause Analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md) (1 shared tag)
-- [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (1 shared tag)
-- [PII Redaction](/docs/user-guide/safety-security/pii-redaction/index.md) (1 shared tag)
+- [Metrics](/docs/user-guide/sdk/observability-evaluation/metrics/index.md) (1 shared tag)
+- [Observability](/docs/user-guide/sdk/observability-evaluation/observability/index.md) (1 shared tag)
+- [Observe your agent](/docs/user-guide/sdk/observability-evaluation/index.md) (1 shared tag)
+- [Task decorator](/docs/user-guide/evals-sdk/how-to/eval_task/index.md) (1 shared tag)
+- [Traces](/docs/user-guide/sdk/observability-evaluation/traces/index.md) (1 shared tag)
+- [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
+- [Logging](/docs/user-guide/sdk/observability-evaluation/logs/index.md) (1 shared tag)
+- [Operating Agents in Production](/docs/user-guide/sdk/deploy/operating-agents-in-production/index.md) (1 shared tag)
+- [Root cause analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md) (1 shared tag)
+- [Session diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (1 shared tag)

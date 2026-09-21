@@ -1,6 +1,6 @@
-A **memory store** is the backend that holds an agent’s long-term knowledge. The [`MemoryManager`](/docs/user-guide/concepts/memory/overview/index.md) orchestrates one or more stores to recall, inject, and extract memories across sessions. Any backend that implements the `MemoryStore` interface can plug in: see [Custom Stores](/docs/user-guide/concepts/memory/overview/index.md#custom-stores) for the contract.
+A **memory store** is the backend that holds an agent’s long-term knowledge. The [`MemoryManager`](/docs/user-guide/sdk/memory/overview/index.md) orchestrates one or more stores to recall, inject, and extract memories across sessions. Any backend that implements the `MemoryStore` interface can plug in: see [Custom Stores](/docs/user-guide/sdk/memory/managing-memory/index.md#custom-stores) for the contract.
 
-The SDK ships reference stores like the [Bedrock Knowledge Base store](/docs/user-guide/concepts/memory/bedrock-knowledge-base/index.md). The packages below go further: they are **community-built** memory stores you can install and attach to an agent, backed by vector databases, managed services, and other stores the SDK does not vend itself.
+The SDK ships reference stores like the [Bedrock Knowledge Base store](/docs/user-guide/sdk/memory/bedrock-knowledge-base/index.md). The packages below go further: they are **community-built** memory stores you can install and attach to an agent, backed by vector databases, managed services, and other stores the SDK does not vend itself.
 
 Community maintained
 

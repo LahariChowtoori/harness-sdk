@@ -1,0 +1,1 @@
+var e=`starlight-synced-tabs__jarkqt`,t=`TypeScript`;export{e as n,t};

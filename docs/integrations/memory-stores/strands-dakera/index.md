@@ -2,7 +2,7 @@
 
 It offers two integration points against the same server:
 
--   **`DakeraMemoryStore`** — a [`MemoryStore`](/docs/user-guide/concepts/memory/overview/index.md) that plugs into the agent loop via a `MemoryManager` (Strands ≥ 1.45), with automatic memory injection and extraction.
+-   **`DakeraMemoryStore`** — a [`MemoryStore`](/docs/user-guide/sdk/memory/overview/index.md) that plugs into the agent loop via a `MemoryManager` (Strands ≥ 1.45), with automatic memory injection and extraction.
 -   **`dakera_memory`** — a tool the model calls explicitly for full CRUD (`store` / `retrieve` / `get` / `update` / `delete`).
 
 ## Installation

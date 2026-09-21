@@ -2,7 +2,7 @@
 
 OpenAI compatibility
 
-This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) pointed at Cohere’s OpenAI-compatible endpoint; there is no separate Cohere integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
+This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) pointed at Cohere’s OpenAI-compatible endpoint; there is no separate Cohere integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
 
 Cohere’s Compatibility API rejects the `stream_options` request field. The Python provider lets you unset it (shown below); the TypeScript provider always sends it, so it does not work with Cohere.
 
@@ -46,10 +46,10 @@ Two client settings connect the provider to Cohere:
 -   **API key**: from the [Cohere Dashboard](https://dashboard.cohere.com)
 -   **Base URL**: `https://api.cohere.ai/compatibility/v1`
 
-Model IDs come from the [Cohere model catalog](https://docs.cohere.com/docs/models), for example `command-a-03-2025` or `command-r-plus`. Keep `params={"stream_options": None}` in every configuration. For other provider options, see the [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) guide.
+Model IDs come from the [Cohere model catalog](https://docs.cohere.com/docs/models), for example `command-a-03-2025` or `command-r-plus`. Keep `params={"stream_options": None}` in every configuration. For other provider options, see the [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) guide.
 
 ## References
 
 -   [Cohere docs: using the OpenAI SDK](https://docs.cohere.com/docs/compatibility-api)
 -   [Cohere API reference](https://docs.cohere.com/reference)
--   [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md)
+-   [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md)

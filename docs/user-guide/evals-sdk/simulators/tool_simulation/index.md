@@ -1,8 +1,8 @@
 ## Overview
 
-Tool simulation enables controlled agent evaluation by replacing real tool execution with LLM-powered responses. Using the `ToolSimulator` class, you register tools with a decorator, define output schemas, and optionally share state across related tools. When the agent calls a simulated tool, an LLM generates a realistic, schema-validated response instead of executing the real function.
+When your agent calls tools that need live infrastructure, you can replace them with LLM-generated responses for evaluation. With `ToolSimulator`, you register a tool with a decorator, give it an output schema, and optionally share state across related tools. Each time the agent calls a simulated tool, an LLM generates a schema-valid response instead of running the real function.
 
-This is useful when:
+Reach for tool simulation when:
 
 -   Real tools require live infrastructure (APIs, databases, hardware)
 -   You need controllable tool behavior for evaluation
@@ -31,18 +31,18 @@ agent = Agent(tools=[weather_tool], callback_handler=None)
 response = agent("What's the weather in Seattle?")
 ```
 
-## How It Works
+## How it works
 
 1.  **Tool Registration**: The `@tool_simulator.tool()` decorator captures function metadata (name, docstring, type hints) via Strands’ `FunctionToolMetadata`. The function body is never executed.
 2.  **Simulation Wrapper**: When retrieved via `get_tool()`, the real function is replaced with an LLM-backed wrapper that can be passed to a Strands `Agent`.
 3.  **LLM Invocation**: On each call, the wrapper builds a prompt containing the tool’s input schema, output schema, user parameters, and current state context, then invokes an Agent to generate a response.
 4.  **State Tracking**: A `StateRegistry` records call history and shared state across tools, providing the LLM with context for consistent responses.
 
-## Basic Usage
+## Basic usage
 
-### Registering a Tool
+### Registering a tool
 
-Define a function with type hints and a docstring, then decorate it with `@tool_simulator.tool()`. Provide an `output_schema` to control the response structure, and the tool can be retrived and passed to a Strands agent.
+Define a function with type hints and a docstring, then decorate it with `@tool_simulator.tool()`. Provide an `output_schema` to control the response structure. Retrieve the registered tool with `get_tool()` and pass it to a Strands agent.
 
 ```python
 from typing import Any
@@ -71,7 +71,7 @@ agent = Agent(
 response = agent("Where is my order #12345?")
 ```
 
-### Custom Tool Names
+### Custom tool names
 
 Override the default function name:
 
@@ -85,7 +85,7 @@ def check_order(order_id: str) -> dict[str, Any]:
 tool = tool_simulator.get_tool("lookup_order")
 ```
 
-## Shared State
+## Shared state
 
 Tools that operate on the same environment can share state via `share_state_id`. When multiple tools share a state key, the LLM sees call history from all of them, enabling consistent behavior across related tools.
 
@@ -133,7 +133,7 @@ sensor_tool = tool_simulator.get_tool("room_sensor")
 agent = Agent(tools=[hvac_tool, sensor_tool], callback_handler=None)
 ```
 
-### Initial State Description
+### Initial state description
 
 The `initial_state_description` parameter provides the LLM with baseline context about the environment. This is included in every prompt so the LLM can generate responses consistent with the starting conditions:
 
@@ -147,7 +147,7 @@ def lookup_user(username: str) -> dict:
     pass
 ```
 
-## Integration with Experiments
+## Integration with experiments
 
 Use ToolSimulator within an Experiment to evaluate agent tool-use behavior end-to-end:
 
@@ -215,7 +215,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## API Reference
+## API reference
 
 ### ToolSimulator
 
@@ -231,12 +231,12 @@ asyncio.run(main())
 
 | Method | Description |
 | --- | --- |
-| `initialize_state_via_description(description, state_key)` | Pre-seed state with context |
+| `initialize_state_via_description(initial_state_description, state_key)` | Pre-seed state with context |
 | `get_state(state_key)` | Retrieve state dict for a tool or shared group |
 | `cache_tool_call(tool_name, state_key, response_data, parameters)` | Record a tool call |
 | `clear_state(state_key)` | Clear state for a specific key |
 
-### Data Models
+### Data models
 
 **RegisteredTool:**
 
@@ -256,9 +256,9 @@ class DefaultToolResponse(BaseModel):
     response: str  # Default response when no output_schema is provided
 ```
 
-## Advanced Usage and Configurations
+## Advanced usage and configurations
 
-### Inspecting State
+### Inspecting state
 
 Use `get_state()` to examine call history and initial state for debugging:
 
@@ -283,7 +283,7 @@ Each call record contains:
 
 ### Configuration
 
-#### Custom Model
+#### Custom model
 
 Specify a different model for simulation inference:
 
@@ -298,7 +298,7 @@ model = BedrockModel(model_id="anthropic.claude-haiku-4-5-20251001-v1:0")
 tool_simulator = ToolSimulator(model=model)
 ```
 
-#### Cache Size
+#### Cache size
 
 Control how many tool calls are retained per state key:
 
@@ -312,7 +312,7 @@ tool_simulator = ToolSimulator(max_tool_call_cache_size=50)
 
 When the cache is full, the oldest calls are evicted (FIFO).
 
-#### Custom State Registry
+#### Custom state registry
 
 Provide your own `StateRegistry` for advanced state management:
 
@@ -323,7 +323,7 @@ registry = StateRegistry(max_tool_call_cache_size=100)
 tool_simulator = ToolSimulator(state_registry=registry)
 ```
 
-### Running Independent Simulator Instances
+### Running independent simulator instances
 
 You can create multiple `ToolSimulator` instances side by side. Each instance maintains its own tool registry and state, so you can run parallel experiment configurations in the same codebase:
 
@@ -331,13 +331,13 @@ You can create multiple `ToolSimulator` instances side by side. Each instance ma
 simulator_a = ToolSimulator()
 simulator_b = ToolSimulator()
 
-# Each instance has an independent tool registry and state --
+# Each instance has an independent tool registry and state,
 # ideal for comparing agent behavior across different tool setups.
 ```
 
 This is useful when you want to A/B test different tool configurations, output schemas, or initial state descriptions against the same agent.
 
-### Seeding State from Real Data
+### Seeding state from real data
 
 Because `initial_state_description` accepts natural language, you can get creative with how you seed context. For tools that interact with tabular data, use a `DataFrame.describe()` call to generate statistical summaries and pass those statistics directly as the state description. `ToolSimulator` will generate responses that reflect realistic data distributions, without ever accessing the actual data:
 
@@ -360,7 +360,7 @@ This approach lets you ground simulated responses in real data characteristics w
 
 ## Troubleshooting
 
-### Issue: Tool Not Found
+### Issue: Tool not found
 
 `get_tool()` returns `None` if the tool name doesn’t match:
 
@@ -370,7 +370,7 @@ if tool is None:
     print(f"Available tools: {tool_simulator.list_tools()}")
 ```
 
-### Issue: Inconsistent Responses Across Calls
+### Issue: Inconsistent responses across calls
 
 Ensure related tools share state and that initial state is set:
 
@@ -383,7 +383,7 @@ def tool_a(...): ...
 def tool_b(...): ...
 ```
 
-### Issue: State Re-initialization Warning
+### Issue: State re-initialization warning
 
 If you see a warning about state already being initialized, it means two tools with the same `share_state_id` both provide `initial_state_description`. Only the first one takes effect:
 
@@ -405,7 +405,7 @@ def tool_a(...): ...
 def tool_b(...): ...
 ```
 
-## Related Documentation
+## Related documentation
 
 -   [Simulators Overview](/docs/user-guide/evals-sdk/simulators/index.md): Overview of the simulator framework
 -   [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md): Simulate multi-turn user conversations
@@ -414,13 +414,13 @@ def tool_b(...): ...
 
 ## Related pages
 
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (2 shared tags)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (2 shared tags)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (2 shared tags)
-- [Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
-- [Experiment Generator](/docs/user-guide/evals-sdk/experiment_generator/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (2 shared tags)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (2 shared tags)
+- [Recovery strategy evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (2 shared tags)
+- [Deterministic evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
+- [Tool parameter accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
+- [Tool selection accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
+- [Trajectory evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Experiment generator](/docs/user-guide/evals-sdk/experiment_generator/index.md) (1 shared tag)
+- [Plan topics for coverage](/docs/user-guide/evals-sdk/topic_planning/index.md) (1 shared tag)
 - [Simulators](/docs/user-guide/evals-sdk/simulators/index.md) (1 shared tag)
-- [Tool Parameter Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
-- [Tool Selection Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
-- [Trajectory Evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
-- [User Simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)

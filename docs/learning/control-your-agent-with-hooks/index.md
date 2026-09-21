@@ -1,47 +1,103 @@
 *[Watch on YouTube](https://www.youtube.com/watch?v=Zamh36RWKz8&list=PLDzwjhH-4yhU&index=5)*
 
-*Code for this lesson can be found [**here**](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/05-hooks).*
+About this lesson
 
-### The Need for Reliability Over Probability
+The videos in this course are a snapshot in time. Strands is under active development, so the code featured on this page reflects the most up-to-date patterns, but the concepts covered in the video still apply. When in doubt, trust the code.
 
-We’ve built an agent with tools, but when the agent decides to call a tool, it just calls it. There’s nothing you can do about it. Models are getting smarter all the time, and they’re very capable. But capability isn’t the same as reliability. You can’t guarantee the model won’t do something destructive, call the same tool in an infinite loop, or pass bad inputs to a sensitive API without guardrails in place.
+*Code for this lesson: [`samples/05-hooks`](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/05-hooks)*
 
-Designing an agent harness thoughtfully allows you to tackle these problems. And one of the main ways to mitigate these risks is to inject deterministic code into the agent lifecycle at specific points through hooks. They give you a place where you can enforce the things that can’t be left to probability, like approval gates, rate limits, input validation, audit logging, and safety checks.
+## Rules That Don’t Depend on the Model
 
-Hooks are checkpoints in the agent lifecycle. They exist for the same reason web frameworks have request interception layers. You don’t just trust every request handler to check off or log correctly, so you put that in a layer that is guaranteed and is applied reliably. Hooks are that layer, but for agents.
+Hooks inject code at lifecycle events (before/after tool calls, before/after the agent loop) without changing the agent’s logic. Unlike tools, which the model decides to use, hooks fire automatically every time regardless of what the model reasons. That’s the key distinction: a prompt is a request, a hook is a guarantee.
 
-You’ve actually already seen hooks in action in the first lesson when the coding agent paused and asked for approval before running certain operations. That approval workflow was implemented through hooks.
+A runaway loop could call the same tool dozens of times. A model might attempt a destructive operation without asking. Prompting asks the model to behave. Hooks guarantee it.
 
-### How Hooks Work Under the Hood
+## Hook Architecture
 
-The way hooks work is pretty straightforward: You write a callback function, register it for a lifecycle event, and your function gets called whenever the event fires. Multiple hooks can listen to the same event, so you can stack behaviors. You can have one hook for logging, another for validation, and another for approval gates without them stepping on each other or interfering.
+-   Subclass `HookProvider` to define hooks
+-   Register callbacks for lifecycle events in `register_hooks()`
+-   Multiple hooks can listen to the same event (stackable)
+-   `event.interrupt()` pauses the loop for human input
+-   `event.cancel_tool` blocks tool execution and feeds a message back to the model explaining why
 
-Interrupts are one of the most common reasons to use hooks. Let’s say you’re building an agent that runs locally on someone’s machine, and one of the things it can do is manipulate files. What you might want is a hook that pauses the agent before any file deletion happens and asks the user for approval. The user can see what’s about to be deleted, approve or deny the action, and the agent either continues or cancels based on that response.
+## Example: Human Approval for Deletions
 
-### Coding an Interrupt-Gated File Deletion
+```python
+from strands import Agent, tool
+from strands.hooks import BeforeToolCallEvent, HookProvider, HookRegistry
 
-Let’s look at some code to do this. For the agent itself, we have several tools for file management, including a delete file tool. Then we have a hook defined here. This is a hook called `DeleteApprovalHook`, which subclasses `HookProvider` from Strands. `HookProvider` is a base class that gives you a structured way to register hook callbacks.
+class DeleteApprovalHook(HookProvider):
+    """Intercepts delete operations for human approval."""
 
-Inside `register_hooks`, we wire up our callback to the specific lifecycle event we care about. In this case, we register `check_delete` to fire on every `before_tool_call` event. Inside `check_delete`, the first thing we do is inspect the tool name. If the tool isn’t `delete_file`, we immediately return and allow execution to continue normally. But if the tool is attempting a delete operation, we call `event.interrupt()`. This pauses the agent loop and returns control back to our application.
+    def register_hooks(self, registry: HookRegistry) -> None:
+        registry.add_callback(BeforeToolCallEvent, self.check_delete)
 
-Your application can then prompt the user for approval before resuming with the agent operations. If the user declines the action, we set `event.cancel_tool` to a message explaining why the tool execution was blocked. That cancellation message gets passed back to the agent loop as a tool result, and the model adapts its behavior accordingly.
+    def check_delete(self, event: BeforeToolCallEvent) -> None:
+        if event.tool_use["name"] != "delete_file":
+            return
 
-Then, during agent initiation, we pass the hook into the agent using `hooks=[DeleteApprovalHook()]`, and the agent harness handles the interrupt lifecycle, checking if the agent paused, prompting the user, and feeding the response back to the agent until the request completes.
+        approval = event.interrupt(
+            "delete-approval",
+            reason={"path": event.tool_use["input"]["path"]}
+        )
 
-Let’s run it. First, I’ll ask the agent to create a file called `data.txt`. The agent uses the file tools normally. Then, I’ll ask the agent to delete the `data.txt` file. A hook fires before the delete tool executes and pauses the loop. The application asks for approval, and I’ll type `n` to deny the operation. The hook cancels the tool call, passes the cancellation back into the loop, and the agent continues without deleting the file.
+        if approval.lower() != "y":
+            event.cancel_tool = "User denied file deletion"
 
-### Preventing Infinite Loops and Runaway Costs
+agent = Agent(
+    tools=[list_files, read_file, write_file, delete_file],
+    hooks=[DeleteApprovalHook()],
+)
+```
 
-Now let’s look at another kind of hook using the same overall structure. We subclass `HookProvider`, register a `before_tool_call` event, and this time, instead of interrupting for human approval, we track how many times each tool has been called during the request.
+📂 [approval\_interrupt.py](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/05-hooks/approval_interrupt.py)
 
-The `LimitToolCounts` hook accepts a `max_calls` threshold and stores counts for each tool. On every tool call, it increments the count and checks whether the tool exceeded the allowed limit. If the limit is exceeded, it sets `event.cancel_tool` to a message instructing the model to stop calling that tool. The model sees that cancellation as the tool result and adjusts its behavior accordingly.
+`event.interrupt()` pauses agent execution and returns control to the caller. That’s what makes approval workflows possible: the agent doesn’t proceed until a human answers.
 
-This is useful because agents can occasionally get stuck in loops, repeatedly calling the same failing tool. A lightweight, deterministic safeguard like this can prevent runaway costs and unstable behavior. This is one of the main reasons why tuning your harness is important for cost control and reliability.
+## Example: Rate Limiting Tool Calls
 
-### What’s Next?
+```python
+from strands.hooks import BeforeInvocationEvent, BeforeToolCallEvent, HookProvider, HookRegistry
 
-These are simple examples, but hooks are one of the foundational mechanisms that make production agents safe, observable, and controllable. They’re also the foundation for plugins, which package hooks, tools, and context management into reusable components, which we’ll be looking at next.
+class LimitToolCounts(HookProvider):
+    def __init__(self, max_calls: int = 3):
+        self.max_calls = max_calls
+        self.counts: dict[str, int] = {}
 
-Starting in the next lesson, we’ll begin building a customer service agent to show that these same patterns and ideas apply across different use cases. That agent will become one of the main running examples for the rest of the course.
+    def register_hooks(self, registry: HookRegistry) -> None:
+        registry.add_callback(BeforeInvocationEvent, self.reset)
+        registry.add_callback(BeforeToolCallEvent, self.check)
 
-*Learn more: [Hooks](/docs/user-guide/concepts/agents/hooks/index.md)*
+    def reset(self, event: BeforeInvocationEvent) -> None:
+        self.counts = {}
+
+    def check(self, event: BeforeToolCallEvent) -> None:
+        name = event.tool_use["name"]
+        self.counts[name] = self.counts.get(name, 0) + 1
+        if self.counts[name] > self.max_calls:
+            event.cancel_tool = (
+                f"'{name}' hit the {self.max_calls}-call limit. "
+                "Do NOT call this tool again."
+            )
+
+agent = Agent(tools=[get_weather], hooks=[LimitToolCounts(max_calls=3)])
+```
+
+📂 [rate\_limiter.py](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/05-hooks/rate_limiter.py)
+
+Notice the counter resets on `BeforeInvocationEvent`. Rate limits are per request, not for the agent’s lifetime. And because `cancel_tool` sends a message back to the model, the model learns why the call was blocked and stops retrying.
+
+## When to Use Hooks
+
+-   Rate limit tool usage to prevent runaway loops
+-   Require human approval before destructive operations
+-   Log every tool call for audit trails
+-   Validate tool inputs and outputs against business rules
+-   Enforce access control on sensitive tools
+
+Hooks don’t touch tools or prompts. They’re a separate, reusable layer you can drop onto any agent.
+
+## Resources
+
+-   📖 [Hooks](/docs/user-guide/sdk/agents/hooks/index.md)
+-   📖 [Lifecycle Controls](/docs/user-guide/sdk/agents/lifecycle-controls/index.md)

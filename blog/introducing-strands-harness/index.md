@@ -2,7 +2,7 @@
 title: "Introducing Strands harness: frontier performance with 28% lower token cost"
 date: 2026-09-21T00:00:00.000Z
 description: "Strands harness is a fully assembled, customizable, state-of-the-art agent you run locally or deploy anywhere."
-tags: ["Announcement", "Strands Harness", "Harness SDK", "Use Cases"]
+tags: ["Announcement", "Strands harness", "Harness SDK", "Use Cases"]
 ---
 We noticed builders often wished their Claude Code or Codex setup could run in the cloud because locally their agent idea just “worked” with those harnesses.
 
@@ -171,6 +171,6 @@ When you’re ready to go deeper, Strands harness is fully customizable. You can
 
 We’re excited for all kinds of agents that’ll come to life with Strands harness.
 
-## Try it soon!
+## Try it out today
 
-Our team is launching this harness later today, stay tuned in our [Discord](https://discord.gg/strands)!
+You can check out the [Python](https://github.com/strands-agents/harness-sdk/tree/main/harness-py) or [TypeScript](https://github.com/strands-agents/harness-sdk/tree/main/harness-ts) version of Strands harness today. The CLI will be launched later today as a separate package. Stay tuned in our [Discord](https://discord.gg/strands)!

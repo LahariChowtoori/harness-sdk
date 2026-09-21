@@ -2,7 +2,7 @@
 
 The `ToolSelectionAccuracyEvaluator` evaluates whether tool calls are justified at specific points in the conversation. It assesses if the agent selected the right tool at the right time based on the conversation context and available tools. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/tool_selection_accuracy_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Tool-Level Evaluation**: Evaluates each tool call independently
 -   **Contextual Justification**: Checks if tool selection is appropriate given the conversation state
@@ -11,7 +11,7 @@ The `ToolSelectionAccuracyEvaluator` evaluates whether tool calls are justified 
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Multiple Evaluations**: Returns one evaluation result per tool call
 
-## When to Use
+## When to use
 
 Use the `ToolSelectionAccuracyEvaluator` when you need to:
 
@@ -22,11 +22,17 @@ Use the `ToolSelectionAccuracyEvaluator` when you need to:
 -   Debug issues with incorrect tool selection
 -   Optimize tool selection strategies
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TOOL\_LEVEL**, meaning it evaluates each individual tool call in the trajectory separately. If an agent makes 3 tool calls, you’ll receive 3 evaluation results.
 
 ## Parameters
+
+### `version` (optional)
+
+-   **Type**: `str`
+-   **Default**: `"v0"`
+-   **Description**: Prompt template version used when no `system_prompt` is supplied.
 
 ### `model` (optional)
 
@@ -40,14 +46,14 @@ This evaluator operates at the **TOOL\_LEVEL**, meaning it evaluates each indivi
 -   **Default**: `None` (uses built-in template)
 -   **Description**: Custom system prompt to guide the judge model’s behavior.
 
-## Scoring System
+## Scoring system
 
 The evaluator uses a binary scoring system:
 
 -   **Yes (1.0)**: Tool selection is justified and appropriate
 -   **No (0.0)**: Tool selection is unjustified, premature, or inappropriate
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -122,7 +128,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `ToolSelectionAccuracyEvaluator` returns a list of `EvaluationOutput` objects (one per tool call) with:
 
@@ -131,7 +137,7 @@ The `ToolSelectionAccuracyEvaluator` returns a list of `EvaluationOutput` object
 -   **reason**: Step-by-step reasoning explaining the evaluation
 -   **label**: “Yes” or “No”
 
-## What Gets Evaluated
+## What gets evaluated
 
 The evaluator examines:
 
@@ -144,7 +150,7 @@ The evaluator examines:
 
 The judge determines if the tool selection was appropriate given the context and whether the timing was correct.
 
-## Best Practices
+## Best practices
 
 1.  **Use with Proper Telemetry Setup**: The evaluator requires trajectory information captured via OpenTelemetry
 2.  **Provide Clear Tool Descriptions**: Ensure tools have clear, descriptive names and documentation
@@ -152,35 +158,35 @@ The judge determines if the tool selection was appropriate given the context and
 4.  **Combine with Parameter Evaluator**: Use alongside `ToolParameterAccuracyEvaluator` for complete tool usage assessment
 5.  **Review Reasoning**: Always review the reasoning to understand selection decisions
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Validating Tool Choice
+### Pattern 1: Validating tool choice
 
 Ensure agents select the most appropriate tool from multiple options.
 
-### Pattern 2: Detecting Premature Tool Calls
+### Pattern 2: Detecting premature tool calls
 
 Identify cases where agents call tools before gathering necessary information.
 
-### Pattern 3: Identifying Missing Tool Calls
+### Pattern 3: Identifying missing tool calls
 
 Detect when agents should have used a tool but didn’t.
 
-## Common Issues and Solutions
+## Common issues and solutions
 
-### Issue 1: No Evaluations Returned
+### Issue 1: No evaluations returned
 
 **Problem**: Evaluator returns empty list or no results. **Solution**: Ensure trajectory is properly captured and includes tool calls.
 
-### Issue 2: Ambiguous Tool Selection
+### Issue 2: Ambiguous tool selection
 
 **Problem**: Multiple tools could be appropriate for a given task. **Solution**: Refine tool descriptions and system prompts to clarify tool purposes.
 
-### Issue 3: Context-Dependent Selection
+### Issue 3: Context-dependent selection
 
 **Problem**: Tool selection appropriateness depends on conversation history. **Solution**: Ensure full conversation history is captured in traces.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**ToolParameterAccuracyEvaluator**](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md): Evaluates if tool parameters are correct
 -   [**TrajectoryEvaluator**](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md): Evaluates the overall sequence of tool calls
@@ -189,10 +195,10 @@ Detect when agents should have used a tool but didn’t.
 
 ## Related pages
 
-- [Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
-- [Tool Parameter Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
-- [Trajectory Evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
-- [Tool Simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (1 shared tag)
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)
+- [Deterministic evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
+- [Tool parameter accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
+- [Trajectory evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Tool simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
+- [Recovery strategy evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)

@@ -1,105 +1,151 @@
 *[Watch on YouTube](https://www.youtube.com/watch?v=ZpXWGjISMs8&list=PLDzwjhH-4yhU)*
 
-*Code for this lesson can be found [**here**](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/01-agent-loop).*
+About this lesson
 
-### The Problem with Stateless Models
+The videos in this course are a snapshot in time. Strands is under active development, so the code featured on this page reflects the most up-to-date patterns, but the concepts covered in the video still apply. When in doubt, trust the code.
 
-AI models are continually becoming more capable. They can reason through complex problems, write code, analyze data, and make decisions.
+*Code for this lesson: [`samples/01-agent-loop`](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/01-agent-loop)*
 
-But that capability alone doesn’t make them useful in production. A model by itself is stateless. It processes one request, produces a completion, and forgets everything before the next turn. It can’t take action in the real world, access real-time information, or coordinate across a multi-step workflow on its own.
+## Why Agents?
 
-This is why so many modern AI systems are being built as agents.
+Models are stateless. They process one request, produce a completion, and forget. They can’t take action, access live data, or coordinate multi-step workflows alone. Agents solve this by wrapping a model in a runtime system that gives it tools, memory, and a reasoning loop.
 
-### Anatomy of the Agent Loop and the Agent Harness
+## The Agent Loop
 
-Agents work like this: The model gets context, including the system prompt, the user prompt, any relevant information or memories from previous interactions, and a tool list.
+![Agent Loop Flow](/_astro/agent-loop-flow.CgHBgQw3_nJnxY.webp)
 
-It reasons over the information in the context and decides whether or not it needs to call any tools. If so, the tools get executed and the results get fed back into context for the model to reason over. This cycle repeats until the task is complete. This is the agent loop.
+1.  Model receives **context** (system prompt + user input + tool list + history)
+2.  Model **reasons** and decides whether to call a tool
+3.  Tool **executes**, result feeds back into context
+4.  Loop **repeats** until the task is complete
 
-But that loop doesn’t run itself. Something has to manage it. That something is the agent harness.
+## Agent = Model + Harness
 
-Coding assistants are some of the most common examples of agent harnesses today. They are models wrapped in systems that give them tools, memory, context management, execution environments, and the ability to operate in a loop. And on top of that, a good agent harness helps verify whether the actions an agent took actually worked.
+The **harness** is the system that surrounds the model and turns it into an agent. It handles the agent loop, tool execution, context management, memory, lifecycle control, observability, and verification.
 
-The same patterns that are used to build resilient and capable coding assistants can be applied to any other agent use case as well, like customer support systems, research agents, workflow automation, and business operations. Together, the model and the harness create an agent.
+Together, **model + harness = agent.**
 
-### Coding a Simple Agent with Strands
+## Three Layers of Engineering
 
-The code can be found [here](https://github.com/aws-samples/sample-building-with-strands-course/blob/main/samples/01-agent-loop/simple_agent.py). We’re importing agent from strands, creating an instance of the agent, and then passing in a prompt to that agent saying, “Explain what an AI agent is in 2 seconds.” Let’s give that a run by typing:
+**Prompt Engineering:** Instructions and constraints sent to the model
 
-```bash
-python3 simple_agent.py
+**Context Engineering:** What information enters the context window, when, and how
+
+**Harness Engineering:** The runtime system orchestrating everything
+
+## Strands Harness SDK
+
+The Strands Harness SDK is an open-source SDK for building agent harnesses. It provides composable primitives like tools, context management, lifecycle hooks, memory, sessions, evals, and observability that you assemble into whatever system your use case requires.
+
+**Design philosophy:** Let the model drive. You define the environment and boundaries; the model reasons through the task.
+
+## Code: A Simple Agent
+
+This is already a working agent with a loop, just without tools.
+
+```python
+from strands import Agent
+
+agent = Agent()
+
+response = agent("What are the key differences between REST and GraphQL APIs?")
+print(response)
 ```
 
-…and we can see the response coming back. This is already a working agent. Not a very capable one, because it has no tools yet, but it already contains an agent loop.
+📂 [simple\_agent.py](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/01-agent-loop/simple_agent.py)
 
-The model receives input and generates a response. The model itself isn’t autonomously managing this process—the harness is repeatedly invoking the model, executing tools, updating context, and deciding when the loop continues. And once you start adding those tools, memory, lifecycle controls, and other capabilities into this harness, the agent becomes much more powerful.
+## Code: Agent with Tools
 
-### The Three Pillars of Agent Engineering
+The `web_fetch` vended tool pulls in an HTML parser, so install the SDK with that extra: `pip install 'strands-agents[web-fetch]'`.
 
-You may have heard of prompt engineering, which focuses on defining the instructions, examples, and constraints that drive model behavior.
+```python
+from strands import Agent, tool
+from strands.vended_tools import file_editor, web_fetch
 
-Context engineering focuses on deciding what additional information beyond the prompt enters the model’s context window, when, and in what form.
+@tool
+def query_product_database(query: str) -> str:
+    """Query the internal product database for inventory and pricing information.
 
-Harness engineering is the layer above both. It’s the process of creating and tuning the runtime system that orchestrates the model, manages context, connects tools, enforces rules, and provides the compute, memory, and observability that keeps the agent operating safely and effectively.
+    Args:
+        query: Search query for products (e.g., "wireless headphones", "USB-C hub")
+    """
+    products = {
+        "wireless headphones": "SKU-WH100: Wireless Headphones Pro - $79.99, 142 in stock, 4.5★ rating, launched 2025-03",
+        "usb-c hub": "SKU-UC200: USB-C Hub 7-in-1 - $45.00, 89 in stock, 4.2★ rating, launched 2024-11",
+        "mechanical keyboard": "SKU-MK300: Mechanical Keyboard RGB - $149.99, 23 in stock, 4.8★ rating, launched 2025-01",
+        "noise cancelling": "SKU-NC400: Noise Cancelling Earbuds - $129.99, 67 in stock, 4.6★ rating, launched 2025-05",
+    }
+    key = query.lower()
+    matches = [info for product_key, info in products.items() if product_key in key]
+    if matches:
+        return "\n".join(matches)
+    return f"No products found matching '{query}'. Available: wireless headphones, usb-c hub, mechanical keyboard, noise cancelling"
 
-The goal is to let agents handle more on their own while you maintain control over the boundaries. You can run deterministic code where you need predictable behavior, add validation layers to verify outcomes, and when the stakes are high, you can use interrupts to pause the agent and route the decision to a human.
+SYSTEM_PROMPT = """You are a product research analyst. You help the team understand
+market positioning by comparing competitor pricing with our internal catalog.
 
-### Introducing the Strands Agents SDK
+When given a research task:
+1. Use web_fetch to gather public market data from the web
+2. Use query_product_database to check our internal pricing and inventory
+3. Write a brief competitive analysis and save it to report.md using file_editor"""
 
-We’ll be exploring how to build agent harnesses using the Strands agents SDK, which is an open-source SDK that gives you the building blocks to construct your own harness and control it end-to-end. It has components for tools, context engineering, lifecycle hooks, plugins, memory, session management, evaluations, observability, and more. You compose them together into whatever system your use case calls for.
+agent = Agent(
+    tools=[web_fetch, file_editor, query_product_database],
+    system_prompt=SYSTEM_PROMPT,
+)
 
-Strands does not add any tools by default—you choose which tools your agent gets. The default conversation manager is `SlidingWindowConversationManager`, which keeps the most recent messages and truncates older history. Proactive context compression is opt-in via `context_manager="auto"`. The community tools package (`strands-agents-tools`) provides ready-made tools for file operations, shell, search, web access, and more that you can add to your agent. You can start with those and customize further, or build from scratch using the primitives. We’ll do both in this course.
+result = agent("Research what wireless headphones are trending on the market and compare it against our offerings. "
+               "Write a short competitive positioning summary and save it to report.md")
+```
 
-Strands itself came out of production systems at AWS. Teams building agents kept running into the same problem: The abstractions and rigid orchestration layers in existing frameworks weren’t keeping up with what newer models could do natively.
+Key concepts:
 
-So Strands was built around a simple idea: Let the model drive. You give the model tools and context, and the model reasons through what to call, in what order, and when to stop. Your job is to define the environment capabilities, the boundaries, and the guardrails around the model. The model’s job is to reason through the task.
+-   **`@tool` decorator** turns any Python function into an agent-callable tool
+-   **Docstrings** become the tool description the model sees
+-   **Type hints** auto-generate the input schema
+-   **System prompt** defines agent identity and behavior
 
-### Step-by-Step: Creating a Market Research Agent with Tools
+After a run, `agent.messages` shows every step the loop took: user turns, assistant text, tool calls, and tool results. This is the first place to look when you want to know why the agent did what it did.
 
-So now let’s take our very simple agent and add some tools. In this example, we are creating a market research agent that helps a company compare internal product listings to their competitors.
+📂 [agent\_with\_tools.py](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/01-agent-loop/agent_with_tools.py)
 
-Here at the top, we import agent and tool from strands, along with some community tools like HTTP request and file write.
+## Out of the Box Components
 
-Then we define a custom tool. Custom tools let your agent run deterministic functionality directly when it needs it. This could be calling an API, performing business logic, doing math, reading data from a database, or whatever you need—it’s simply a function that an agent can run. You can also use MCP, but we’ll get into that in a later video.
+Strands also ships preconfigured components that give you a capable agent out of the box:
 
-You can turn any Python function into a tool using the @tool decorator. This tool simulates querying a product database to pull back information about a company’s product listings. This, in the real world, would query a database or hit an internal API to bring this data in. But for now, we’re just getting used to the mechanics of the SDK and seeing how to create a simple agent.
+-   **Vended tools** for file operations, shell access, and web fetching
+-   **Automatic context management** that offloads large results, compresses old messages, and fires proactive compression before the window fills
+-   **Plugin system** for extending behavior
 
-Strands reads the docstring and uses it as the tool description that the model sees, or it can read the type hints and generate the input schema automatically. You write a Python function, add a decorator, and Strands handles the rest.
+You can start with these defaults and customize from there, or build from scratch using the primitives.
 
-Now to create the agent: Here we create a simple system prompt. This prompt lays out the behavior of the agent. It defines what the agent is and how it should behave. This gets sent along with every request to the model. In this case, we are saying: “You are a product research analyst,” and providing details on how to handle tasks.
+```python
+from strands import Agent
+from strands.models import BedrockModel
+from strands.vended_tools import file_editor, shell
+from strands.vended_tools.web_fetch import web_fetch
 
-Then we create an agent by creating a new instance of the agent class, passing in the community tools like HTTP request and file write, as well as our custom tool query\_product\_database, and then also passing in the system prompt.
+agent = Agent(
+    model=BedrockModel(
+        model_id="us.anthropic.claude-sonnet-5",
+    ),
+    # Vended tools for file ops, shell, and web fetching
+    tools=[file_editor, shell, web_fetch],
+    # Auto context management: offloads large tool results, compresses old
+    # messages into summaries, and fires proactive compression at 85% usage.
+    context_manager="auto",
+)
 
-And now we can give the agent a task by passing in a user query or prompt just like this:
+# Give it a research task
+agent("Research the current state of AI agent deployment patterns in production, including common architectures, challenges teams face, and best practices. Write a summary to report.md")
+```
 
-“Research what wireless headphones are trending on the market and compare it against our offerings. Write a short competitive positioning summary and save it to report.md.” Now we can go ahead and give this a run.
+📂 [agent\_with\_defaults.py](https://github.com/aws-samples/sample-building-with-strands-course/tree/main/samples/01-agent-loop/agent_with_defaults.py)
 
-### Observing Self-Healing & Interrupt-Gated Operations
+## Resources
 
-The agent kicked off, and we can see it using its tools like HTTP request and query\_product\_database to look up the products that it’s comparing.
-
-But the interesting thing is you can see that when it runs into errors, like having certain websites be blocked for scraping, it pivots and uses a more accessible public data source. This is showing how the agent loop allows the agent to be adaptable, and whenever it runs into errors or problems, it runs through another loop and it’s able to take a different path.
-
-Then later, we can see that it continues to gather information, and then it goes to write the file. Here it’s stopping to ask me, the user, for permission: “Can I proceed with writing this file?” So, this has some built-in interrupt-gated capabilities with the file write tool. I’ll go ahead and say “yes” to allow that. Then it will write the file to a local directory, which will contain the entire report.
-
-### Under the Hood: Demystifying Agent Messages
-
-To see what the agent did in more detail, step by step, we can inspect agent messages, and this will show us the full context of what the agent saw and did with every loop. Let’s go ahead and run it again.
-
-The agent is done running, and we’ve printed out all of the messages that the agent can see. And when I first started building agents, this is what I wish someone had shown me first, because it answers the question, “Why did my agent do that?” almost every time.
-
-If we scroll up, you can see every user message, every assistant response (which is the response coming from the model), and you can also see all of the tool calls and the tool results that occurred during the agent loop. You can see the tool use blocks where the model requested a tool with specific inputs. Then Strands invokes those tools and sends the response back to the model as additional context.
-
-The model reasons over those results and decides what to do next. This accumulated conversation state is sent to the model on every request, because models are stateless by default—they only know what you send them during every single invocation. The harness continually manages and reconstructs context so the model can build on previous actions, recover from failures, and synthesize information across multiple steps.
-
-### What’s Next in the Course?
-
-Throughout this course, we’ll progressively compose primitives offered by Strands agents into more sophisticated systems. The early videos focus on understanding the components individually with small examples.
-
-Then we’ll build towards more advanced architectures like long-running conversations, memory systems, orchestration workflows, customer support agents, multi-agent systems, evaluations, monitoring, observability, and cloud deployment patterns. The goal here is building a mental model for how agent harnesses work and how these core Strands primitives compose together into real systems.
-
-In the age of AI coding assistants, syntax matters a lot less than understanding the systems and the patterns.
-
-To get started, install strands-agents for the core SDK and strands-agents-tools for the community tools package. Also, by default, Strands uses Amazon Bedrock as the model provider. So, if you already have AWS credentials configured, then you’re ready to go. But Strands is model-provider agnostic. You can also use providers like OpenAI, Anthropic, or Ollama for local models.
-
-*Learn more: [Agent Loop](/docs/user-guide/concepts/agents/agent-loop/index.md)*
+-   📖 [Getting Started](/docs/user-guide/sdk/quickstart/python/index.md)
+-   📖 [Agent Loop](/docs/user-guide/sdk/agents/agent-loop/index.md)
+-   📖 [Tools](/docs/user-guide/sdk/tools/index.md)
+-   📖 [Custom Tools](/docs/user-guide/sdk/tools/custom-tools/index.md)
+-   📖 [Connect your AI coding assistant (Strands MCP Server)](/docs/user-guide/sdk/quickstart/python/index.md#connect-your-ai-coding-assistant)

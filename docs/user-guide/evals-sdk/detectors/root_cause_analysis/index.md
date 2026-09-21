@@ -1,8 +1,8 @@
 ## Overview
 
-`analyze_root_cause` performs deep causal analysis of detected failures in an agent execution session. It traces failure chains, classifies causality (primary vs. secondary vs. tertiary), assesses propagation impact, and produces actionable fix recommendations — telling you not just what failed, but why and how to fix it.
+`analyze_root_cause` performs deep causal analysis of detected failures in an agent execution session. It traces failure chains, classifies causality (primary vs. secondary vs. tertiary), assesses propagation impact, and produces actionable fix recommendations: not just what failed, but why and how to fix it.
 
-## Key Features
+## Key features
 
 -   **Causal chain analysis**: Distinguishes between root causes and their downstream effects
 -   **Propagation impact assessment**: Determines whether failures caused task termination, quality degradation, incorrect paths, or were contained
@@ -10,13 +10,13 @@
 -   **3-tier fallback strategy**: Handles large sessions via direct analysis, failure path pruning, and chunked analysis with merge
 -   **Automatic failure detection**: If no failures are provided, calls `detect_failures` automatically
 
-## When to Use
+## When to use
 
 Use `analyze_root_cause` when you need to:
 
 -   **Understand causal relationships** between failures in a session
 -   **Get fix recommendations** for detected failures
--   **Determine propagation impact** — did the failure cascade or stay contained?
+-   **Determine propagation impact**: did the failure cascade or stay contained?
 -   **Prioritize fixes** based on causality (fix primary failures first)
 
 For a combined detect-and-analyze pipeline, use [`diagnose_session`](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) instead.
@@ -40,7 +40,7 @@ For a combined detect-and-analyze pipeline, use [`diagnose_session`](/docs/user-
 -   **Default**: `None` (uses Claude Sonnet via Bedrock)
 -   **Description**: The model to use for analysis. Can be a `Model` instance, a Bedrock model ID string, or `None` for the default.
 
-## Basic Usage
+## Basic usage
 
 ```python
 from strands_evals.detectors import detect_failures, analyze_root_cause, ConfidenceLevel
@@ -61,7 +61,7 @@ for rc in rca_output.root_causes:
     print(f"  Recommendation: {rc.fix_recommendation}")
 ```
 
-## Auto-detection Mode
+## Auto-detection mode
 
 If you don’t provide failures, `analyze_root_cause` calls `detect_failures` internally:
 
@@ -74,7 +74,7 @@ rca_output = analyze_root_cause(session)
 
 This is convenient for one-off analysis but means failure detection runs with default settings (`confidence_threshold=ConfidenceLevel.LOW`). For more control, detect failures separately.
 
-## Output Structure
+## Output structure
 
 `analyze_root_cause` returns an `RCAOutput`:
 
@@ -94,7 +94,7 @@ class RCAItem(BaseModel):
     fix_recommendation: str
 ```
 
-### Causality Classification
+### Causality classification
 
 | Value | Meaning |
 | --- | --- |
@@ -103,7 +103,7 @@ class RCAItem(BaseModel):
 | `TERTIARY_FAILURE` | Downstream effect of a secondary failure |
 | `UNCLEAR` | Insufficient context to determine causality |
 
-### Propagation Impact
+### Propagation impact
 
 | Value | Meaning |
 | --- | --- |
@@ -114,7 +114,7 @@ class RCAItem(BaseModel):
 | `NO_PROPAGATION` | Contained failure, recovered within 1-2 turns |
 | `UNCLEAR` | Cannot determine impact |
 
-### Failure Detection Timing
+### Failure detection timing
 
 | Value | Meaning |
 | --- | --- |
@@ -123,7 +123,7 @@ class RCAItem(BaseModel):
 | `ONLY_AT_TASK_END` | Failure was only apparent when the task completed |
 | `SILENT_UNDETECTED` | Failure went undetected during execution |
 
-### Completion Status
+### Completion status
 
 | Value | Meaning |
 | --- | --- |
@@ -131,7 +131,7 @@ class RCAItem(BaseModel):
 | `PARTIAL_SUCCESS` | Task partially completed |
 | `COMPLETE_FAILURE` | Task failed entirely |
 
-### Fix Types
+### Fix types
 
 | Value | When to use |
 | --- | --- |
@@ -139,15 +139,15 @@ class RCAItem(BaseModel):
 | `TOOL_DESCRIPTION_FIX` | Tool parameter confusion, unclear capabilities, missing constraint documentation |
 | `OTHERS` | Tool implementation bugs, API errors, infrastructure issues |
 
-## How the 3-Tier Strategy Works
+## How the 3-tier strategy works
 
 Root cause analysis requires understanding the full causal context of failures, which can be challenging for large sessions. The analyzer uses three progressively more aggressive strategies:
 
-### Tier 1: Direct Analysis
+### Tier 1: Direct analysis
 
 The full session and failures are sent to the LLM in a single call. This produces the highest quality results because the model sees the complete execution context.
 
-### Tier 2: Failure Path Pruning
+### Tier 2: Failure path pruning
 
 If the session exceeds context limits, the analyzer prunes the session to keep only spans on failure paths:
 
@@ -156,14 +156,14 @@ If the session exceeds context limits, the analyzer prunes the session to keep o
 
 This typically reduces session size by 50-90% while preserving the information needed for causal analysis.
 
-### Tier 3: Chunked Analysis with Merge
+### Tier 3: Chunked analysis with merge
 
 If the pruned session still exceeds context limits, it is split into per-trace windows:
 
 1.  Each window is analyzed independently
 2.  Results from all windows are merged using a dedicated merge prompt that deduplicates and reconciles findings
 
-## Example: Analyzing a Production Trace
+## Example: Analyzing a production trace
 
 ```python
 from strands_evals.providers import CloudWatchProvider
@@ -189,15 +189,15 @@ for fix_type, recs in by_type.items():
         print(f"  - {rec}")
 ```
 
-## Best Practices
+## Best practices
 
-1.  **Pass failures explicitly** when you’ve already run `detect_failures` — avoids redundant LLM calls
+1.  **Pass failures explicitly** when you’ve already run `detect_failures`: avoids redundant LLM calls
 2.  **Use `ConfidenceLevel.MEDIUM`** for failure detection before RCA to reduce noise in root cause analysis
-3.  **Fix primary failures first** — secondary and tertiary failures often resolve when their root cause is addressed
+3.  **Fix primary failures first**: secondary and tertiary failures often resolve when their root cause is addressed
 4.  **Group recommendations by fix type** to batch related changes (e.g., all system prompt fixes together)
 5.  **Use `diagnose_session`** when you want the full pipeline in a single call
 
-## Related Documentation
+## Related documentation
 
 -   [Failure Detection](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md): Identify failures before analyzing root causes
 -   [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md): Combined detection + RCA pipeline
@@ -205,13 +205,13 @@ for fix_type, recs in by_type.items():
 
 ## Related pages
 
-- [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (3 shared tags)
+- [Session diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (3 shared tags)
 - [Detectors](/docs/user-guide/evals-sdk/detectors/index.md) (2 shared tags)
-- [Failure Detection](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md) (2 shared tags)
-- [Operating Agents in Production](/docs/user-guide/deploy/operating-agents-in-production/index.md) (2 shared tags)
-- [Evaluating Remote Traces](/docs/user-guide/evals-sdk/how-to/trace_providers/index.md) (1 shared tag)
-- [Metrics](/docs/user-guide/observability-evaluation/metrics/index.md) (1 shared tag)
-- [Model Routing](/docs/user-guide/concepts/model-providers/model-routing/index.md) (1 shared tag)
-- [Observability](/docs/user-guide/observability-evaluation/observability/index.md) (1 shared tag)
-- [Task Decorator](/docs/user-guide/evals-sdk/how-to/eval_task/index.md) (1 shared tag)
-- [Traces](/docs/user-guide/observability-evaluation/traces/index.md) (1 shared tag)
+- [Failure detection](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md) (2 shared tags)
+- [Operating Agents in Production](/docs/user-guide/sdk/deploy/operating-agents-in-production/index.md) (2 shared tags)
+- [Evaluating remote traces](/docs/user-guide/evals-sdk/how-to/trace_providers/index.md) (1 shared tag)
+- [Metrics](/docs/user-guide/sdk/observability-evaluation/metrics/index.md) (1 shared tag)
+- [Observability](/docs/user-guide/sdk/observability-evaluation/observability/index.md) (1 shared tag)
+- [Observe your agent](/docs/user-guide/sdk/observability-evaluation/index.md) (1 shared tag)
+- [Task decorator](/docs/user-guide/evals-sdk/how-to/eval_task/index.md) (1 shared tag)
+- [Traces](/docs/user-guide/sdk/observability-evaluation/traces/index.md) (1 shared tag)

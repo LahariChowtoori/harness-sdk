@@ -86,7 +86,7 @@ Once you’ve built your agent with AG-UI, you can deploy it to AWS Bedrock Agen
 
 Note
 
-This guide is adapted for AG-UI. For general AgentCore deployment documentation, see [Deploy to Bedrock AgentCore](/docs/user-guide/deploy/deploy_to_bedrock_agentcore/index.md).
+This guide is adapted for AG-UI. For general AgentCore deployment documentation, see [Deploy to Bedrock AgentCore](/docs/user-guide/sdk/deploy/deploy_to_bedrock_agentcore/index.md).
 
 ### Setup Authentication
 

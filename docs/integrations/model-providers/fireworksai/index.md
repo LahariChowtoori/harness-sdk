@@ -2,7 +2,7 @@
 
 OpenAI compatibility
 
-This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) pointed at Fireworks AI’s OpenAI-compatible endpoint; there is no separate integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
+This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) pointed at Fireworks AI’s OpenAI-compatible endpoint; there is no separate integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
 
 ## Installation
 
@@ -72,10 +72,10 @@ Two client settings connect the provider to Fireworks AI:
 -   **API key**: from your [account settings](https://app.fireworks.ai/settings/users/api-keys)
 -   **Base URL**: `https://api.fireworks.ai/inference/v1`
 
-Model IDs come from the [Fireworks AI model library](https://fireworks.ai/models) and carry the `accounts/fireworks/models/` prefix. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) guide.
+Model IDs come from the [Fireworks AI model library](https://fireworks.ai/models) and carry the `accounts/fireworks/models/` prefix. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) guide.
 
 ## References
 
 -   [Fireworks AI OpenAI compatibility guide](https://fireworks.ai/docs/tools-sdks/openai-compatibility#openai-compatibility)
 -   [Fireworks AI model library](https://fireworks.ai/models)
--   [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md)
+-   [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md)

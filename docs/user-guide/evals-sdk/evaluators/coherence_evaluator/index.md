@@ -2,14 +2,14 @@
 
 The `CoherenceEvaluator` assesses whether an agent’s response maintains logical consistency, flows naturally, and presents ideas in a well-organized manner. It uses an LLM-as-judge approach with a five-level scoring rubric.
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the most recent turn in the conversation
 -   **Five-Level Scoring**: Granular scale from “Not At All” to “Completely Yes”
 -   **Context-Aware**: Considers conversation history when evaluating coherence
 -   **Structured Reasoning**: Provides step-by-step reasoning for each evaluation
 
-## When to Use
+## When to use
 
 Use the `CoherenceEvaluator` when you need to:
 
@@ -18,7 +18,7 @@ Use the `CoherenceEvaluator` when you need to:
 -   Evaluate whether responses flow naturally
 -   Measure quality of multi-step reasoning
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn in the conversation.
 
@@ -48,7 +48,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 -   **Default**: `"v0"`
 -   **Description**: Prompt template version.
 
-## Scoring System
+## Scoring system
 
 | Rating | Score | Description |
 | --- | --- | --- |
@@ -60,7 +60,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 
 A response passes the evaluation if the score is >= 0.5.
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -100,7 +100,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**ConcisenessEvaluator**](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md): Evaluates response brevity
 -   [**ResponseRelevanceEvaluator**](/docs/user-guide/evals-sdk/evaluators/response_relevance_evaluator/index.md): Evaluates relevance to user questions
@@ -108,13 +108,13 @@ asyncio.run(main())
 
 ## Related pages
 
-- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
-- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
-- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Conciseness evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal success rate evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Helpfulness evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
+- [Interactions evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
+- [Output evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)
+- [Customizing user simulation](/docs/user-guide/evals-sdk/simulators/customize_user_simulation/index.md) (1 shared tag)
+- [User simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/sdk/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/sdk/context-management/context-estimation/index.md) (1 shared tag)

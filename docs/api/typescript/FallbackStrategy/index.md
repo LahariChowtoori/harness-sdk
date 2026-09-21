@@ -1,4 +1,4 @@
-Defined in: [src/models/routing/fallback-strategy.ts:5](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/fallback-strategy.ts#L5)
+Defined in: [src/models/routing/fallback-strategy.ts:5](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/routing/fallback-strategy.ts#L5)
 
 Selects the healthiest candidate not yet tried since the last success.
 
@@ -26,7 +26,7 @@ new FallbackStrategy(): FallbackStrategy;
 select(context): Promise<RoutingCandidate>;
 ```
 
-Defined in: [src/models/routing/fallback-strategy.ts:12](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/fallback-strategy.ts#L12)
+Defined in: [src/models/routing/fallback-strategy.ts:12](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/routing/fallback-strategy.ts#L12)
 
 Select the least-failed available candidate, breaking ties by declaration order.
 

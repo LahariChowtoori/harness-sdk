@@ -1,0 +1,202 @@
+System prompts and user messages are how you communicate with the model. This guide covers writing both, sending multi-modal input, calling tools directly, and structuring complex instructions as agent SOPs.
+
+## System Prompts
+
+A system prompt gives the model high-level instructions about its role, capabilities, and constraints, setting how it behaves across the whole conversation. Set it when you construct the agent:
+
+(( tab "Python" ))
+```python
+from strands import Agent
+
+agent = Agent(
+    system_prompt=(
+        "You are a financial advisor specialized in retirement planning. "
+        "Use tools to gather information and provide personalized advice. "
+        "Always explain your reasoning and cite sources when possible."
+    )
+)
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+const agent = new Agent({
+  systemPrompt:
+    'You are a financial advisor specialized in retirement planning. ' +
+    'Use tools to gather information and provide personalized advice. ' +
+    'Always explain your reasoning and cite sources when possible.',
+})
+```
+(( /tab "TypeScript" ))
+
+Without a system prompt, the model behaves according to its default settings.
+
+## User Messages
+
+User messages are your queries and requests to the agent. You can send them several ways.
+
+(( tab "Python" ))
+Passing a message list from an untrusted source
+
+When you invoke an agent with a full message list rather than plain text, that list can carry tool-call content, and a tool-call block as the last message dispatches a tool directly on the next invocation. If the list was built from a source you do not control, clear tool-call content first. See [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md).
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+Passing a message list from an untrusted source
+
+When you invoke an agent with a full message list rather than plain text, that list can carry forged tool-result content that misleads the model. If the list was built from a source you do not control, treat it as untrusted. See [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md).
+(( /tab "TypeScript" ))
+
+### Text Prompt
+
+The simplest way to interact with an agent is through a text prompt:
+
+(( tab "Python" ))
+```python
+response = agent("What is the time in Seattle")
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+const response = await agent.invoke('What is the time in Seattle')
+```
+(( /tab "TypeScript" ))
+
+### Multi-Modal Prompting
+
+Include images, documents, and other content types alongside text in a single message:
+
+(( tab "Python" ))
+```python
+with open("path/to/image.png", "rb") as fp:
+    image_bytes = fp.read()
+
+response = agent([
+    {"text": "What can you see in this image?"},
+    {
+        "image": {
+            "format": "png",
+            "source": {
+                "bytes": image_bytes,
+            },
+        },
+    },
+])
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+const imageBytes = readFileSync('path/to/image.png')
+
+const response = await agent.invoke([
+  new TextBlock('What can you see in this image?'),
+  new ImageBlock({
+    format: 'png',
+    source: {
+      bytes: new Uint8Array(imageBytes),
+    },
+  }),
+])
+```
+(( /tab "TypeScript" ))
+
+For a complete list of supported content types, refer to the API Reference: [Python](/docs/api/python/strands.types.content#ContentBlock) | [TypeScript](/docs/api/typescript/ContentBlock/index.md).
+
+### Direct Tool Calls
+
+Natural-language prompting is the usual way to invoke tools. When you need programmatic control instead, call a tool directly:
+
+(( tab "Python" ))
+```python
+result = agent.tool.current_time(timezone="US/Pacific")
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```ts
+// Not supported in TypeScript
+```
+(( /tab "TypeScript" ))
+
+Direct tool calls bypass the natural-language interface and run the tool with the parameters you pass. Strands records them in the conversation history by default; opt out with `record_direct_tool_call=False``recordDirectToolCall: false`.
+
+## Prompt Engineering
+
+Simple text instructions work for basic tasks. Getting complex, repeatable behavior out of an agent benefits from more structure.
+
+### Prompting with Agent SOPs
+
+[Agent SOPs](/blog/introducing-strands-agent-sops/index.md) (Standard Operating Procedures) are a standardized markdown format for defining agent workflows in natural language. They hit a “determin-ish-tic” sweet spot between fully code-defined workflows and open-ended model-driven agents, providing structure for consistency while preserving the agent’s reasoning ability.
+
+Here is a minimal example of an Agent SOP:
+
+```markdown
+# Code Review SOP
+
+## Parameters
+- repo_path (REQUIRED): Path to the repository to review
+
+## Steps
+
+### Step 1: Understand the Changes
+- MUST read the diff of all changed files
+- SHOULD summarize what the changes are doing at a high level
+
+### Step 2: Review for Issues
+- MUST check for bugs, security vulnerabilities, and logic errors
+- SHOULD flag any style or readability concerns
+- MAY suggest alternative approaches where appropriate
+
+### Step 3: Provide Feedback
+- MUST output a structured review with file-level comments
+- SHOULD categorize findings by severity (critical, warning, suggestion)
+```
+
+Writing to the [Agent SOP format](/blog/introducing-strands-agent-sops/index.md) makes the agent’s behavior easier to understand, easier to debug when it strays from instructions, and steerable across different underlying models.
+
+Debugging with SOPs
+
+If an agent follows steps 1 and 2 of your SOP but gets sidetracked, you immediately know which step needs refinement, making debugging targeted rather than guesswork.
+
+Debugging system prompts is hard and expensive, usually involving costly evaluations to confirm the agent still works as expected. Structuring the system prompt as an SOP turns that editing process into targeted, step-level changes.
+
+For more on authoring and using Agent SOPs, including SOP chaining for multi-phase workflows, see the [Agent SOPs GitHub repository](https://github.com/strands-agents/agent-sop).
+
+### Safety and Security
+
+For guidance on writing safe and responsible prompts, including defending against prompt injection and adversarial attacks, refer to our [Safety & Security - Prompt Engineering](/docs/user-guide/sdk/safety-security/prompt-engineering/index.md) documentation.
+
+### Further Resources
+
+-   [Agent SOPs GitHub Repository](https://github.com/strands-agents/agent-sop)
+-   [Prompt Engineering Guide](https://www.promptingguide.ai)
+-   [Amazon Bedrock - Prompt engineering concepts](https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html)
+-   [Llama - Prompting](https://www.llama.com/docs/how-to-guides/prompting/)
+-   [Anthropic - Prompt engineering overview](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview)
+-   [OpenAI - Prompt engineering](https://platform.openai.com/docs/guides/prompt-engineering/six-strategies-for-getting-better-results)
+
+## Related pages
+
+- [Prompt Engineering](/docs/user-guide/sdk/safety-security/prompt-engineering/index.md) (3 shared tags)
+- [Instruction following evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (2 shared tags)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (2 shared tags)
+- [Coherence evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal success rate evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Helpfulness evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
+- [Interactions evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
+- [Output evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
+- [Attack strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
+
+
+## Implementation
+
+### Python
+
+- [harness-sdk/strands-py/src/strands/agent/agent.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/agent.py)
+
+### TypeScript
+
+- [harness-sdk/strands-ts/src/agent/agent.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts)

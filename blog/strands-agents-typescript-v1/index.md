@@ -4,7 +4,7 @@ date: 2026-04-30T00:00:00.000Z
 description: "Version 1.0 of the Strands Agents TypeScript SDK is here. Build type-safe AI agents with full model provider support, custom tools, plugins, and multi-agent orchestration in Node.js and the browser."
 tags: ["Open Source", "Announcement", "TypeScript"]
 ---
-We’re excited to announce version 1.0 of the [Strands Agents TypeScript SDK](https://strandsagents.com/docs/user-guide/quickstart/typescript/). The SDK brings the Strands model-driven approach to the TypeScript and JavaScript ecosystem. If you’ve been following Strands Agents, you know the Python SDK has been powering production agents across AWS and the broader community since May 2025, with over 25 million downloads and counting. Now, TypeScript developers can enjoy the same experience, with full type safety, custom tools, and the ability to run agents in both Node.js and the browser.
+We’re excited to announce version 1.0 of the [Strands Agents TypeScript SDK](https://strandsagents.com/docs/user-guide/sdk/quickstart/typescript/). The SDK brings the Strands model-driven approach to the TypeScript and JavaScript ecosystem. If you’ve been following Strands Agents, you know the Python SDK has been powering production agents across AWS and the broader community since May 2025, with over 25 million downloads and counting. Now, TypeScript developers can enjoy the same experience, with full type safety, custom tools, and the ability to run agents in both Node.js and the browser.
 
 ## Quick start
 
@@ -126,7 +126,7 @@ const agent = new Agent({
 })
 ```
 
-The SDK vends its own plugins as well. [Agent Skills](https://strandsagents.com/docs/user-guide/concepts/plugins/skills/), for instance, lets your agent discover and activate instructions on demand rather than loading everything upfront.
+The SDK vends its own plugins as well. [Agent Skills](https://strandsagents.com/docs/user-guide/sdk/plugins/skills/), for instance, lets your agent discover and activate instructions on demand rather than loading everything upfront.
 
 ### Multi-agent orchestration
 
@@ -241,7 +241,7 @@ The SDK runs natively in the browser with no server required. This opens up a wh
 npm install @strands-agents/sdk
 ```
 
--   [TypeScript quickstart guide](https://strandsagents.com/docs/user-guide/quickstart/typescript/)
+-   [TypeScript quickstart guide](https://strandsagents.com/docs/user-guide/sdk/quickstart/typescript/)
 -   [GitHub repo](https://github.com/strands-agents/sdk-typescript)
 -   [API documentation](https://strandsagents.com/docs/api/typescript/)
 -   [Examples](https://github.com/strands-agents/sdk-typescript/tree/main/strands-ts/examples)

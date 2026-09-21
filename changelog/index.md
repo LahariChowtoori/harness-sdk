@@ -1,6 +1,6 @@
 # Strands Agents Changelog
 
-## Harness Python v1.56.0 — 2026-09-15
+## SDK Python v1.56.0 — 2026-09-15
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.56.0 · Package: https://pypi.org/project/strands-agents/1.56.0/
 
 ### Features
@@ -34,7 +34,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.56
 - refine model audio configuration [model, bidirectional-streaming] (https://github.com/strands-agents/harness-sdk/pull/4303)
 - pin native OTel trace continuity on the mcp 2.x version [mcp, otel] (https://github.com/strands-agents/harness-sdk/pull/4131)
 
-## Harness TypeScript v1.18.0 — 2026-09-15
+## SDK TypeScript v1.18.0 — 2026-09-15
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.18.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.18.0
 
 ### Features
@@ -67,7 +67,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.3.0 · Package:
 - clarify tool-selection prompt in flaky Claude integration test [evaluators] (https://github.com/strands-agents/evals/pull/386)
 - omit default model=None from to\_dict instead of pinning to default model id [evaluators, devx] (https://github.com/strands-agents/evals/pull/392)
 
-## Harness Python v1.55.1 — 2026-09-09
+## SDK Python v1.55.1 — 2026-09-09
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.55.1 · Package: https://pypi.org/project/strands-agents/1.55.1/
 
 ### Features
@@ -81,7 +81,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.55
 - use semantic system instructions for agent spans [otel, agent] (https://github.com/strands-agents/harness-sdk/pull/4222)
 - filter malformed immutable snapshot IDs [persistence] (https://github.com/strands-agents/harness-sdk/pull/4199)
 
-## Harness Python v1.55.0 — 2026-09-08
+## SDK Python v1.55.0 — 2026-09-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.55.0 · Package: https://pypi.org/project/strands-agents/1.55.0/
 
 ### Features
@@ -147,7 +147,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.55
 - added mcp 2.x integ tests [mcp] (https://github.com/strands-agents/harness-sdk/pull/4129)
 - add install-size guard to pack test (https://github.com/strands-agents/harness-sdk/pull/4179)
 
-## Harness TypeScript v1.17.0 — 2026-09-08
+## SDK TypeScript v1.17.0 — 2026-09-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.17.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.17.0
 
 ### Features
@@ -173,7 +173,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 - move codecov config to repo root so Codecov discovers it again (https://github.com/strands-agents/harness-sdk/pull/4174)
 - add install-size guard to pack test (https://github.com/strands-agents/harness-sdk/pull/4179)
 
-## Harness TypeScript v1.16.0 — 2026-08-31
+## SDK TypeScript v1.16.0 — 2026-08-31
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.16.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.16.0
 
 ### Features
@@ -188,7 +188,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 ### Other
 - align 0016 with shipped ClassifierStrategy (https://github.com/strands-agents/harness-sdk/pull/4046)
 
-## Harness Python v1.54.0 — 2026-08-27
+## SDK Python v1.54.0 — 2026-08-27
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.54.0 · Package: https://pypi.org/project/strands-agents/1.54.0/
 
 ### Features
@@ -224,7 +224,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.54
 - update Bidi Bedrock dependencies (https://github.com/strands-agents/harness-sdk/pull/3997)
 - record decision on null vs undefined input handling (https://github.com/strands-agents/harness-sdk/pull/3889)
 
-## Harness TypeScript v1.15.0 — 2026-08-27
+## SDK TypeScript v1.15.0 — 2026-08-27
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.15.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.15.0
 
 ### Features
@@ -254,7 +254,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 - bump the production-minor group across 1 directory with 3 updates (https://github.com/strands-agents/harness-sdk/pull/3942)
 - record decision on null vs undefined input handling (https://github.com/strands-agents/harness-sdk/pull/3889)
 
-## Harness Python v1.53.0 — 2026-08-21
+## SDK Python v1.53.0 — 2026-08-21
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.53.0 · Package: https://pypi.org/project/strands-agents/1.53.0/
 
 ### Features
@@ -297,7 +297,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.53
 - remove unwinnable rate-limit throttling integ test [context, model] (https://github.com/strands-agents/harness-sdk/pull/3891)
 - update mypy requirement from \<2.0.0,\>=1.15.0 to \>=1.15.0,\<3.0.0 in /strands-py (https://github.com/strands-agents/harness-sdk/pull/3868)
 
-## Harness TypeScript v1.14.0 — 2026-08-21
+## SDK TypeScript v1.14.0 — 2026-08-21
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.14.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.14.0
 
 ### Features
@@ -355,7 +355,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.2.0 · Package:
 - update mypy requirement from \<2.0.0 to \<3.0.0 (https://github.com/strands-agents/evals/pull/368)
 - update opentelemetry-instrumentation-langchain requirement from \<0.62.0,\>=0.40.0 to \>=0.40.0,\<0.63.0 (https://github.com/strands-agents/evals/pull/369)
 
-## Harness Python v1.52.0 — 2026-08-12
+## SDK Python v1.52.0 — 2026-08-12
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.52.0 · Package: https://pypi.org/project/strands-agents/1.52.0/
 
 ### Features
@@ -388,7 +388,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.52
 - treat bash as its own deprecated tool [tool] (https://github.com/strands-agents/harness-sdk/pull/3756)
 - link catalog and standalone page changes in the preview comment (https://github.com/strands-agents/harness-sdk/pull/3774)
 
-## Harness TypeScript v1.13.0 — 2026-08-12
+## SDK TypeScript v1.13.0 — 2026-08-12
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.13.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.13.0
 
 ### Features
@@ -421,7 +421,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.1.1 · Package:
 - update pre-commit requirement from \<4.6.0,\>=3.2.0 to \>=3.2.0,\<4.7.0 (https://github.com/strands-agents/evals/pull/321)
 - bump pypa/gh-action-pypi-publish from 1.14.0 to 1.14.2 (https://github.com/strands-agents/evals/pull/333)
 
-## Harness Python v1.51.0 — 2026-08-07
+## SDK Python v1.51.0 — 2026-08-07
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.51.0 · Package: https://pypi.org/project/strands-agents/1.51.0/
 
 ### Features
@@ -473,7 +473,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.51
 - wait for the retained task, not the log line [async, mcp] (https://github.com/strands-agents/harness-sdk/pull/3537)
 - extend the comment rule to require to-the-point, non-inferable content (https://github.com/strands-agents/harness-sdk/pull/3676)
 
-## Harness TypeScript v1.12.0 — 2026-08-07
+## SDK TypeScript v1.12.0 — 2026-08-07
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.12.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.12.0
 
 ### Features
@@ -536,7 +536,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.1.0 · Package:
 ### Other
 - update ruff requirement from \<0.16.0,\>=0.13.0 to \>=0.13.0,\<0.17.0 (https://github.com/strands-agents/evals/pull/327)
 
-## Harness Python v1.50.2 — 2026-07-27
+## SDK Python v1.50.2 — 2026-07-27
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.50.2 · Package: https://pypi.org/project/strands-agents/1.50.2/
 
 ### Features
@@ -555,7 +555,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.50
 - update context offloader comments to deprecate legacy storage [persistence] (https://github.com/strands-agents/harness-sdk/pull/3476)
 - remove security features, accept httpx.AsyncClient [devx, tool] (https://github.com/strands-agents/harness-sdk/pull/3491)
 
-## Harness TypeScript v1.11.2 — 2026-07-27
+## SDK TypeScript v1.11.2 — 2026-07-27
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.11.2 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.11.2
 
 ### Features
@@ -569,7 +569,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 - correct search tool contracts [mcp] (https://github.com/strands-agents/harness-sdk/pull/3456)
 - update context offloader comments to deprecate legacy storage [persistence] (https://github.com/strands-agents/harness-sdk/pull/3476)
 
-## Harness Python v1.50.1 — 2026-07-24
+## SDK Python v1.50.1 — 2026-07-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.50.1 · Package: https://pypi.org/project/strands-agents/1.50.1/
 
 ### Features
@@ -584,7 +584,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.50
 - enforce single-increment versions and verify publish on the registry (https://github.com/strands-agents/harness-sdk/pull/3473)
 - add automated release workflow [mcp] (https://github.com/strands-agents/harness-sdk/pull/3413)
 
-## Harness Python v1.50.0 — 2026-07-24
+## SDK Python v1.50.0 — 2026-07-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.50.0 · Package: https://pypi.org/project/strands-agents/1.50.0/
 
 ### Features
@@ -615,7 +615,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.50
 - bump astral-sh/setup-uv from 8.3.0 to 9.0.0 (https://github.com/strands-agents/harness-sdk/pull/3407)
 - bump pypa/gh-action-pypi-publish from 1.14.0 to 1.14.1 (https://github.com/strands-agents/harness-sdk/pull/3406)
 
-## Harness TypeScript v1.11.1 — 2026-07-24
+## SDK TypeScript v1.11.1 — 2026-07-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.11.1 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.11.1
 
 ### Features
@@ -632,7 +632,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 - enforce single-increment versions and verify publish on the registry (https://github.com/strands-agents/harness-sdk/pull/3473)
 - add automated release workflow [mcp] (https://github.com/strands-agents/harness-sdk/pull/3413)
 
-## Harness TypeScript v1.11.0 — 2026-07-24
+## SDK TypeScript v1.11.0 — 2026-07-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.11.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.11.0
 
 ### Features
@@ -679,7 +679,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.0.3 · Package:
 - align dependabot config with harness-sdk conventions (https://github.com/strands-agents/evals/pull/306)
 - bump actions/setup-python from 6 to 7 (https://github.com/strands-agents/evals/pull/318)
 
-## Harness Python v1.48.0 — 2026-07-17
+## SDK Python v1.48.0 — 2026-07-17
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.48.0 · Package: https://pypi.org/project/strands-agents/1.48.0/
 
 ### Features
@@ -712,7 +712,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.48
 - remove dead private code (https://github.com/strands-agents/harness-sdk/pull/3286)
 - deduplicate pr guidelines summary in sdk agents files (https://github.com/strands-agents/harness-sdk/pull/3293)
 
-## Harness TypeScript v1.10.0 — 2026-07-17
+## SDK TypeScript v1.10.0 — 2026-07-17
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.10.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.10.0
 
 ### Features
@@ -734,7 +734,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 - deduplicate pr guidelines summary in sdk agents files (https://github.com/strands-agents/harness-sdk/pull/3293)
 - deduplicate testing guide and agents file (https://github.com/strands-agents/harness-sdk/pull/3291)
 
-## Harness Python v1.47.0 — 2026-07-10
+## SDK Python v1.47.0 — 2026-07-10
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.47.0 · Package: https://pypi.org/project/strands-agents/1.47.0/
 
 ### Features
@@ -766,7 +766,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.47
 - update litellm requirement from \<=1.91.0,\>=1.75.9 to \>=1.75.9,\<=1.91.1 in /strands-py (https://github.com/strands-agents/harness-sdk/pull/3142)
 - relax litellm upper bound to \<2.0.0 [model] (https://github.com/strands-agents/harness-sdk/pull/3149)
 
-## Harness TypeScript v1.9.0 — 2026-07-10
+## SDK TypeScript v1.9.0 — 2026-07-10
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.9.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.9.0
 
 ### Features
@@ -806,7 +806,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.0.2 · Package:
 - added evals full release workflow (https://github.com/strands-agents/evals/pull/302)
 - add aggregate CI Gate status check (https://github.com/strands-agents/evals/pull/303)
 
-## Harness TypeScript v1.8.0 — 2026-07-08
+## SDK TypeScript v1.8.0 — 2026-07-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.8.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.8.0
 
 ### Features
@@ -845,7 +845,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v
 - added release workflow (https://github.com/strands-agents/harness-sdk/pull/2940)
 - fix integration test runs (https://github.com/strands-agents/harness-sdk/pull/3112)
 
-## Harness Python v1.46.0 — 2026-07-07
+## SDK Python v1.46.0 — 2026-07-07
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.46.0 · Package: https://pypi.org/project/strands-agents/1.46.0/
 
 ### Features
@@ -900,7 +900,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.46
 - drop unused snapshot and app\_data fields [hil, persistence] (https://github.com/strands-agents/harness-sdk/pull/3104)
 - fix integration test runs (https://github.com/strands-agents/harness-sdk/pull/3112)
 
-## Harness Python v1.45.0 — 2026-06-25
+## SDK Python v1.45.0 — 2026-06-25
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.45.0 · Package: https://pypi.org/project/strands-agents/1.45.0/
 
 ### Features
@@ -971,7 +971,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.45
 - improve testing instructions (https://github.com/strands-agents/harness-sdk/pull/2965)
 - skip SDK test matrices on markdown-only changes (https://github.com/strands-agents/harness-sdk/pull/2967)
 
-## Harness TypeScript v1.7.0 — 2026-06-25
+## SDK TypeScript v1.7.0 — 2026-06-25
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.7.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.7.0
 
 ### Features
@@ -1034,7 +1034,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.0.1 · Package:
 - bump actions/upload-artifact from 6 to 7 (https://github.com/strands-agents/evals/pull/149)
 - tighten dependabot versioning strategy (https://github.com/strands-agents/evals/pull/281)
 
-## Harness Python v1.44.0 — 2026-06-16
+## SDK Python v1.44.0 — 2026-06-16
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.44.0 · Package: https://pypi.org/project/strands-agents/1.44.0/
 
 ### Features
@@ -1079,7 +1079,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.44
 - bump hono to 4.12.25 to fix high-severity audit failure (https://github.com/strands-agents/harness-sdk/pull/2843)
 - assert S3 sidecar metadata and scope round-trip [persistence] (https://github.com/strands-agents/harness-sdk/pull/2840)
 
-## Harness TypeScript v1.6.0 — 2026-06-16
+## SDK TypeScript v1.6.0 — 2026-06-16
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.6.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.6.0
 
 ### Features
@@ -1134,7 +1134,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v1.0.0 · Package:
 - add module README [redteam] (https://github.com/strands-agents/evals/pull/271)
 - updated AGENT.md, SKILL.md, README (https://github.com/strands-agents/evals/pull/273)
 
-## Harness Python v1.43.0 — 2026-06-12
+## SDK Python v1.43.0 — 2026-06-12
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.43.0 · Package: https://pypi.org/project/strands-agents/1.43.0/
 
 ### Features
@@ -1187,7 +1187,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.43
 - enforce API review label requirement before merge (https://github.com/strands-agents/harness-sdk/pull/2716)
 - add AI contribution guidance to CONTRIBUTING and PR template (https://github.com/strands-agents/harness-sdk/pull/2728)
 
-## Harness TypeScript v1.5.0 — 2026-06-12
+## SDK TypeScript v1.5.0 — 2026-06-12
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.5.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.5.0
 
 ### Features
@@ -1277,7 +1277,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.3.0 · Package:
 - add community and character guidance to AGENTS.md [agent] (https://github.com/strands-agents/evals/pull/261)
 - added generate command for experiment generation [cli] (https://github.com/strands-agents/evals/pull/260)
 
-## Harness Python v1.42.0 — 2026-06-01
+## SDK Python v1.42.0 — 2026-06-01
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.42.0 · Package: https://pypi.org/project/strands-agents/1.42.0/
 
 ### Features
@@ -1317,7 +1317,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.42
 - add security warnings to http\_request and file\_editor vended tools [tool] (https://github.com/strands-agents/sdk-python/pull/2391)
 - allow design type in PR title validation (https://github.com/strands-agents/sdk-python/pull/2395)
 
-## Harness TypeScript v1.4.0 — 2026-06-01
+## SDK TypeScript v1.4.0 — 2026-06-01
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/typescript/v1.4.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.4.0
 
 First TypeScript release cut from the unified harness-sdk monorepo. The
@@ -1335,7 +1335,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.2.1 · Package:
 ### Other
 - added evals-skills (https://github.com/strands-agents/evals/pull/231)
 
-## Harness Python v1.41.0 — 2026-05-21
+## SDK Python v1.41.0 — 2026-05-21
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.41.0 · Package: https://pypi.org/project/strands-agents/1.41.0/
 
 ### Features
@@ -1346,7 +1346,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.41
 ### Fixes
 - add use\_native\_token\_count=True when expected (https://github.com/strands-agents/sdk-python/pull/2311)
 
-## Harness TypeScript v1.3.0 — 2026-05-21
+## SDK TypeScript v1.3.0 — 2026-05-21
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.3.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.3.0
 
 ### Features
@@ -1362,7 +1362,7 @@ Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.3.0 ·
 - update anthropic-provider [model] (https://github.com/strands-agents/sdk-typescript/pull/1075)
 - Migrate strands-py to strands-py-wasm (https://github.com/strands-agents/sdk-typescript/pull/1078)
 
-## Harness Python v1.40.0 — 2026-05-14
+## SDK Python v1.40.0 — 2026-05-14
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.40.0 · Package: https://pypi.org/project/strands-agents/1.40.0/
 
 ### Features
@@ -1375,7 +1375,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.40
 - set use\_native\_token\_count default to false (https://github.com/strands-agents/sdk-python/pull/2284)
 - swarm bug "Failed to detach context" with opentelemetry [multiagent] (https://github.com/strands-agents/sdk-python/pull/2281)
 
-## Harness TypeScript v1.2.0 — 2026-05-14
+## SDK TypeScript v1.2.0 — 2026-05-14
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.2.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.2.0
 
 ### Features
@@ -1417,7 +1417,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.2.0 · Package:
 ### Other
 - update import to include DiagnosisTrigger [detectors] (https://github.com/strands-agents/evals/pull/219)
 
-## Harness Python v1.39.0 — 2026-05-08
+## SDK Python v1.39.0 — 2026-05-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.39.0 · Package: https://pypi.org/project/strands-agents/1.39.0/
 
 ### Features
@@ -1433,7 +1433,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.39
 - correct MCPClient.\_\_exit\_\_ and stop() type annotations (https://github.com/strands-agents/sdk-python/pull/2248)
 - integration test updates (https://github.com/strands-agents/sdk-python/pull/2262)
 
-## Harness TypeScript v1.1.0 — 2026-05-08
+## SDK TypeScript v1.1.0 — 2026-05-08
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.1.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.1.0
 
 ### Features
@@ -1500,7 +1500,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.17 · Package
 - updated confidencelevel and diagnose\_trigger to enum [detectors] (https://github.com/strands-agents/evals/pull/212)
 - formatting (https://github.com/strands-agents/evals/pull/217)
 
-## Harness Python v1.38.0 — 2026-04-30
+## SDK Python v1.38.0 — 2026-04-30
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.38.0 · Package: https://pypi.org/project/strands-agents/1.38.0/
 
 ### Features
@@ -1531,7 +1531,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.38
 - update pre-commit requirement from \<4.6.0,\>=3.2.0 to \>=3.2.0,\<4.7.0 (https://github.com/strands-agents/sdk-python/pull/2185)
 - update style guide for tool spec navigation [tool] (https://github.com/strands-agents/sdk-python/pull/2203)
 
-## Harness TypeScript v1.0.0 — 2026-04-30
+## SDK TypeScript v1.0.0 — 2026-04-30
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0
 
 ### Features
@@ -1573,7 +1573,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.16 · Package
 ### Other
 - use PEP 604 union syntax and add Model type to HarmfulnessEvaluator [evaluators] (https://github.com/strands-agents/evals/pull/206)
 
-## Harness Python v1.37.0 — 2026-04-22
+## SDK Python v1.37.0 — 2026-04-22
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.37.0 · Package: https://pypi.org/project/strands-agents/1.37.0/
 
 ### Features
@@ -1585,7 +1585,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.37
 - skip MCPClient cleanup during interpreter finalization [mcp] (https://github.com/strands-agents/sdk-python/pull/2144)
 - update retired claude-3-haiku model in integration tests (https://github.com/strands-agents/sdk-python/pull/2186)
 
-## Harness TypeScript v1.0.0-rc.5 — 2026-04-22
+## SDK TypeScript v1.0.0-rc.5 — 2026-04-22
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc.5 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0-rc.5
 
 ### Features
@@ -1614,7 +1614,7 @@ Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc
 - update AGENTS.md (https://github.com/strands-agents/sdk-typescript/pull/862)
 - upgrade to otel js sdk v2 [otel] (https://github.com/strands-agents/sdk-typescript/pull/867)
 
-## Harness Python v1.36.0 — 2026-04-17
+## SDK Python v1.36.0 — 2026-04-17
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.36.0 · Package: https://pypi.org/project/strands-agents/1.36.0/
 
 ### Features
@@ -1635,7 +1635,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.36
 - normalize empty toolResult content arrays in \_format\_bedrock\_messages [model] (https://github.com/strands-agents/sdk-python/pull/2123)
 - remove force\_flush in tracer [otel] (https://github.com/strands-agents/sdk-python/pull/2142)
 
-## Harness TypeScript v1.0.0-rc.4 — 2026-04-17
+## SDK TypeScript v1.0.0-rc.4 — 2026-04-17
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc.4 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0-rc.4
 
 ### Features
@@ -1663,7 +1663,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.15 · Package
 ### Other
 - updated simulators README (https://github.com/strands-agents/evals/pull/195)
 
-## Harness Python v1.35.0 — 2026-04-08
+## SDK Python v1.35.0 — 2026-04-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.35.0 · Package: https://pypi.org/project/strands-agents/1.35.0/
 
 ### Features
@@ -1682,7 +1682,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.35
 ### Other
 - add weekly markdown link check workflow (https://github.com/strands-agents/sdk-python/pull/2088)
 
-## Harness TypeScript v1.0.0-rc.3 — 2026-04-08
+## SDK TypeScript v1.0.0-rc.3 — 2026-04-08
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc.3 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0-rc.3
 
 ### Features
@@ -1708,7 +1708,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.14 · Package
 ### Other
 - devx to allow for passing the Provider directly to evaluations with creating a wrapper task (https://github.com/strands-agents/evals/pull/183)
 
-## Harness Python v1.34.1 — 2026-04-01
+## SDK Python v1.34.1 — 2026-04-01
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.34.1 · Package: https://pypi.org/project/strands-agents/1.34.1/
 
 ### Features
@@ -1719,7 +1719,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.34
 - isolate langfuse env vars (https://github.com/strands-agents/sdk-python/pull/2022)
 - restore explicit span.end() to fix span end\_time regression [otel] (https://github.com/strands-agents/sdk-python/pull/2032)
 
-## Harness Python v1.34.0 — 2026-03-31
+## SDK Python v1.34.0 — 2026-03-31
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.34.0 · Package: https://pypi.org/project/strands-agents/1.34.0/
 
 ### Features
@@ -1737,7 +1737,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.34
 ### Other
 - remove Cohere from required integ test providers (https://github.com/strands-agents/sdk-python/pull/1967)
 
-## Harness TypeScript v1.0.0-rc.2 — 2026-03-31
+## SDK TypeScript v1.0.0-rc.2 — 2026-03-31
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc.2 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0-rc.2
 
 ### Features
@@ -1758,13 +1758,13 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.13 · Package
 - add LocalFileTaskResultStore for caching task results locally (https://github.com/strands-agents/evals/pull/178)
 - langfuse provider changes to support newer version of langfuse (https://github.com/strands-agents/evals/pull/165)
 
-## Harness TypeScript v1.0.0-rc.1 — 2026-03-26
+## SDK TypeScript v1.0.0-rc.1 — 2026-03-26
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc.1 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0-rc.1
 
 ### Fixes
 - remove top level telemetry export [otel] (https://github.com/strands-agents/sdk-typescript/pull/748)
 
-## Harness TypeScript v1.0.0-rc.0 — 2026-03-26
+## SDK TypeScript v1.0.0-rc.0 — 2026-03-26
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v1.0.0-rc.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/1.0.0-rc.0
 
 ### Features
@@ -1814,7 +1814,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.12 · Package
 ### Other
 - unify sync/async evaluation by defaulting aevaluate to asyncio.to\_thread (https://github.com/strands-agents/evals/pull/173)
 
-## Harness Python v1.33.0 — 2026-03-24
+## SDK Python v1.33.0 — 2026-03-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.33.0 · Package: https://pypi.org/project/strands-agents/1.33.0/
 
 ### Fixes
@@ -1822,7 +1822,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.33
 - remove agent from swarm test to get more consistency out of it [multiagent] (https://github.com/strands-agents/sdk-python/pull/1946)
 - CRITICAL: Hard pin \`litellm\<=1.82.6\` to mitigate supply chain attack [model] (https://github.com/strands-agents/sdk-python/pull/1961)
 
-## Harness Python v1.32.0 — 2026-03-20
+## SDK Python v1.32.0 — 2026-03-20
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.32.0 · Package: https://pypi.org/project/strands-agents/1.32.0/
 
 ### Fixes
@@ -1830,7 +1830,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.32
 - pin upper bound for mistralai dependency (https://github.com/strands-agents/sdk-python/pull/1935)
 - override end\_turn stop reason when streaming response contains toolUse blocks [bidirectional-streaming] (https://github.com/strands-agents/sdk-python/pull/1827)
 
-## Harness Python v1.31.0 — 2026-03-19
+## SDK Python v1.31.0 — 2026-03-19
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.31.0 · Package: https://pypi.org/project/strands-agents/1.31.0/
 
 ### Features
@@ -1845,7 +1845,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.31
 - lowercase the python language in code snippet (https://github.com/strands-agents/sdk-python/pull/1929)
 - openai repsonses api error handling [model] (https://github.com/strands-agents/sdk-python/pull/1931)
 
-## Harness TypeScript v0.7.0 — 2026-03-19
+## SDK TypeScript v0.7.0 — 2026-03-19
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.7.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.7.0
 
 ### Features
@@ -1899,7 +1899,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.11 · Package
 ### Fixes
 - hatch run test-lint (https://github.com/strands-agents/evals/pull/161)
 
-## Harness Python v1.30.0 — 2026-03-11
+## SDK Python v1.30.0 — 2026-03-11
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.30.0 · Package: https://pypi.org/project/strands-agents/1.30.0/
 
 ### Features
@@ -1923,7 +1923,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.30
 - break circular references so Agent cleanup doesn't hang with MCPClient [agent] (https://github.com/strands-agents/sdk-python/pull/1830)
 - Set \_is\_new\_session = False at the end of each initialize\_\* method (https://github.com/strands-agents/sdk-python/pull/1859)
 
-## Harness TypeScript v0.6.0 — 2026-03-11
+## SDK TypeScript v0.6.0 — 2026-03-11
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.6.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.6.0
 
 ### Features
@@ -1962,7 +1962,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.10 · Package
 ### Features
 - add deterministic evaluators for output and trajectory checks (https://github.com/strands-agents/evals/pull/154)
 
-## Harness Python v1.29.0 — 2026-03-04
+## SDK Python v1.29.0 — 2026-03-04
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.29.0 · Package: https://pypi.org/project/strands-agents/1.29.0/
 
 ### Features
@@ -1980,7 +1980,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.29
 - bump actions/upload-artifact from 6 to 7 (https://github.com/strands-agents/sdk-python/pull/1777)
 - bump actions/download-artifact from 7 to 8 (https://github.com/strands-agents/sdk-python/pull/1776)
 
-## Harness TypeScript v0.5.0 — 2026-03-04
+## SDK TypeScript v0.5.0 — 2026-03-04
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.5.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.5.0
 
 ### Features
@@ -2007,7 +2007,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.9 · Package:
 - add CloudWatchProvider to pull remote cloudwatch traces and run evals against them. (https://github.com/strands-agents/evals/pull/147)
 - add ToolSimulator for tool response simulation [tool] (https://github.com/strands-agents/evals/pull/111)
 
-## Harness Python v1.28.0 — 2026-02-25
+## SDK Python v1.28.0 — 2026-02-25
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.28.0 · Package: https://pypi.org/project/strands-agents/1.28.0/
 
 ### Features
@@ -2026,7 +2026,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.28
 - convert Plugin from Protocol to ABC (https://github.com/strands-agents/sdk-python/pull/1741)
 - switch to Sonnet 4.6 for Anthropic provider integ tests [model] (https://github.com/strands-agents/sdk-python/pull/1754)
 
-## Harness TypeScript v0.4.0 — 2026-02-25
+## SDK TypeScript v0.4.0 — 2026-02-25
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.4.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.4.0
 
 ### Features
@@ -2050,7 +2050,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.8 · Package:
 ### Other
 - bump amannn/action-semantic-pull-request from 5 to 6 (https://github.com/strands-agents/evals/pull/138)
 
-## Harness Python v1.27.0 — 2026-02-19
+## SDK Python v1.27.0 — 2026-02-19
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.27.0 · Package: https://pypi.org/project/strands-agents/1.27.0/
 
 ### Features
@@ -2075,7 +2075,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.27
 - bump amannn/action-semantic-pull-request from 5 to 6 (https://github.com/strands-agents/sdk-python/pull/1684)
 - coverage for python 3.14 (https://github.com/strands-agents/sdk-python/pull/1178)
 
-## Harness TypeScript v0.3.0 — 2026-02-19
+## SDK TypeScript v0.3.0 — 2026-02-19
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.3.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.3.0
 
 ### Features
@@ -2104,7 +2104,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.7 · Package:
 - update output variable name in workflow (https://github.com/strands-agents/evals/pull/139)
 - update finalize condition for workflow execution (https://github.com/strands-agents/evals/pull/142)
 
-## Harness Python v1.26.0 — 2026-02-11
+## SDK Python v1.26.0 — 2026-02-11
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.26.0 · Package: https://pypi.org/project/strands-agents/1.26.0/
 
 ### Features
@@ -2120,7 +2120,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.26
 - bump aws-actions/configure-aws-credentials from 5 to 6 (https://github.com/strands-agents/sdk-python/pull/1632)
 - add guidance on using Protocol instead of Callable for extensible interfaces (https://github.com/strands-agents/sdk-python/pull/1637)
 
-## Harness TypeScript v0.2.2 — 2026-02-11
+## SDK TypeScript v0.2.2 — 2026-02-11
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.2.2 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.2.2
 
 ### Features
@@ -2144,7 +2144,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.6 · Package:
 - centralized InputT and OutputT (https://github.com/strands-agents/evals/pull/124)
 - Added CoherenceEvaluator (https://github.com/strands-agents/evals/pull/125)
 
-## Harness Python v1.25.0 — 2026-02-05
+## SDK Python v1.25.0 — 2026-02-05
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.25.0 · Package: https://pypi.org/project/strands-agents/1.25.0/
 
 ### Features
@@ -2177,7 +2177,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.25
 - bump actions/upload-artifact from 4 to 6 (https://github.com/strands-agents/sdk-python/pull/1608)
 - remove broken MCP transport timeout test (https://github.com/strands-agents/sdk-python/pull/1635)
 
-## Harness TypeScript v0.2.1 — 2026-02-05
+## SDK TypeScript v0.2.1 — 2026-02-05
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.2.1 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.2.1
 
 ### Features
@@ -2207,7 +2207,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.5 · Package:
 - bump aws-actions/configure-aws-credentials from 5 to 6 (https://github.com/strands-agents/evals/pull/118)
 - workflow: add strands-command for PR and issue (https://github.com/strands-agents/evals/pull/122)
 
-## Harness Python v1.24.0 — 2026-01-29
+## SDK Python v1.24.0 — 2026-01-29
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.24.0 · Package: https://pypi.org/project/strands-agents/1.24.0/
 
 ### Features
@@ -2233,7 +2233,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.24
 - callback handler - fix reporting of tool when missing delta [tool] (https://github.com/strands-agents/sdk-python/pull/1573)
 - Fix failing integ tests (https://github.com/strands-agents/sdk-python/pull/1580)
 
-## Harness TypeScript v0.2.0 — 2026-01-29
+## SDK TypeScript v0.2.0 — 2026-01-29
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.2.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.2.0
 
 ### Features
@@ -2260,7 +2260,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.4 · Package:
 ### Fixes
 - include tool executions in \_extract\_trace\_level [tool] (https://github.com/strands-agents/evals/pull/77)
 
-## Harness Python v1.23.0 — 2026-01-21
+## SDK Python v1.23.0 — 2026-01-21
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.23.0 · Package: https://pypi.org/project/strands-agents/1.23.0/
 
 ### Features
@@ -2291,7 +2291,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.23
 - gemini - tool\_use\_id\_to\_name - local [model] (https://github.com/strands-agents/sdk-python/pull/1521)
 - Nova Sonic 2 support for BidiAgent (https://github.com/strands-agents/sdk-python/pull/1476)
 
-## Harness TypeScript v0.1.6 — 2026-01-21
+## SDK TypeScript v0.1.6 — 2026-01-21
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.6 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.6
 
 ### Features
@@ -2311,7 +2311,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.3 · Package:
 ### Fixes
 - Multiple Tool Usage Not Detected in tools\_use\_extractor.py [tool] (https://github.com/strands-agents/evals/pull/80)
 
-## Harness Python v1.22.0 — 2026-01-13
+## SDK Python v1.22.0 — 2026-01-13
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.22.0 · Package: https://pypi.org/project/strands-agents/1.22.0/
 
 ### Features
@@ -2341,7 +2341,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.22
 - update sphinx requirement from \<9.0.0,\>=5.0.0 to \>=5.0.0,\<10.0.0 (https://github.com/strands-agents/sdk-python/pull/1426)
 - Update to opus 4.5 (https://github.com/strands-agents/sdk-python/pull/1471)
 
-## Harness TypeScript v0.1.5 — 2026-01-13
+## SDK TypeScript v0.1.5 — 2026-01-13
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.5 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.5
 
 ### Other
@@ -2356,7 +2356,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.2 · Package:
 - Isolate evaluator errors in run\_evaluations (https://github.com/strands-agents/evals/pull/84)
 - Add null check for toolResult in message extraction (https://github.com/strands-agents/evals/pull/85)
 
-## Harness Python v1.21.0 — 2026-01-02
+## SDK Python v1.21.0 — 2026-01-02
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.21.0 · Package: https://pypi.org/project/strands-agents/1.21.0/
 
 ### Features
@@ -2395,7 +2395,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.21
 - bump actions/checkout from 5 to 6 (https://github.com/strands-agents/sdk-python/pull/1389)
 - Port TypeScript agents into Python (https://github.com/strands-agents/sdk-python/pull/1403)
 
-## Harness TypeScript v0.1.4 — 2026-01-02
+## SDK TypeScript v0.1.4 — 2026-01-02
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.4 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.4
 
 ### Fixes
@@ -2412,7 +2412,7 @@ Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.4 ·
 - Provide better names for integ test jobs (https://github.com/strands-agents/sdk-typescript/pull/371)
 - Mock aws config file path env var (https://github.com/strands-agents/sdk-typescript/pull/372)
 
-## Harness Python v1.20.0 — 2025-12-15
+## SDK Python v1.20.0 — 2025-12-15
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.20.0 · Package: https://pypi.org/project/strands-agents/1.20.0/
 
 ### Features
@@ -2433,7 +2433,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.20
 - bidi - fix mypy errors (https://github.com/strands-agents/sdk-python/pull/1308)
 - bidi - remove python 3.11+ features (https://github.com/strands-agents/sdk-python/pull/1302)
 
-## Harness TypeScript v0.1.3 — 2025-12-15
+## SDK TypeScript v0.1.3 — 2025-12-15
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.3 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.3
 
 ### Fixes
@@ -2473,7 +2473,7 @@ Release: https://github.com/strands-agents/evals/releases/tag/v0.1.1 · Package:
 - bump actions/upload-artifact from 5 to 6 (https://github.com/strands-agents/evals/pull/72)
 - us VCS for versioning and remove hardcoded (https://github.com/strands-agents/evals/pull/73)
 
-## Harness TypeScript v0.1.2 — 2025-12-04
+## SDK TypeScript v0.1.2 — 2025-12-04
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.2 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.2
 
 ### Other
@@ -2481,7 +2481,7 @@ Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.2 ·
 - fix broken API reference link in README (https://github.com/strands-agents/sdk-typescript/pull/314)
 - Update exports to account for CJS (https://github.com/strands-agents/sdk-typescript/pull/316)
 
-## Harness Python v1.19.0 — 2025-12-03
+## SDK Python v1.19.0 — 2025-12-03
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.19.0 · Package: https://pypi.org/project/strands-agents/1.19.0/
 
 ### Features
@@ -2498,7 +2498,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.19
 - mcp - elicitation - fix server request test [mcp] (https://github.com/strands-agents/sdk-python/pull/1281)
 - adjust integ test system prompts to reduce flakiness (https://github.com/strands-agents/sdk-python/pull/1282)
 
-## Harness TypeScript v0.1.1 — 2025-12-03
+## SDK TypeScript v0.1.1 — 2025-12-03
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.1 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.1
 
 ### Other
@@ -2511,10 +2511,10 @@ Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.1 ·
 ## Evals v0.1.0 — 2025-12-03
 Release: https://github.com/strands-agents/evals/releases/tag/v0.1.0 · Package: https://pypi.org/project/strands-agents-evals/0.1.0/
 
-## Harness TypeScript v0.1.0 — 2025-12-03
+## SDK TypeScript v0.1.0 — 2025-12-03
 Release: https://github.com/strands-agents/sdk-typescript/releases/tag/v0.1.0 · Package: https://www.npmjs.com/package/@strands-agents/sdk/v/0.1.0
 
-## Harness Python v1.18.0 — 2025-11-21
+## SDK Python v1.18.0 — 2025-11-21
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.18.0 · Package: https://pypi.org/project/strands-agents/1.18.0/
 
 ### Fixes
@@ -2531,7 +2531,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.18
 - interrupt - interruptible multi agent hook interface [hooks] (https://github.com/strands-agents/sdk-python/pull/1207)
 - security(tool\_loader): prevent tool name and sys modules collisions i… [tool] (https://github.com/strands-agents/sdk-python/pull/1214)
 
-## Harness Python v1.17.0 — 2025-11-18
+## SDK Python v1.17.0 — 2025-11-18
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.17.0 · Package: https://pypi.org/project/strands-agents/1.17.0/
 
 ### Features
@@ -2545,7 +2545,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.17
 ### Other
 - swarm - switch to handoff node only after current node stops [multiagent] (https://github.com/strands-agents/sdk-python/pull/1147)
 
-## Harness Python v1.16.0 — 2025-11-12
+## SDK Python v1.16.0 — 2025-11-12
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.16.0 · Package: https://pypi.org/project/strands-agents/1.16.0/
 
 ### Features
@@ -2566,7 +2566,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.16
 - updated opt-in attributes to internal [otel] (https://github.com/strands-agents/sdk-python/pull/1152)
 - share interrupt state (https://github.com/strands-agents/sdk-python/pull/1148)
 
-## Harness Python v1.15.0 — 2025-11-04
+## SDK Python v1.15.0 — 2025-11-04
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.15.0 · Package: https://pypi.org/project/strands-agents/1.15.0/
 
 ### Features
@@ -2586,7 +2586,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.15
 - linting (https://github.com/strands-agents/sdk-python/pull/1120)
 - Fix input/output message not redacted when guardrails\_trace="enabled\_full" (https://github.com/strands-agents/sdk-python/pull/1072)
 
-## Harness Python v1.14.0 — 2025-10-29
+## SDK Python v1.14.0 — 2025-10-29
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.14.0 · Package: https://pypi.org/project/strands-agents/1.14.0/
 
 ### Features
@@ -2611,7 +2611,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.14
 - mcp elicitation [mcp] (https://github.com/strands-agents/sdk-python/pull/1094)
 - Transform invalid tool usages on sending, not on initial detection [tool] (https://github.com/strands-agents/sdk-python/pull/1091)
 
-## Harness Python v1.13.0 — 2025-10-17
+## SDK Python v1.13.0 — 2025-10-17
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.13.0 · Package: https://pypi.org/project/strands-agents/1.13.0/
 
 ### Features
@@ -2629,7 +2629,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.13
 - multiagents - temporarily raise exception when interrupted (https://github.com/strands-agents/sdk-python/pull/1038)
 - interrupts - decorated tools [tool] (https://github.com/strands-agents/sdk-python/pull/1041)
 
-## Harness Python v1.12.0 — 2025-10-10
+## SDK Python v1.12.0 — 2025-10-10
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.12.0 · Package: https://pypi.org/project/strands-agents/1.12.0/
 
 ### Features
@@ -2643,7 +2643,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.12
 - conversation manager - summarization - noop tool [tool] (https://github.com/strands-agents/sdk-python/pull/1003)
 - Fix additional\_args passing in SageMakerAIModel (https://github.com/strands-agents/sdk-python/pull/983)
 
-## Harness Python v1.11.0 — 2025-10-08
+## SDK Python v1.11.0 — 2025-10-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.11.0 · Package: https://pypi.org/project/strands-agents/1.11.0/
 
 ### Features
@@ -2660,7 +2660,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.11
 - event loop - handle model execution (https://github.com/strands-agents/sdk-python/pull/958)
 - hooks - before tool call event - cancel tool [tool] (https://github.com/strands-agents/sdk-python/pull/964)
 
-## Harness Python v1.10.0 — 2025-09-29
+## SDK Python v1.10.0 — 2025-09-29
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.10.0 · Package: https://pypi.org/project/strands-agents/1.10.0/
 
 ### Features
@@ -2681,7 +2681,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.10
 - update openai requirement from \<1.108.0,\>=1.68.0 to \>=1.68.0,\<1.110.0 [model] (https://github.com/strands-agents/sdk-python/pull/916)
 - update pytest-asyncio requirement from \<1.2.0,\>=1.0.0 to \>=1.0.0,\<1.3.0 (https://github.com/strands-agents/sdk-python/pull/861)
 
-## Harness Python v1.9.1 — 2025-09-19
+## SDK Python v1.9.1 — 2025-09-19
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.9.1 · Package: https://pypi.org/project/strands-agents/1.9.1/
 
 ### Features
@@ -2695,7 +2695,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.9.
 - Fix github workflow to use fmt instead of hatch run (https://github.com/strands-agents/sdk-python/pull/898)
 - make tool\_choice an optional keyword arg instead positional [model] (https://github.com/strands-agents/sdk-python/pull/899)
 
-## Harness Python v1.9.0 — 2025-09-17
+## SDK Python v1.9.0 — 2025-09-17
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.9.0 · Package: https://pypi.org/project/strands-agents/1.9.0/
 
 ### Features
@@ -2724,7 +2724,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.9.
 - models - openai - client context comment [model] (https://github.com/strands-agents/sdk-python/pull/864)
 - fix links and imports (https://github.com/strands-agents/sdk-python/pull/837)
 
-## Harness Python v1.8.0 — 2025-09-10
+## SDK Python v1.8.0 — 2025-09-10
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.8.0 · Package: https://pypi.org/project/strands-agents/1.8.0/
 
 ### Features
@@ -2748,7 +2748,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.8.
 - llama.cpp model provider support [model] (https://github.com/strands-agents/sdk-python/pull/585)
 - fix(llama.cpp) - add ToolChoice and validation of model config values [model] (https://github.com/strands-agents/sdk-python/pull/838)
 
-## Harness Python v1.7.1 — 2025-09-05
+## SDK Python v1.7.1 — 2025-09-05
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.7.1 · Package: https://pypi.org/project/strands-agents/1.7.1/
 
 ### Features
@@ -2765,7 +2765,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.7.
 ### Other
 - update openai requirement from \<1.100.0 to \<1.102.0 [model] (https://github.com/strands-agents/sdk-python/pull/722)
 
-## Harness Python v1.7.0 — 2025-09-02
+## SDK Python v1.7.0 — 2025-09-02
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.7.0 · Package: https://pypi.org/project/strands-agents/1.7.0/
 
 ### Features
@@ -2784,7 +2784,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.7.
 - Add invocation\_state to ToolContext (https://github.com/strands-agents/sdk-python/pull/761)
 - Add VPC endpoint support to BedrockModel class - Add optional endpoin… [model] (https://github.com/strands-agents/sdk-python/pull/502)
 
-## Harness Python v1.6.0 — 2025-08-26
+## SDK Python v1.6.0 — 2025-08-26
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.6.0 · Package: https://pypi.org/project/strands-agents/1.6.0/
 
 ### Features
@@ -2811,7 +2811,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.6.
 - update pytest-cov requirement from \<5.0.0,\>=4.1.0 to \>=4.1.0,\<7.0.0 (https://github.com/strands-agents/sdk-python/pull/705)
 - @dependabot\[bot\] made their first contribution (https://github.com/strands-agents/sdk-python/pull/706)
 
-## Harness Python v1.5.0 — 2025-08-19
+## SDK Python v1.5.0 — 2025-08-19
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.5.0 · Package: https://pypi.org/project/strands-agents/1.5.0/
 
 ### Features
@@ -2833,7 +2833,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.5.
 - session manager - prevent file path injection [sessions] (https://github.com/strands-agents/sdk-python/pull/680)
 - Have \[all\] group reference the other optional dependency groups by name (https://github.com/strands-agents/sdk-python/pull/674)
 
-## Harness Python v1.4.0 — 2025-08-08
+## SDK Python v1.4.0 — 2025-08-08
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.4.0 · Package: https://pypi.org/project/strands-agents/1.4.0/
 
 ### Features
@@ -2849,7 +2849,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.4.
 - Change max\_tokens type to int to match Anthropic API [model] (https://github.com/strands-agents/sdk-python/pull/588)
 - update host per AppSec recommendation [a2a] (https://github.com/strands-agents/sdk-python/pull/619)
 
-## Harness Python v1.3.0 — 2025-08-04
+## SDK Python v1.3.0 — 2025-08-04
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.3.0 · Package: https://pypi.org/project/strands-agents/1.3.0/
 
 ### Fixes
@@ -2860,7 +2860,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.3.
 ### Other
 - pin a2a to a minor version while it is still in beta [a2a] (https://github.com/strands-agents/sdk-python/pull/586)
 
-## Harness Python v1.2.0 — 2025-07-30
+## SDK Python v1.2.0 — 2025-07-30
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.2.0 · Package: https://pypi.org/project/strands-agents/1.2.0/
 
 ### Features
@@ -2874,7 +2874,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.2.
 - Support for Amazon SageMaker AI endpoints as Model Provider [model] (https://github.com/strands-agents/sdk-python/pull/176)
 - \[Feat\] Update structured output error message [structured-output] (https://github.com/strands-agents/sdk-python/pull/563)
 
-## Harness Python v1.1.0 — 2025-07-24
+## SDK Python v1.1.0 — 2025-07-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.1.0 · Package: https://pypi.org/project/strands-agents/1.1.0/
 
 ### Features
@@ -2893,7 +2893,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.1.
 - enable integ tests for anthropic, cohere, mistral, openai, writer [model] (https://github.com/strands-agents/sdk-python/pull/510)
 - Automatically flatten nested tool collections [tool] (https://github.com/strands-agents/sdk-python/pull/508)
 
-## Harness Python v1.0.1 — 2025-07-18
+## SDK Python v1.0.1 — 2025-07-18
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.0.1 · Package: https://pypi.org/project/strands-agents/1.0.1/
 
 ### Fixes
@@ -2906,7 +2906,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.0.
 - update development status classifier (https://github.com/strands-agents/sdk-python/pull/480)
 - Update README.md with Writer (https://github.com/strands-agents/sdk-python/pull/474)
 
-## Harness Python v1.0.0 — 2025-07-15
+## SDK Python v1.0.0 — 2025-07-15
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.0.0 · Package: https://pypi.org/project/strands-agents/1.0.0/
 
 ### Features
@@ -2947,7 +2947,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v1.0.
 - Swarm - Remove unnecessary complete\_swarm\_task tool [multiagent] (https://github.com/strands-agents/sdk-python/pull/473)
 - remove preview from README.md (https://github.com/strands-agents/sdk-python/pull/459)
 
-## Harness Python v0.3.0 — 2025-07-11
+## SDK Python v0.3.0 — 2025-07-11
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.3.0 · Package: https://pypi.org/project/strands-agents/0.3.0/
 
 ### Features
@@ -3003,13 +3003,13 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.3.
 - Remove \_remove\_dangling\_messages from SlidingWindowConversationManager (https://github.com/strands-agents/sdk-python/pull/418)
 - set Agent property load\_tools\_from\_directory to default to False [agent] (https://github.com/strands-agents/sdk-python/pull/419)
 
-## Harness Python v0.2.1 — 2025-07-04
+## SDK Python v0.2.1 — 2025-07-04
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.2.1 · Package: https://pypi.org/project/strands-agents/0.2.1/
 
 ### Other
 - tools - parallel execution - sleep [tool] (https://github.com/strands-agents/sdk-python/pull/355)
 
-## Harness Python v0.2.0 — 2025-07-02
+## SDK Python v0.2.0 — 2025-07-02
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.2.0 · Package: https://pypi.org/project/strands-agents/0.2.0/
 
 ### Features
@@ -3043,7 +3043,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.2.
 - Remove FunctionTool as a breaking change (https://github.com/strands-agents/sdk-python/pull/325)
 - executor - run tools - yield [tool] (https://github.com/strands-agents/sdk-python/pull/328)
 
-## Harness Python v0.1.9 — 2025-06-24
+## SDK Python v0.1.9 — 2025-06-24
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.9 · Package: https://pypi.org/project/strands-agents/0.1.9/
 
 ### Features
@@ -3063,7 +3063,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - litellm - bug in v1.73.0 [model] (https://github.com/strands-agents/sdk-python/pull/270)
 - Update @tool to return an AgentTool that also acts as a function [tool] (https://github.com/strands-agents/sdk-python/pull/258)
 
-## Harness Python v0.1.8 — 2025-06-18
+## SDK Python v0.1.8 — 2025-06-18
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.8 · Package: https://pypi.org/project/strands-agents/0.1.8/
 
 ### Features
@@ -3086,7 +3086,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - raise exception if exporter unavailable [otel] (https://github.com/strands-agents/sdk-python/pull/234)
 - docstring parser (https://github.com/strands-agents/sdk-python/pull/239)
 
-## Harness Python v0.1.7 — 2025-06-09
+## SDK Python v0.1.7 — 2025-06-09
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.7 · Package: https://pypi.org/project/strands-agents/0.1.7/
 
 ### Features
@@ -3110,7 +3110,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - Remove codeowners (https://github.com/strands-agents/sdk-python/pull/181)
 - enhance error messaging when MCP tools are used without sessio… [mcp] (https://github.com/strands-agents/sdk-python/pull/175)
 
-## Harness Python v0.1.6 — 2025-05-30
+## SDK Python v0.1.6 — 2025-05-30
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.6 · Package: https://pypi.org/project/strands-agents/0.1.6/
 
 ### Features
@@ -3128,7 +3128,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - models - anthropic - document - plain text [model] (https://github.com/strands-agents/sdk-python/pull/141)
 - Automate deployment to PYPI (https://github.com/strands-agents/sdk-python/pull/145)
 
-## Harness Python v0.1.5 — 2025-05-26
+## SDK Python v0.1.5 — 2025-05-26
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.5 · Package: https://pypi.org/project/strands-agents/0.1.5/
 
 ### Features
@@ -3149,7 +3149,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - 🔥🕊️ Rise of the Phoenix: Event Loop Refactor (https://github.com/strands-agents/sdk-python/pull/106)
 - v0.1.5 (https://github.com/strands-agents/sdk-python/pull/121)
 
-## Harness Python v0.1.4 — 2025-05-23
+## SDK Python v0.1.4 — 2025-05-23
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.4 · Package: https://pypi.org/project/strands-agents/0.1.4/
 
 ### Fixes
@@ -3167,7 +3167,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - lint - openai client protocol [model] (https://github.com/strands-agents/sdk-python/pull/87)
 - Lower OpenTelemetry minimum version (https://github.com/strands-agents/sdk-python/pull/89)
 
-## Harness Python v0.1.3 — 2025-05-21
+## SDK Python v0.1.3 — 2025-05-21
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.3 · Package: https://pypi.org/project/strands-agents/0.1.3/
 
 ### Fixes
@@ -3178,7 +3178,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - style guide (https://github.com/strands-agents/sdk-python/pull/49)
 - Update version to 0.1.3 (https://github.com/strands-agents/sdk-python/pull/63)
 
-## Harness Python v0.1.2 — 2025-05-18
+## SDK Python v0.1.2 — 2025-05-18
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.2 · Package: https://pypi.org/project/strands-agents/0.1.2/
 
 ### Fixes
@@ -3190,7 +3190,7 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - Update README to mention Meta Llama API as a supported model provider [model] (https://github.com/strands-agents/sdk-python/pull/21)
 - v0.1.2 (https://github.com/strands-agents/sdk-python/pull/41)
 
-## Harness Python v0.1.1 — 2025-05-17
+## SDK Python v0.1.1 — 2025-05-17
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.1 · Package: https://pypi.org/project/strands-agents/0.1.1/
 
 ### Fixes
@@ -3204,5 +3204,5 @@ Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.
 - actions: remove dispatch docs (https://github.com/strands-agents/sdk-python/pull/22)
 - v0.1.1 release (https://github.com/strands-agents/sdk-python/pull/26)
 
-## Harness Python v0.1.0 — 2025-05-16
+## SDK Python v0.1.0 — 2025-05-16
 Release: https://github.com/strands-agents/harness-sdk/releases/tag/python/v0.1.0 · Package: https://pypi.org/project/strands-agents/0.1.0/

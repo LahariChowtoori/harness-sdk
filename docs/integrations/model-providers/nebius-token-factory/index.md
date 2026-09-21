@@ -2,7 +2,7 @@
 
 OpenAI compatibility
 
-This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) pointed at Nebius Token Factory’s OpenAI-compatible endpoint; there is no separate integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
+This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) pointed at Nebius Token Factory’s OpenAI-compatible endpoint; there is no separate integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
 
 ## Installation
 
@@ -72,10 +72,10 @@ Two client settings connect the provider to Nebius Token Factory:
 -   **API key**: from the [Token Factory Console](https://tokenfactory.nebius.com/)
 -   **Base URL**: `https://api.tokenfactory.nebius.com/v1/`
 
-Model IDs come from the [Token Factory model catalog](https://docs.tokenfactory.nebius.com/ai-models-inference/overview), for example `deepseek-ai/DeepSeek-R1-0528` or `meta-llama/Meta-Llama-3.1-70B-Instruct`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) guide.
+Model IDs come from the [Token Factory model catalog](https://docs.tokenfactory.nebius.com/ai-models-inference/overview), for example `deepseek-ai/DeepSeek-R1-0528` or `meta-llama/Meta-Llama-3.1-70B-Instruct`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) guide.
 
 ## References
 
 -   [Nebius Token Factory documentation](https://docs.tokenfactory.nebius.com/)
 -   [Nebius Token Factory API reference](https://docs.tokenfactory.nebius.com/api-reference)
--   [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md)
+-   [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md)

@@ -1,6 +1,6 @@
 A **storage backend** persists raw bytes under `/`\-separated string keys. The SDK uses the `Storage` interface internally for session snapshots, context offloading, and any construct that needs durable key-value persistence. Any class that implements the four-method `Storage` protocol (`write`, `read`, `delete`, `list`) can plug in.
 
-The SDK ships reference backends: [`InMemoryStorage`](/docs/user-guide/concepts/storage/index.md#inmemorystorage), [`LocalFileStorage`](/docs/user-guide/concepts/storage/index.md#localfilestorage), and [`S3Storage`](/docs/user-guide/concepts/storage/index.md#s3storage). The packages below are **community-built** storage backends you can install and use wherever a `Storage` instance is accepted.
+The SDK ships reference backends: [`InMemoryStorage`](/docs/user-guide/sdk/storage/index.md#inmemorystorage), [`LocalFileStorage`](/docs/user-guide/sdk/storage/index.md#localfilestorage), and [`S3Storage`](/docs/user-guide/sdk/storage/index.md#s3storage). The packages below are **community-built** storage backends you can install and use wherever a `Storage` instance is accepted.
 
 Community maintained
 

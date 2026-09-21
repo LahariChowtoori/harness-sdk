@@ -29,7 +29,7 @@ That’s it. An agent with a model, a prompt, and a conversation. The model driv
 
 ## What’s in the box
 
-The TypeScript SDK ships with the core features you need to build agents that range from quick prototypes to production systems. Here’s a quick tour. For the full details, head over to the [TypeScript quickstart guide](/docs/user-guide/quickstart/typescript/index.md).
+The TypeScript SDK ships with the core features you need to build agents that range from quick prototypes to production systems. Here’s a quick tour. For the full details, head over to the [TypeScript quickstart guide](/docs/user-guide/sdk/quickstart/typescript/index.md).
 
 ### Model providers
 
@@ -159,7 +159,7 @@ npm install @strands-agents/sdk
 
 Here’s where to go next:
 
--   [Getting started](/docs/user-guide/quickstart/typescript/index.md) to build your first agent
+-   [Getting started](/docs/user-guide/sdk/quickstart/typescript/index.md) to build your first agent
 -   [GitHub](https://github.com/strands-agents/sdk-typescript) for source code and examples
 
 We’re building this in the open and contributions are welcome. Whether it’s a bug fix, a new feature, or a cool example, we’d love to see what you build. Join us [on GitHub](https://github.com/strands-agents/sdk-typescript) and let us know what you think.

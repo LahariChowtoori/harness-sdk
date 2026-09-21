@@ -2,7 +2,7 @@
 
 The `InteractionsEvaluator` is designed for evaluating interactions between agents or components in multi-agent systems or complex workflows. It assesses each interaction step-by-step, considering dependencies, message flow, and the overall sequence of interactions.
 
-## Key Features
+## Key features
 
 -   **Interaction-Level Evaluation**: Evaluates each interaction in a sequence
 -   **Multi-Agent Support**: Designed for evaluating multi-agent systems and workflows
@@ -11,7 +11,7 @@ The `InteractionsEvaluator` is designed for evaluating interactions between agen
 -   **Dependency Tracking**: Considers dependencies between interactions
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 
-## When to Use
+## When to use
 
 Use the `InteractionsEvaluator` when you need to:
 
@@ -53,7 +53,7 @@ Use the `InteractionsEvaluator` when you need to:
 -   **Default**: `True`
 -   **Description**: Whether to include inputs in the evaluation context.
 
-## Interaction Structure
+## Interaction structure
 
 Each interaction should contain:
 
@@ -61,7 +61,7 @@ Each interaction should contain:
 -   **dependencies**: List of nodes this interaction depends on
 -   **messages**: Messages exchanged in this interaction
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -131,7 +131,7 @@ evaluator = InteractionsEvaluator(
     rubric={
         "planner": "Evaluate if planning is thorough and logical",
         "executor": "Evaluate if execution follows the plan correctly",
-        "validator": "Evaluate if validation is comprehensive"
+        "validator": "Evaluate if validation is thorough"
     }
 )
 
@@ -145,7 +145,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `InteractionsEvaluator` returns a list of `EvaluationOutput` objects (one per interaction) with:
 
@@ -156,7 +156,7 @@ The `InteractionsEvaluator` returns a list of `EvaluationOutput` objects (one pe
 
 The final interaction’s evaluation includes context from all previous interactions.
 
-## What Gets Evaluated
+## What gets evaluated
 
 For each interaction, the evaluator examines:
 
@@ -166,7 +166,7 @@ For each interaction, the evaluator examines:
 4.  **Previous Evaluations**: Context from earlier interactions (for later interactions)
 5.  **Final Output**: Overall output (only for the last interaction)
 
-## Best Practices
+## Best practices
 
 1.  **Define Clear Interaction Structure**: Ensure interactions have consistent node\_name, dependencies, and messages
 2.  **Use Node-Specific Rubrics**: Provide tailored evaluation criteria for different agent types
@@ -174,9 +174,9 @@ For each interaction, the evaluator examines:
 4.  **Update Descriptions**: Use `update_interaction_description()` to provide context about available interactions
 5.  **Test Sequences**: Include test cases with various interaction patterns
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Linear Workflow
+### Pattern 1: Linear workflow
 
 ```python
 interactions = [
@@ -186,7 +186,7 @@ interactions = [
 ]
 ```
 
-### Pattern 2: Parallel Execution
+### Pattern 2: Parallel execution
 
 ```python
 interactions = [
@@ -197,7 +197,7 @@ interactions = [
 ]
 ```
 
-### Pattern 3: Conditional Flow
+### Pattern 3: Conditional flow
 
 ```python
 interactions = [
@@ -207,9 +207,9 @@ interactions = [
 ]
 ```
 
-## Example Scenarios
+## Example scenarios
 
-### Scenario 1: Successful Multi-Agent Workflow
+### Scenario 1: Successful multi-agent workflow
 
 ```python
 # Task: Research and summarize a topic
@@ -227,13 +227,13 @@ interactions = [
     {
         "node_name": "writer",
         "dependencies": ["analyzer"],
-        "messages": "Created comprehensive summary"
+        "messages": "Created summary of the topic"
     }
 ]
 # Evaluation: Each interaction scored based on quality and dependency adherence
 ```
 
-### Scenario 2: Failed Dependency
+### Scenario 2: Failed dependency
 
 ```python
 # Task: Process data pipeline
@@ -252,39 +252,39 @@ interactions = [
 # Evaluation: Low scores due to incorrect dependency handling
 ```
 
-## Common Issues and Solutions
+## Common issues and solutions
 
-### Issue 1: Missing Interaction Keys
+### Issue 1: Missing interaction keys
 
 **Problem**: Interactions missing required keys (node\_name, dependencies, messages). **Solution**: Ensure all interactions include all three required fields.
 
-### Issue 2: Incorrect Dependency Specification
+### Issue 2: Incorrect dependency specification
 
 **Problem**: Dependencies don’t match actual execution order. **Solution**: Verify dependency lists accurately reflect the workflow.
 
-### Issue 3: Rubric Key Mismatch
+### Issue 3: Rubric key mismatch
 
 **Problem**: Node-specific rubric dictionary missing keys for some nodes. **Solution**: Ensure rubric dictionary contains entries for all node names, or use a single string rubric.
 
-## Use Cases
+## Use cases
 
-### Use Case 1: Multi-Agent Orchestration
+### Use case 1: Multi-agent orchestration
 
 Evaluate coordination between multiple specialized agents.
 
-### Use Case 2: Workflow Validation
+### Use case 2: Workflow validation
 
 Assess execution of complex, multi-step workflows.
 
-### Use Case 3: Agent Handoff Quality
+### Use case 3: Agent handoff quality
 
 Measure quality of information transfer between agents.
 
-### Use Case 4: Dependency Compliance
+### Use case 4: Dependency compliance
 
 Verify that agents respect declared dependencies.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**TrajectoryEvaluator**](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md): Evaluates tool call sequences (single agent)
 -   [**GoalSuccessRateEvaluator**](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md): Evaluates overall goal achievement
@@ -293,13 +293,13 @@ Verify that agents respect declared dependencies.
 
 ## Related pages
 
-- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
-- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
-- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
-- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Coherence evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal success rate evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Helpfulness evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
+- [Output evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)
+- [Customizing user simulation](/docs/user-guide/evals-sdk/simulators/customize_user_simulation/index.md) (1 shared tag)
+- [User simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/sdk/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/sdk/context-management/context-estimation/index.md) (1 shared tag)

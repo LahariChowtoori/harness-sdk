@@ -2,7 +2,7 @@
 
 The `GoalSuccessRateEvaluator` evaluates whether all user goals were successfully achieved in a conversation. It provides a holistic assessment of whether the agent accomplished what the user set out to do, considering the entire conversation session. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/goal_success_rate_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Session-Level Evaluation**: Evaluates the entire conversation session
 -   **Goal-Oriented Assessment**: Focuses on whether user objectives were met
@@ -12,7 +12,7 @@ The `GoalSuccessRateEvaluator` evaluates whether all user goals were successfull
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Holistic View**: Considers all interactions in the session
 
-## When to Use
+## When to use
 
 Use the `GoalSuccessRateEvaluator` when you need to:
 
@@ -23,11 +23,17 @@ Use the `GoalSuccessRateEvaluator` when you need to:
 -   Identify patterns in successful vs. unsuccessful interactions
 -   Optimize agents for goal achievement
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **SESSION\_LEVEL**, meaning it evaluates the entire conversation session as a whole, not individual turns or tool calls.
 
 ## Parameters
+
+### `version` (optional)
+
+-   **Type**: `str`
+-   **Default**: `"v0"`
+-   **Description**: Prompt template version used for both the basic and assertion templates when no custom `system_prompt` or `assertion_system_prompt` is supplied.
 
 ### `model` (optional)
 
@@ -47,7 +53,7 @@ This evaluator operates at the **SESSION\_LEVEL**, meaning it evaluates the enti
 -   **Default**: `None` (uses built-in template)
 -   **Description**: Custom system prompt for assertion-based evaluation.
 
-## Scoring System
+## Scoring system
 
 ### Basic Mode (no assertions)
 
@@ -56,7 +62,7 @@ The evaluator infers user goals from the conversation and checks whether they we
 -   **Yes (1.0)**: All user goals were successfully achieved
 -   **No (0.0)**: User goals were not fully achieved
 
-### Assertion Mode (with `expected_assertion`)
+### Assertion mode (with `expected_assertion`)
 
 When `expected_assertion` is set on the case, the evaluator judges against explicit success criteria instead of inferring goals:
 
@@ -65,7 +71,7 @@ When `expected_assertion` is set on the case, the evaluator judges against expli
 
 A session passes the evaluation only if the score is 1.0.
 
-### Using Assertions
+### Using assertions
 
 ```python
 cases = [
@@ -85,7 +91,7 @@ experiment = Experiment(cases=cases, evaluators=[GoalSuccessRateEvaluator()])
 
 Assertions are human-authored statements describing expected agent actions, responses, or behaviors. They give you precise control over what “success” means for each test case.
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -149,7 +155,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `GoalSuccessRateEvaluator` returns `EvaluationOutput` objects with:
 
@@ -158,7 +164,7 @@ The `GoalSuccessRateEvaluator` returns `EvaluationOutput` objects with:
 -   **reason**: Step-by-step reasoning explaining the evaluation
 -   **label**: “Yes” or “No”
 
-## What Gets Evaluated
+## What gets evaluated
 
 The evaluator examines:
 
@@ -169,7 +175,7 @@ The evaluator examines:
 
 The judge determines if the agent successfully helped the user accomplish their goals by the end of the session.
 
-## Best Practices
+## Best practices
 
 1.  **Use with Proper Telemetry Setup**: The evaluator requires trajectory information captured via OpenTelemetry
 2.  **Define Clear Goals**: Ensure test cases have clear, measurable objectives
@@ -177,23 +183,23 @@ The judge determines if the agent successfully helped the user accomplish their 
 4.  **Test Various Complexity Levels**: Include simple and complex goal scenarios
 5.  **Combine with Other Evaluators**: Use alongside helpfulness and trajectory evaluators
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Task Completion
+### Pattern 1: Task completion
 
 Evaluate if specific tasks were completed successfully.
 
-### Pattern 2: Multi-Step Goals
+### Pattern 2: Multi-step goals
 
 Assess achievement of goals requiring multiple steps.
 
-### Pattern 3: Information Retrieval
+### Pattern 3: Information retrieval
 
 Determine if users obtained the information they needed.
 
-## Example Scenarios
+## Example scenarios
 
-### Scenario 1: Successful Goal Achievement
+### Scenario 1: Successful goal achievement
 
 ```plaintext
 User: "I need to book a flight from NYC to LA for next Monday"
@@ -202,7 +208,7 @@ Final: "Your flight is booked! Confirmation number: ABC123"
 Evaluation: Yes (1.0) - Goal fully achieved
 ```
 
-### Scenario 2: Partial Achievement
+### Scenario 2: Partial achievement
 
 ```plaintext
 User: "I need to book a flight from NYC to LA for next Monday"
@@ -211,7 +217,7 @@ Final: "Here are available flights. Would you like me to book one?"
 Evaluation: No (0.0) - Goal not completed (booking not finalized)
 ```
 
-### Scenario 3: Failed Goal
+### Scenario 3: Failed goal
 
 ```plaintext
 User: "I need to book a flight from NYC to LA for next Monday"
@@ -219,7 +225,7 @@ Agent: "I can help with general travel information."
 Evaluation: No (0.0) - Goal not achieved
 ```
 
-### Scenario 4: Complex Multi-Goal Success
+### Scenario 4: Complex multi-goal success
 
 ```plaintext
 User: "Find the cheapest flight to Paris, book it, and send confirmation to my email"
@@ -228,45 +234,45 @@ Final: "Booked the €450 flight and sent confirmation to your email"
 Evaluation: Yes (1.0) - All goals achieved
 ```
 
-## Common Issues and Solutions
+## Common issues and solutions
 
-### Issue 1: No Evaluation Returned
+### Issue 1: No evaluation returned
 
 **Problem**: Evaluator returns empty results. **Solution**: Ensure trajectory contains a complete session with at least one agent invocation span.
 
-### Issue 2: Ambiguous Goals
+### Issue 2: Ambiguous goals
 
 **Problem**: Unclear what constitutes “success” for a given query. **Solution**: Provide clearer test case descriptions or expected outcomes in metadata.
 
-### Issue 3: Partial Success Scoring
+### Issue 3: Partial success scoring
 
 **Problem**: Agent partially achieves goals but evaluator marks as failure. **Solution**: This is by design - the evaluator requires full goal achievement. Consider using HelpfulnessEvaluator for partial success assessment.
 
-## Differences from Other Evaluators
+## Differences from other evaluators
 
 -   **vs. HelpfulnessEvaluator**: Goal success is binary (achieved/not achieved), helpfulness is graduated
 -   **vs. OutputEvaluator**: Goal success evaluates overall achievement, output evaluates response quality
 -   **vs. TrajectoryEvaluator**: Goal success evaluates outcome, trajectory evaluates the path taken
 
-## Use Cases
+## Use cases
 
-### Use Case 1: Customer Service
+### Use case 1: Customer service
 
 Evaluate if customer issues were fully resolved.
 
-### Use Case 2: Task Automation
+### Use case 2: Task automation
 
 Measure success rate of automated task completion.
 
-### Use Case 3: Information Retrieval
+### Use case 3: Information retrieval
 
 Assess if users obtained all needed information.
 
-### Use Case 4: Multi-Step Workflows
+### Use case 4: Multi-step workflows
 
 Evaluate completion of complex, multi-step processes.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**HelpfulnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md): Evaluates helpfulness of individual responses
 -   [**TrajectoryEvaluator**](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md): Evaluates the sequence of actions taken
@@ -275,13 +281,13 @@ Evaluate completion of complex, multi-step processes.
 
 ## Related pages
 
-- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
-- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
-- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
-- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Coherence evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Helpfulness evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
+- [Interactions evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
+- [Output evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)
+- [Customizing user simulation](/docs/user-guide/evals-sdk/simulators/customize_user_simulation/index.md) (1 shared tag)
+- [User simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/sdk/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/sdk/context-management/context-estimation/index.md) (1 shared tag)

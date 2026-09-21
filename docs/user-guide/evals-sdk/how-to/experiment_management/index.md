@@ -1,10 +1,10 @@
 ## Overview
 
-Test cases in Strands Evals are organized into `Experiment` objects. This guide covers practical patterns for managing experiments and test cases.
+Strands Evals organizes test cases into `Experiment` objects. This guide covers practical patterns for managing experiments and test cases.
 
-## Organizing Test Cases
+## Organizing test cases
 
-### Using Metadata for Organization
+### Using metadata for organization
 
 ```python
 from strands_evals import Case
@@ -31,11 +31,11 @@ cases = [
     )
 ]
 
-# Filter by metadata (Case.metadata defaults to None — guard with `or {}`)
+# Filter by metadata (Case.metadata defaults to None, so guard with `or {}`)
 easy_cases = [c for c in cases if (c.metadata or {}).get("difficulty") == "easy"]
 ```
 
-### Naming Conventions
+### Naming conventions
 
 ```python
 # Pattern: {category}-{subcategory}-{number}
@@ -43,9 +43,9 @@ Case(name="knowledge-geography-001", input="..."),
 Case(name="math-arithmetic-001", input="..."),
 ```
 
-## Managing Multiple Experiments
+## Managing multiple experiments
 
-### Experiment Collections
+### Experiment collections
 
 ```python
 import asyncio
@@ -67,7 +67,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Combining Experiments
+### Combining experiments
 
 ```python
 # Merge cases from multiple experiments
@@ -77,9 +77,9 @@ combined = Experiment(
 )
 ```
 
-### Combining Reports From Different Experiments
+### Combining reports from different experiments
 
-`run_evaluations` already returns a single `EvaluationReport` even when the experiment has multiple evaluators — each row in `report.cases` carries an `evaluator` key naming the evaluator that produced it.
+`run_evaluations` already returns a single `EvaluationReport` even when the experiment has multiple evaluators: each row in `report.cases` carries an `evaluator` key naming the evaluator that produced it.
 
 If you’ve run separate experiments and want to merge their reports into one table, use `EvaluationReport.flatten`:
 
@@ -97,9 +97,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## Modifying Experiments
+## Modifying experiments
 
-### Adding Cases
+### Adding cases
 
 `Experiment.cases` returns a deep copy on read, so `.append` / `.extend` on the property are silently dropped. Use the setter to replace the list:
 
@@ -111,7 +111,7 @@ experiment.cases = experiment.cases + [new_case]
 experiment.cases = experiment.cases + additional_cases
 ```
 
-### Updating Evaluators
+### Updating evaluators
 
 ```python
 from strands_evals.evaluators import HelpfulnessEvaluator
@@ -135,9 +135,9 @@ print(case.session_id)  # Auto-generated UUID
 case = Case(input="test", session_id="custom-123")
 ```
 
-## Best Practices
+## Best practices
 
-### 1\. Use Descriptive Names
+### 1\. Use descriptive names
 
 ```python
 # Good
@@ -147,7 +147,7 @@ Case(name="customer-service-refund-request", input="...")
 Case(name="test1", input="...")
 ```
 
-### 2\. Include Rich Metadata
+### 2\. Include rich metadata
 
 ```python
 Case(
@@ -162,7 +162,7 @@ Case(
 )
 ```
 
-### 3\. Version Your Experiments
+### 3\. Version your experiments
 
 ```python
 experiment.to_file("experiment_v1.json")
@@ -174,7 +174,7 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 experiment.to_file(f"experiment_{timestamp}.json")
 ```
 
-## Related Documentation
+## Related documentation
 
 -   [Serialization](/docs/user-guide/evals-sdk/how-to/serialization/index.md): Save and load experiments
 -   [Experiment Generator](/docs/user-guide/evals-sdk/experiment_generator/index.md): Generate experiments automatically

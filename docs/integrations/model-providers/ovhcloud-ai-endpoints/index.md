@@ -2,7 +2,7 @@
 
 OpenAI compatibility
 
-This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) pointed at OVHcloud’s OpenAI-compatible endpoint; there is no separate OVHcloud integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
+This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) pointed at OVHcloud’s OpenAI-compatible endpoint; there is no separate OVHcloud integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
 
 ## Installation
 
@@ -74,10 +74,10 @@ Two client settings connect the provider to OVHcloud AI Endpoints:
 -   **API key**: from the [OVHcloud Manager](https://ovh.com/manager). Without a key, requests use a rate-limited free tier; the Python provider accepts an empty key string, while the TypeScript provider requires a non-empty key.
 -   **Base URL**: `https://oai.endpoints.kepler.ai.cloud.ovh.net/v1`
 
-Model IDs come from the [AI Endpoints catalog](https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/), for example `Meta-Llama-3_3-70B-Instruct`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) guide.
+Model IDs come from the [AI Endpoints catalog](https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/), for example `Meta-Llama-3_3-70B-Instruct`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) guide.
 
 ## References
 
 -   [OVHcloud AI Endpoints](https://www.ovhcloud.com/en/public-cloud/ai-endpoints/)
 -   [OVHcloud AI Endpoints catalog](https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/)
--   [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md)
+-   [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md)

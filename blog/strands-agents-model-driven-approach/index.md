@@ -18,7 +18,7 @@ Using the model as the orchestrator doesn’t mean sacrificing developer control
 
 ## The agent loop
 
-At the heart of this philosophy lies the [agent loop](/docs/user-guide/concepts/agents/agent-loop/index.md) – a natural cycle of reasoning and action that reflects how intelligent systems think and work. This approach builds upon the ReAct paradigm ([ReAct: Synergizing Reasoning and Acting in Language Models](https://react-lm.github.io/)), which demonstrates how language models can generate both reasoning traces and task-specific actions in an interleaved manner.
+At the heart of this philosophy lies the [agent loop](/docs/user-guide/sdk/agents/agent-loop/index.md) – a natural cycle of reasoning and action that reflects how intelligent systems think and work. This approach builds upon the ReAct paradigm ([ReAct: Synergizing Reasoning and Acting in Language Models](https://react-lm.github.io/)), which demonstrates how language models can generate both reasoning traces and task-specific actions in an interleaved manner.
 
 The model engages in continuous reasoning:
 
@@ -36,26 +36,28 @@ This internal reasoning process is what makes model-driven agents powerful. They
 
 While the model drives its own behavior, that behavior is shaped by the context it receives. You guide agent intelligence not through rigid control structures, but through carefully crafted context:
 
-**[System prompts](/docs/user-guide/concepts/agents/prompts/index.md)** establish the agent’s role and goals. Instead of dictating specific steps, effective system prompts describe what success looks like and provide principles for decision-making.
+**[System prompts](/docs/user-guide/sdk/agents/prompts/index.md)** establish the agent’s role and goals. Instead of dictating specific steps, effective system prompts describe what success looks like and provide principles for decision-making.
 
-**[Tool specifications](/docs/user-guide/concepts/tools/index.md)** define capability boundaries and usage guidance. Well-designed tool descriptions become part of the model’s reasoning process.
+**[Tool specifications](/docs/user-guide/sdk/tools/index.md)** define capability boundaries and usage guidance. Well-designed tool descriptions become part of the model’s reasoning process.
 
-**[Conversation history](/docs/user-guide/concepts/agents/conversation-management/index.md)** maintains task continuity and evolving context. As conversations grow longer, managing this context becomes crucial for maintaining performance while preserving relevant information.
+**[Conversation history](/docs/user-guide/sdk/agents/conversation-management/index.md)** maintains task continuity and evolving context. As conversations grow longer, managing this context becomes crucial for maintaining performance while preserving relevant information.
 
 This represents a shift from procedural programming to contextual programming. Instead of writing “if this, then that” logic, you’re crafting the context that helps the model figure out the best approach itself.
 
 ```python
 from strands import Agent
-from strands_tools import calculator, file_write, python_repl
+from strands.vended_tools import file_editor, notebook, shell
 
 # Simple: Get started in seconds
 agent = Agent(
-    tools=[calculator, file_write, python_repl],
-    system_prompt="You are a helpful assistant that can perform calculations and verify them with code."
+    tools=[notebook, file_editor, shell],
+    system_prompt=(
+        "You are a helpful assistant that can organize notes and inspect local files."
+    ),
 )
 
 # The model autonomously decides: calculate first, then verify with code
-agent("Calculate the compound interest on $10,000 at 5% annually for 10 years")
+agent("Create a notebook with three ideas for reducing project costs")
 ```
 
 ![Strands agentic loop](/_astro/model-driven-agentic-loop.B2DsLzyy_Z1dbWGE.webp)
@@ -66,15 +68,15 @@ The model-driven approach scales naturally. When you need multiple agents, the m
 
 ### Agents-as-tools
 
-[Agents-as-tools](/docs/user-guide/concepts/multi-agent/agents-as-tools/index.md) creates hierarchical systems where an orchestrator agent delegates to specialists. The orchestrator reasons about which specialists to consult just like it would reason about tool selection.
+[Agents-as-tools](/docs/user-guide/sdk/multi-agent/agents-as-tools/index.md) creates hierarchical systems where an orchestrator agent delegates to specialists. The orchestrator reasons about which specialists to consult just like it would reason about tool selection.
 
 ### Swarms
 
-[Swarms](/docs/user-guide/concepts/multi-agent/swarm/index.md) enable agents to collaborate autonomously, deciding when to hand off tasks to each other. This works well for creative collaboration where multiple perspectives add value.
+[Swarms](/docs/user-guide/sdk/multi-agent/swarm/index.md) enable agents to collaborate autonomously, deciding when to hand off tasks to each other. This works well for creative collaboration where multiple perspectives add value.
 
 ### Graphs
 
-[Graphs](/docs/user-guide/concepts/multi-agent/graph/index.md) provide deterministic workflows where execution follows predefined paths. While individual agents use model-driven execution, the graph structure ensures specific sequences are maintained – ideal for compliance requirements.
+[Graphs](/docs/user-guide/sdk/multi-agent/graph/index.md) provide deterministic workflows where execution follows predefined paths. While individual agents use model-driven execution, the graph structure ensures specific sequences are maintained – ideal for compliance requirements.
 
 ### Meta agents
 
@@ -88,7 +90,7 @@ Strands is flexible enough to support a variety of production architectures:
 
 ![Agent architecture — local](/_astro/model-driven-architecture-1.DertLg1Q_ZY1ivv.webp)
 
-**API deployment** – The agent and its tools are deployed behind an API in production, using [AWS Lambda](/docs/user-guide/deploy/deploy_to_aws_lambda/index.md), [AWS Fargate](/docs/user-guide/deploy/deploy_to_aws_fargate/index.md), or [Amazon EC2](/docs/user-guide/deploy/deploy_to_amazon_ec2/index.md).
+**API deployment** – The agent and its tools are deployed behind an API in production, using [AWS Lambda](/docs/user-guide/sdk/deploy/deploy_to_aws_lambda/index.md), [AWS Fargate](/docs/user-guide/sdk/deploy/deploy_to_aws_fargate/index.md), or [Amazon EC2](/docs/user-guide/sdk/deploy/deploy_to_amazon_ec2/index.md).
 
 ![Agent architecture — behind an API](/_astro/model-driven-architecture-2.DbtF7rVp_1eJMWL.webp)
 

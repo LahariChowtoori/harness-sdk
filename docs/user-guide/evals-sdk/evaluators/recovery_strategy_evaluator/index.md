@@ -2,7 +2,7 @@
 
 The `RecoveryStrategyEvaluator` scores the quality of an agent’s recovery actions when tools fail. It evaluates whether the agent attempts alternative approaches, retries appropriately, and varies its strategies rather than repeating the same failed action. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/chaos_recovery_strategy_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the full conversation trace including tool call patterns, retries, and alternative approaches
 -   **Five-Level Scoring**: Granular scale from “Failure” to “Excellent”
@@ -10,7 +10,7 @@ The `RecoveryStrategyEvaluator` scores the quality of an agent’s recovery acti
 -   **Structured Reasoning**: Provides step-by-step reasoning for each evaluation
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 
-## When to Use
+## When to use
 
 Use the `RecoveryStrategyEvaluator` when you need to:
 
@@ -20,19 +20,37 @@ Use the `RecoveryStrategyEvaluator` when you need to:
 -   Measure quality and variety of recovery strategies
 -   Compare recovery sophistication across agent configurations
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the full conversation trace including tool call patterns, retries, and alternative approaches.
 
 ## Parameters
 
+### `version` (optional)
+
+-   **Type**: `str`
+-   **Default**: `"v0"`
+-   **Description**: Prompt template version for the judge’s system prompt.
+
 ### `model` (optional)
 
 -   **Type**: `Model | str | None`
--   **Default**: `None` (uses default Bedrock model)
+-   **Default**: `None` (uses the default Bedrock model)
 -   **Description**: The model to use as the judge.
 
-## Scoring System
+### `system_prompt` (optional)
+
+-   **Type**: `str | None`
+-   **Default**: `None` (uses the built-in prompt for the selected `version`)
+-   **Description**: Overrides the judge’s system prompt.
+
+### `name` (optional)
+
+-   **Type**: `str | None`
+-   **Default**: `None`
+-   **Description**: Custom evaluator name shown in the evaluation report.
+
+## Scoring system
 
 | Rating | Score | Description |
 | --- | --- | --- |
@@ -46,7 +64,7 @@ A response passes the evaluation if the score is >= 0.5.
 
 When no tool failures occur during the session, the evaluator produces a neutral score of 0.5, since there are no failures to assess recovery behavior against.
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -124,7 +142,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `RecoveryStrategyEvaluator` returns `EvaluationOutput` objects with:
 
@@ -133,7 +151,7 @@ The `RecoveryStrategyEvaluator` returns `EvaluationOutput` objects with:
 -   **reason**: Step-by-step reasoning explaining the evaluation
 -   **label**: One of the categorical labels (e.g., “Good”, “Excellent”)
 
-## What Gets Evaluated
+## What gets evaluated
 
 The evaluator examines:
 
@@ -144,7 +162,7 @@ The evaluator examines:
     -   **Retry discipline**: Did it retry appropriately (not excessively)?
     -   **Approach variation**: Did retries use different strategies (different parameters, different tools)?
 
-## Best Practices
+## Best practices
 
 1.  **Provide Alternative Tools**: Give agents access to multiple tools that can partially fulfill the same goal
 2.  **Add Recovery Instructions**: System prompts with explicit recovery guidance help agents score higher
@@ -152,23 +170,23 @@ The evaluator examines:
 4.  **Combine with Other Evaluators**: Use alongside `FailureCommunicationEvaluator` and `PartialCompletionEvaluator`
 5.  **Test Various Failure Severities**: Include single-tool failures and multi-tool failures
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Fallback to Alternative Tools
+### Pattern 1: Fallback to alternative tools
 
 Evaluate if the agent pivots to a different tool when the primary one fails.
 
-### Pattern 2: Retry with Variation
+### Pattern 2: Retry with variation
 
 Assess if the agent retries with different parameters instead of repeating the same call.
 
-### Pattern 3: Graceful Escalation
+### Pattern 3: Graceful escalation
 
 Measure if the agent escalates to the user when all automated recovery options are exhausted.
 
-## Example Scenarios
+## Example scenarios
 
-### Scenario 1: Excellent Recovery
+### Scenario 1: Excellent recovery
 
 ```plaintext
 Tool: search_flights -> Timeout
@@ -178,7 +196,7 @@ Final: "I couldn't find flight info, but I found hotels in Tokyo for your dates.
 Evaluation: Excellent (1.0) - Tried variation, then pivoted to alternative
 ```
 
-### Scenario 2: Good Recovery
+### Scenario 2: Good recovery
 
 ```plaintext
 Tool: search_flights -> NetworkError
@@ -187,7 +205,7 @@ Final: "Flight search is unavailable. Please try again later."
 Evaluation: Good (0.75) - Retried once, then communicated clearly
 ```
 
-### Scenario 3: Poor Recovery
+### Scenario 3: Poor recovery
 
 ```plaintext
 Tool: search_flights -> Timeout
@@ -196,7 +214,7 @@ Final: "I'm having trouble finding flights."
 Evaluation: Poor (0.25) - Excessive retries with no variation
 ```
 
-### Scenario 4: No Recovery
+### Scenario 4: No recovery
 
 ```plaintext
 Tool: search_flights -> ExecutionError
@@ -204,46 +222,46 @@ Agent: "I can't help with that."
 Evaluation: Failure (0.0) - Gave up immediately without any attempt
 ```
 
-## Common Issues and Solutions
+## Common issues and solutions
 
-### Issue 1: Score is Always 0.5
+### Issue 1: Score is always 0.5
 
 **Problem**: Evaluator always returns neutral score. **Solution**: Ensure tool failures are present in the trace. If no tools fail, the evaluator returns 0.5 by design.
 
-### Issue 2: Agent Retries Excessively
+### Issue 2: Agent retries excessively
 
 **Problem**: Agent retries the same tool many times, getting a low recovery score. **Solution**: Add retry limits to the system prompt (e.g., “Do NOT retry more than once”).
 
-### Issue 3: No Trajectory Data
+### Issue 3: No trajectory data
 
 **Problem**: Evaluator returns empty results. **Solution**: Ensure telemetry captures full session including all tool call spans.
 
-## Differences from Other Evaluators
+## Differences from other evaluators
 
 -   **vs. FailureCommunicationEvaluator**: Recovery scores the agent’s *actions* (retries, fallbacks, tool switching); communication scores the agent’s *words* (how it explains failures). Both can be high, both can be low, or one without the other.
 -   **vs. PartialCompletionEvaluator**: Recovery scores the quality of recovery *attempts* regardless of outcome; partial completion scores the *result* regardless of how the agent got there. Excellent recovery may still yield low completion if all alternatives also fail.
 -   **vs. TrajectoryEvaluator**: Trajectory evaluates the full action sequence holistically for workflow adherence; recovery specifically targets the quality of failure-response actions within that sequence.
 -   **vs. ToolSelectionEvaluator**: Tool selection checks if correct tools were chosen under normal conditions; recovery evaluates whether the agent adapted its tool choices appropriately when failures occurred.
 
-## Use Cases
+## Use cases
 
-### Use Case 1: Chaos Testing
+### Use case 1: Chaos testing
 
 Evaluate agent recovery strategies under deliberately injected tool failures.
 
-### Use Case 2: Agent Configuration Comparison
+### Use case 2: Agent configuration comparison
 
 Compare how different system prompts affect recovery behavior.
 
-### Use Case 3: Retry Policy Validation
+### Use case 3: Retry policy validation
 
 Verify agents follow expected retry policies (retry once, then fallback).
 
-### Use Case 4: Multi-Tool Resilience
+### Use case 4: Multi-tool resilience
 
-Test whether agents leverage alternative tools when primary ones fail.
+Test whether agents use alternative tools when primary ones fail.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**FailureCommunicationEvaluator**](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md): Evaluates how well agents communicate failures
 -   [**PartialCompletionEvaluator**](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md): Measures what fraction of goals were achieved
@@ -251,19 +269,19 @@ Test whether agents leverage alternative tools when primary ones fail.
 -   [**ToolSelectionEvaluator**](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md): Evaluates whether correct tools were selected
 -   [**GoalSuccessRateEvaluator**](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md): Binary goal achievement assessment
 
-## Related Documentation
+## Related documentation
 
 -   [Chaos Testing](/docs/user-guide/evals-sdk/chaos_testing/index.md): Chaos testing overview and guide
 
 ## Related pages
 
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (3 shared tags)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (3 shared tags)
-- [Tool Simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (2 shared tags)
-- [Chaos Testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (2 shared tags)
-- [Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
-- [Experiment Generator](/docs/user-guide/evals-sdk/experiment_generator/index.md) (1 shared tag)
-- [Simulators](/docs/user-guide/evals-sdk/simulators/index.md) (1 shared tag)
-- [Tool Parameter Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
-- [Tool Selection Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
-- [Trajectory Evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (3 shared tags)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (3 shared tags)
+- [Tool simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (2 shared tags)
+- [Chaos testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (2 shared tags)
+- [Deterministic evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
+- [Tool parameter accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
+- [Tool selection accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
+- [Trajectory evaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) (1 shared tag)
+- [Experiment generator](/docs/user-guide/evals-sdk/experiment_generator/index.md) (1 shared tag)
+- [Plan topics for coverage](/docs/user-guide/evals-sdk/topic_planning/index.md) (1 shared tag)

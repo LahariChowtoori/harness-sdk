@@ -2,9 +2,9 @@
 
 Detectors answer **“why did my agent fail?”** by analyzing execution traces for failures, performing root cause analysis, and producing actionable fix recommendations. While evaluators tell you *whether* an agent performed well, detectors tell you *what went wrong and how to fix it*.
 
-Detectors operate on `Session` objects (the same trace format used by trace-based evaluators) and use LLM-based analysis to identify semantic failures that go beyond simple error codes — hallucinations, tool misuse, reasoning breakdowns, policy violations, and more.
+Detectors operate on `Session` objects (the same trace format used by trace-based evaluators) and use LLM-based analysis to identify semantic failures that go beyond simple error codes: hallucinations, tool misuse, reasoning breakdowns, policy violations, and more.
 
-## Why Detectors?
+## Why detectors?
 
 Evaluators give you a score. Detectors give you a diagnosis.
 
@@ -22,7 +22,7 @@ Evaluators give you a score. Detectors give you a diagnosis.
 -   Trace causal chains between failures (primary vs. secondary)
 -   Recommend concrete fixes (system prompt changes, tool description updates)
 
-## When to Use Detectors
+## When to use detectors
 
 Use detectors when you need to:
 
@@ -32,9 +32,9 @@ Use detectors when you need to:
 -   **Automate root cause analysis**: Replace manual trace inspection with LLM-based diagnosis
 -   **Monitor production agents**: Analyze traces from remote providers for systematic issues
 
-## Available Detectors
+## Available detectors
 
-### Failure Detection
+### Failure detection
 
 **[`detect_failures`](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md)**
 
@@ -42,7 +42,7 @@ Use detectors when you need to:
 -   **Output**: List of failures with span location, category, confidence, and evidence
 -   **Categories**: ~20 failure types including hallucinations, execution errors, tool misuse, repetitive behavior, and orchestration errors
 
-### Root Cause Analysis
+### Root cause analysis
 
 **[`analyze_root_cause`](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md)**
 
@@ -50,7 +50,7 @@ Use detectors when you need to:
 -   **Output**: Causal analysis with propagation impact, fix type, and recommendation
 -   **Strategy**: 3-tier fallback (direct, pruned, chunked) for handling large sessions
 
-### Session Diagnosis
+### Session diagnosis
 
 **[`diagnose_session`](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md)**
 
@@ -58,7 +58,7 @@ Use detectors when you need to:
 -   **Output**: Combined result with failures, root causes, and deduplicated recommendations
 -   **Integration**: Can be wired into `Experiment` via `DiagnosisConfig` for automatic diagnosis of failing cases
 
-## Quick Example
+## Quick example
 
 ```python
 from strands_evals.detectors import diagnose_session
@@ -81,7 +81,7 @@ for rec in result.recommendations:
     print(f"  - {rec}")
 ```
 
-## Detectors vs Evaluators
+## Detectors vs evaluators
 
 | Aspect | Evaluators | Detectors |
 | --- | --- | --- |
@@ -93,7 +93,7 @@ for rec in result.recommendations:
 
 **Use Together:** Run evaluators to score your agent, then use detectors on failing cases to understand what went wrong and how to fix it. The `Experiment` class supports this workflow natively via `DiagnosisConfig`.
 
-## Integration with Experiments
+## Integration with experiments
 
 Detectors integrate directly into the evaluation pipeline. Pass a `DiagnosisConfig` to `Experiment` to automatically diagnose failing cases:
 
@@ -121,7 +121,7 @@ asyncio.run(main())
 
 See the [Session Diagnosis guide](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) for the full integration walkthrough.
 
-## How It Works
+## How it works
 
 Detectors use a two-phase analysis pipeline:
 
@@ -136,29 +136,30 @@ flowchart TD
     D -. "failures[]\nroot_causes[]\nrecommendations[]" .-> D
 ```
 
-Both phases handle large sessions that exceed LLM context limits through automatic chunking with overlap and merge strategies.
+Both phases handle large sessions that exceed LLM context limits through automatic chunking and merge strategies. Failure detection splits spans into overlapping chunks; root cause analysis first prunes to failure paths, then splits into per-trace windows.
 
-## Next Steps
+## Next steps
 
 -   [Failure Detection](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md): Identify what went wrong in agent traces
 -   [Root Cause Analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md): Understand why failures happened
 -   [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md): Run the full pipeline and integrate with experiments
 
-## Related Documentation
+## Related documentation
 
 -   [Getting Started](/docs/user-guide/evals-sdk/quickstart/index.md): Set up your first evaluation experiment
 -   [Evaluators Overview](/docs/user-guide/evals-sdk/evaluators/index.md): Score agent performance
 -   [Remote Trace Providers](/docs/user-guide/evals-sdk/how-to/trace_providers/index.md): Fetch traces from production backends
+-   [AI Agent Failure Detection and Root Cause Analysis with Strands Evals](https://aws.amazon.com/blogs/machine-learning/ai-agent-failure-detection-and-root-cause-analysis-with-strands-evals/): an AWS Machine Learning Blog walkthrough of detectors on a failing agent
 
 ## Related pages
 
-- [Failure Detection](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md) (2 shared tags)
-- [Root Cause Analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md) (2 shared tags)
-- [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (2 shared tags)
-- [Model Routing](/docs/user-guide/concepts/model-providers/model-routing/index.md) (1 shared tag)
-- [Retry Strategies](/docs/user-guide/concepts/agents/retry-strategies/index.md) (1 shared tag)
-- [Chaos Testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (1 shared tag)
-- [Operating Agents in Production](/docs/user-guide/deploy/operating-agents-in-production/index.md) (1 shared tag)
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)
+- [Failure detection](/docs/user-guide/evals-sdk/detectors/failure_detection/index.md) (2 shared tags)
+- [Root cause analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md) (2 shared tags)
+- [Session diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (2 shared tags)
+- [Model Routing](/docs/user-guide/sdk/model-providers/model-routing/index.md) (1 shared tag)
+- [Production Lifecycle Controls](/docs/user-guide/sdk/agents/lifecycle-controls/index.md) (1 shared tag)
+- [Retry Strategies](/docs/user-guide/sdk/agents/retry-strategies/index.md) (1 shared tag)
+- [Chaos testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (1 shared tag)
+- [Operating Agents in Production](/docs/user-guide/sdk/deploy/operating-agents-in-production/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)

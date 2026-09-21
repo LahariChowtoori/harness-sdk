@@ -2,7 +2,7 @@
 
 Strands Evals provides JSON serialization for experiments and reports, enabling you to save, load, version, and share evaluation work.
 
-## Saving Experiments
+## Saving experiments
 
 ```python
 from strands_evals import Experiment
@@ -18,7 +18,7 @@ experiment.to_file("experiments/baseline.json")
 experiment.to_file("/path/to/experiments/baseline.json")
 ```
 
-## Loading Experiments
+## Loading experiments
 
 ```python
 # Load from file
@@ -28,16 +28,17 @@ print(f"Loaded {len(experiment.cases)} cases")
 print(f"Evaluators: {[e.get_type_name() for e in experiment.evaluators]}")
 ```
 
-## Custom Evaluators
+## Custom evaluators
 
 Pass custom evaluator classes when loading:
 
 ```python
 from strands_evals.evaluators import Evaluator
+from strands_evals.types.evaluation import EvaluationOutput
 
 class CustomEvaluator(Evaluator):
     def evaluate(self, evaluation_case):
-        # Custom logic — must return list[EvaluationOutput]
+        # Custom logic: must return list[EvaluationOutput]
         return [EvaluationOutput(score=1.0, test_pass=True, reason="...")]
 
 # Save with custom evaluator
@@ -54,7 +55,7 @@ loaded = Experiment.from_file(
 )
 ```
 
-## Dictionary Conversion
+## Dictionary conversion
 
 ```python
 # To dictionary
@@ -70,9 +71,9 @@ experiment = Experiment.from_dict(
 )
 ```
 
-## Saving Reports
+## Saving reports
 
-`run_evaluations` returns a single `EvaluationReport`. When the experiment runs multiple evaluators, each row in `report.cases` carries an `evaluator` key naming the evaluator that produced it — use that to filter by evaluator if needed.
+`run_evaluations` returns a single `EvaluationReport`. When the experiment runs multiple evaluators, each row in `report.cases` carries an `evaluator` key naming the evaluator that produced it. Use that key to filter by evaluator when needed.
 
 ```python
 import asyncio
@@ -101,9 +102,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## Versioning Strategies
+## Versioning strategies
 
-### Timestamp Versioning
+### Timestamp versioning
 
 ```python
 from datetime import datetime
@@ -112,16 +113,16 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 experiment.to_file(f"experiment_{timestamp}.json")
 ```
 
-### Semantic Versioning
+### Semantic versioning
 
 ```python
 experiment.to_file("experiment_v1.json")
 experiment.to_file("experiment_v2.json")
 ```
 
-## Organizing Files
+## Organizing files
 
-### Directory Structure
+### Directory structure
 
 ```plaintext
 experiments/
@@ -136,7 +137,7 @@ experiments/
     └── reports/
 ```
 
-### Organized Saving
+### Organized saving
 
 ```python
 from pathlib import Path
@@ -152,7 +153,7 @@ reports_dir = base_dir / "reports"
 reports_dir.mkdir(exist_ok=True)
 ```
 
-## Saving Experiments with Reports
+## Saving experiments with reports
 
 ```python
 import asyncio
@@ -174,7 +175,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Error Handling
+## Error handling
 
 ```python
 from pathlib import Path
@@ -190,17 +191,17 @@ def safe_load(path, custom_evaluators=None):
             raise ValueError(f"Expected .json file, got: {file_path.suffix}")
 
         experiment = Experiment.from_file(path, custom_evaluators=custom_evaluators)
-        print(f"✓ Loaded {len(experiment.cases)} cases")
+        print(f"Loaded {len(experiment.cases)} cases")
         return experiment
 
     except Exception as e:
-        print(f"✗ Failed to load: {e}")
+        print(f"Failed to load: {e}")
         return None
 ```
 
-## Best Practices
+## Best practices
 
-### 1\. Use Consistent Naming
+### 1\. Use consistent naming
 
 ```python
 # Good
@@ -210,7 +211,7 @@ experiment.to_file("customer_service_baseline_v1.json")
 experiment.to_file("test.json")
 ```
 
-### 2\. Validate After Loading
+### 2\. Validate after loading
 
 ```python
 experiment = Experiment.from_file("experiment.json")
@@ -219,7 +220,7 @@ assert len(experiment.cases) > 0, "No cases loaded"
 assert len(experiment.evaluators) > 0, "No evaluators loaded"
 ```
 
-### 3\. Include Metadata
+### 3\. Include metadata
 
 ```python
 experiment_data = experiment.to_dict()
@@ -233,14 +234,8 @@ with open("experiment.json", "w") as f:
     json.dump(experiment_data, f, indent=2)
 ```
 
-## Related Documentation
+## Related documentation
 
 -   [Experiment Management](/docs/user-guide/evals-sdk/how-to/experiment_management/index.md): Organize experiments
 -   [Experiment Generator](/docs/user-guide/evals-sdk/experiment_generator/index.md): Generate experiments
 -   [Quickstart Guide](/docs/user-guide/evals-sdk/quickstart/index.md): Get started with Strands Evals
-
-## Related pages
-
-- [Bidirectional Streaming Session Management](/docs/user-guide/concepts/bidirectional-streaming/session-management/index.md) (1 shared tag)
-- [Session Management](/docs/user-guide/concepts/agents/session-management/index.md) (1 shared tag)
-- [State Management](/docs/user-guide/concepts/agents/state/index.md) (1 shared tag)

@@ -12,7 +12,7 @@
 Install strands-nvidia-nim from PyPI:
 
 ```bash
-pip install strands-nvidia-nim strands-agents-tools
+pip install strands-nvidia-nim
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ pip install strands-nvidia-nim strands-agents-tools
 
 ```python
 from strands import Agent
-from strands_tools import calculator
+from strands.vended_tools import notebook
 from strands_nvidia_nim import NvidiaNIM
 
 model = NvidiaNIM(
@@ -33,8 +33,8 @@ model = NvidiaNIM(
     }
 )
 
-agent = Agent(model=model, tools=[calculator])
-agent("What is 123.456 * 789.012?")
+agent = Agent(model=model, tools=[notebook])
+agent('Create a notebook named "ideas" and add three uses for accelerated inference.')
 ```
 
 ### Using Environment Variables
@@ -46,7 +46,7 @@ export NVIDIA_NIM_API_KEY=your-nvidia-nim-api-key
 ```python
 import os
 from strands import Agent
-from strands_tools import calculator
+from strands.vended_tools import notebook
 from strands_nvidia_nim import NvidiaNIM
 
 model = NvidiaNIM(
@@ -55,8 +55,8 @@ model = NvidiaNIM(
     params={"max_tokens": 1000, "temperature": 0.7}
 )
 
-agent = Agent(model=model, tools=[calculator])
-agent("What is 123.456 * 789.012?")
+agent = Agent(model=model, tools=[notebook])
+agent('Create a notebook named "ideas" and add three uses for accelerated inference.')
 ```
 
 ## Configuration
@@ -112,4 +112,4 @@ The provider includes detection for context window overflow errors. If you encou
 -   [strands-nvidia-nim Repository](https://github.com/thiago4go/strands-nvidia-nim)
 -   [PyPI Package](https://pypi.org/project/strands-nvidia-nim/)
 -   [Nvidia NIM Documentation](https://docs.nvidia.com/nim/)
--   [Strands Custom Model Provider](/docs/user-guide/concepts/model-providers/custom_model_provider/index.md)
+-   [Strands Custom Model Provider](/docs/user-guide/sdk/model-providers/custom_model_provider/index.md)

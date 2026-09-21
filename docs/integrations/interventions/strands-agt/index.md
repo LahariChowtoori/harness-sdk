@@ -133,4 +133,4 @@ Deny policies are evaluated first and short-circuit. If no deny matches, steer i
 -   [GitHub](https://github.com/lizradway/strands-agt)
 -   [PyPI](https://pypi.org/project/strands-agt/)
 -   [Microsoft AGT](https://github.com/microsoft/agent-governance-toolkit)
--   [Strands Interventions docs](/docs/user-guide/concepts/agents/interventions/index.md)
+-   [Strands Interventions docs](/docs/user-guide/sdk/agents/interventions/index.md)

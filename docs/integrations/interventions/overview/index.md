@@ -1,6 +1,6 @@
-An **intervention handler** is a composable control layer that intercepts agent lifecycle events and returns typed decisions — proceed, deny, guide, confirm, or transform. Handlers are registered via the `interventions` option in agent configuration and evaluated in order, with short-circuiting on deny or guide actions. See [Interventions](/docs/user-guide/concepts/agents/interventions/index.md) for the full concept and built-in handlers.
+An **intervention handler** is a composable control layer that intercepts agent lifecycle events and returns typed decisions — proceed, deny, guide, confirm, or transform. Handlers are registered via the `interventions` option in agent configuration and evaluated in order, with short-circuiting on deny or guide actions. See [Interventions](/docs/user-guide/sdk/agents/interventions/index.md) for the full concept and built-in handlers.
 
-The SDK ships reference handlers like [Cedar Authorization](/docs/user-guide/concepts/agents/interventions/cedar-authorization/index.md), [Steering](/docs/user-guide/concepts/agents/interventions/steering/index.md), and [Human-in-the-Loop](/docs/user-guide/concepts/agents/interventions/human-in-the-loop/index.md). The packages below are **community-built** intervention handlers you can install and attach to an agent.
+The SDK ships reference handlers like [Cedar Authorization](/docs/user-guide/sdk/agents/interventions/cedar-authorization/index.md), [Steering](/docs/user-guide/sdk/agents/interventions/steering/index.md), and [Human-in-the-Loop](/docs/user-guide/sdk/agents/interventions/human-in-the-loop/index.md). The packages below are **community-built** intervention handlers you can install and attach to an agent.
 
 Community maintained
 

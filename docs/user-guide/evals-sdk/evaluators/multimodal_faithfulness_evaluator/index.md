@@ -2,14 +2,14 @@
 
 The `MultimodalFaithfulnessEvaluator` assesses whether an agent response is grounded in the image content, detecting hallucinations such as invented details, unsupported assumptions, external knowledge, and speculation.
 
-## Key Features
+## Key features
 
 -   **Output-Level Evaluation**: Scores a single agent response per case
 -   **Binary Scoring**: `1.0` if fully grounded, `0.0` if any hallucination is found
 -   **Automatic Reference Comparison**: Appends a reference suffix to the rubric when `expected_output` is provided on the case
 -   **Hallucination Detection**: Designed to catch invented details, unsupported assumptions, and speculation
 
-## When to Use
+## When to use
 
 Use the `MultimodalFaithfulnessEvaluator` when you need to:
 
@@ -18,7 +18,7 @@ Use the `MultimodalFaithfulnessEvaluator` when you need to:
 -   Screen for inferred-but-unseen details (emotions, off-screen events, brand names, locations)
 -   Complement correctness checks with a groundedness check
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent response per case.
 
@@ -51,7 +51,13 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 -   **Type**: `str | None`
 -   **Default**: `None` (uses the built-in default suffix)
 
-## Scoring System
+### `uses_environment_state` (optional)
+
+-   **Type**: `bool`
+-   **Default**: `False`
+-   **Description**: Whether to include environment state in the evaluation prompt, enabling assessment of agent side effects alongside the output.
+
+## Scoring system
 
 | Score | Label | Meaning |
 | --- | --- | --- |
@@ -60,7 +66,7 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 
 A response passes only if the score is `1.0`.
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -95,9 +101,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## Combining with Other Evaluators
+## Combining with other evaluators
 
-Pair with correctness to distinguish “wrong” from “ungrounded”. `Experiment.run_evaluations` returns one combined report across all evaluators — each row in `report.cases` carries an `evaluator` key naming the producing evaluator:
+Pair with correctness to distinguish “wrong” from “ungrounded”. `Experiment.run_evaluations` returns one combined report across all evaluators. Each row in `report.cases` carries an `evaluator` key naming the producing evaluator:
 
 ```python
 from strands_evals import Experiment
@@ -121,7 +127,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**MultimodalOutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md): Parent class with full parameter reference
 -   [**MultimodalCorrectnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md): Strict factual correctness
@@ -129,13 +135,13 @@ asyncio.run(main())
 
 ## Related pages
 
-- [Multimodal Correctness Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) (2 shared tags)
-- [Multimodal Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) (2 shared tags)
-- [Multimodal Output Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) (2 shared tags)
-- [Multimodal Overall Quality Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
-- [Google](/docs/user-guide/concepts/model-providers/google/index.md) (1 shared tag)
-- [Vercel](/docs/user-guide/concepts/model-providers/vercel/index.md) (1 shared tag)
-- [OpenAI](/docs/user-guide/concepts/model-providers/openai/index.md) (1 shared tag)
-- [Writer](/docs/user-guide/concepts/model-providers/writer/index.md) (1 shared tag)
-- [Amazon Nova](/docs/user-guide/concepts/model-providers/amazon-nova/index.md) (1 shared tag)
-- [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md) (1 shared tag)
+- [Multimodal correctness evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) (2 shared tags)
+- [Multimodal instruction following evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) (2 shared tags)
+- [Multimodal output evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) (2 shared tags)
+- [Multimodal overall quality evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
+- [Google](/docs/user-guide/sdk/model-providers/google/index.md) (1 shared tag)
+- [Vercel](/docs/user-guide/sdk/model-providers/vercel/index.md) (1 shared tag)
+- [OpenAI](/docs/user-guide/sdk/model-providers/openai/index.md) (1 shared tag)
+- [Writer](/docs/user-guide/sdk/model-providers/writer/index.md) (1 shared tag)
+- [Amazon Nova](/docs/user-guide/sdk/model-providers/amazon-nova/index.md) (1 shared tag)
+- [Amazon Bedrock](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md) (1 shared tag)

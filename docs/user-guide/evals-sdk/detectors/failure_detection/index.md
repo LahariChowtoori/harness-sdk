@@ -1,15 +1,15 @@
 ## Overview
 
-`detect_failures` analyzes an agent execution `Session` and identifies semantic failures — hallucinations, tool errors, policy violations, repetitive behavior, and more. It uses an LLM to evaluate each span against a 20+ category failure taxonomy and returns structured results with span locations, failure categories, confidence levels, and evidence.
+`detect_failures` analyzes an agent execution `Session` and identifies semantic failures: hallucinations, tool errors, policy violations, repetitive behavior, and more. It uses an LLM to evaluate each span against a 20+ category failure taxonomy and returns structured results with span locations, failure categories, confidence levels, and evidence.
 
-## Key Features
+## Key features
 
 -   **20+ failure categories**: Covers execution errors, hallucinations, tool misuse, orchestration errors, and more
 -   **Confidence-based filtering**: Filter results by `ConfidenceLevel.LOW`, `MEDIUM`, or `HIGH` thresholds
 -   **Automatic chunking**: Sessions exceeding context limits are split into token-bounded chunks with overlap, analyzed independently, and merged
--   **Resilient parsing**: Malformed LLM output is handled gracefully — bad chunks return empty results rather than crashing
+-   **Resilient parsing**: Malformed LLM output is handled gracefully: bad chunks return empty results rather than crashing
 
-## When to Use
+## When to use
 
 Use `detect_failures` when you need to:
 
@@ -39,7 +39,7 @@ For a combined detect-and-analyze pipeline, use [`diagnose_session`](/docs/user-
 -   **Default**: `None` (uses Claude Sonnet via Bedrock)
 -   **Description**: The model to use for analysis. Can be a `Model` instance, a Bedrock model ID string, or `None` for the default.
 
-## Basic Usage
+## Basic usage
 
 ```python
 from strands_evals.detectors import detect_failures
@@ -57,26 +57,26 @@ for failure in result.failures:
         print(f"    {failure.evidence[i]}")
 ```
 
-## Filtering by Confidence
+## Filtering by confidence
 
 Use `confidence_threshold` to control sensitivity:
 
 ```python
 from strands_evals.detectors import ConfidenceLevel
 
-# High precision — only include failures the LLM is very confident about
+# High precision: only include failures the LLM is very confident about
 result = detect_failures(session, confidence_threshold=ConfidenceLevel.HIGH)
 
-# Medium — balanced between precision and recall
+# Medium: balanced between precision and recall
 result = detect_failures(session, confidence_threshold=ConfidenceLevel.MEDIUM)
 
-# Low (default) — include everything the LLM flagged
+# Low (default): include everything the LLM flagged
 result = detect_failures(session, confidence_threshold=ConfidenceLevel.LOW)
 ```
 
-The threshold filters at the per-category level within each span. A span with two categories — one high-confidence and one low-confidence — will retain only the high-confidence category when `confidence_threshold=ConfidenceLevel.HIGH`.
+The threshold filters at the per-category level within each span. A span with two categories (one high-confidence and one low-confidence) retains only the high-confidence category when `confidence_threshold=ConfidenceLevel.HIGH`.
 
-## Using with Remote Traces
+## Using with remote traces
 
 Combine with trace providers to analyze production agent sessions:
 
@@ -93,17 +93,17 @@ for failure in result.failures:
     print(f"[{failure.category[0]}] {failure.evidence[0]}")
 ```
 
-## Custom Model
+## Custom model
 
 ```python
 from strands.models.bedrock import BedrockModel
 from strands_evals.detectors import detect_failures
 
-model = BedrockModel(model_id="global.anthropic.claude-sonnet-4-6")
+model = BedrockModel(model_id="global.anthropic.claude-sonnet-5")
 result = detect_failures(session, model=model)
 ```
 
-## Output Structure
+## Output structure
 
 `detect_failures` returns a `FailureOutput`:
 
@@ -119,9 +119,9 @@ class FailureItem(BaseModel):
     evidence: list[str]   # Evidence per category
 ```
 
-A single span can have multiple failure categories. The `category`, `confidence`, and `evidence` lists are element-wise aligned — `category[i]` corresponds to `confidence[i]` and `evidence[i]`.
+A single span can have multiple failure categories. The `category`, `confidence`, and `evidence` lists are element-wise aligned: `category[i]` corresponds to `confidence[i]` and `evidence[i]`.
 
-## Failure Categories
+## Failure categories
 
 The detector uses a taxonomy organized by parent category:
 
@@ -138,7 +138,7 @@ The detector uses a taxonomy organized by parent category:
 | **configuration-mismatch** | tool-definition | Tool setup doesn’t match its actual behavior |
 | **coding-use-case-specific** | edge-case-oversights, dependency-issues | Code generation and modification failures |
 
-## How Chunking Works
+## How chunking works
 
 When a session exceeds the model’s context window (~200K tokens), the detector automatically falls back to chunked analysis:
 
@@ -149,14 +149,14 @@ When a session exceeds the model’s context window (~200K tokens), the detector
 
 If the pre-flight check passes but the model still returns a context error, the detector catches it and retries with chunking. This two-layer approach maximizes the chance of using direct (higher quality) analysis while handling edge cases gracefully.
 
-## Best Practices
+## Best practices
 
 1.  **Start with `ConfidenceLevel.LOW`** to see all potential issues, then raise to `MEDIUM` or `HIGH` to focus on high-confidence findings
 2.  **Use with `analyze_root_cause`** to understand *why* failures happened, not just *what* failed
 3.  **Pass failures to RCA explicitly** rather than re-detecting: `analyze_root_cause(session, failures=result.failures)`
 4.  **Use `diagnose_session`** when you want both detection and RCA in a single call
 
-## Related Documentation
+## Related documentation
 
 -   [Root Cause Analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md): Analyze why failures happened
 -   [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md): Combined detection + RCA pipeline
@@ -166,12 +166,12 @@ If the pre-flight check passes but the model still returns a context error, the 
 ## Related pages
 
 - [Detectors](/docs/user-guide/evals-sdk/detectors/index.md) (2 shared tags)
-- [Root Cause Analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md) (2 shared tags)
-- [Session Diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (2 shared tags)
-- [Model Routing](/docs/user-guide/concepts/model-providers/model-routing/index.md) (1 shared tag)
-- [Retry Strategies](/docs/user-guide/concepts/agents/retry-strategies/index.md) (1 shared tag)
-- [Chaos Testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (1 shared tag)
-- [Operating Agents in Production](/docs/user-guide/deploy/operating-agents-in-production/index.md) (1 shared tag)
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)
+- [Root cause analysis](/docs/user-guide/evals-sdk/detectors/root_cause_analysis/index.md) (2 shared tags)
+- [Session diagnosis](/docs/user-guide/evals-sdk/detectors/diagnosis/index.md) (2 shared tags)
+- [Model Routing](/docs/user-guide/sdk/model-providers/model-routing/index.md) (1 shared tag)
+- [Production Lifecycle Controls](/docs/user-guide/sdk/agents/lifecycle-controls/index.md) (1 shared tag)
+- [Retry Strategies](/docs/user-guide/sdk/agents/retry-strategies/index.md) (1 shared tag)
+- [Chaos testing](/docs/user-guide/evals-sdk/chaos_testing/index.md) (1 shared tag)
+- [Operating Agents in Production](/docs/user-guide/sdk/deploy/operating-agents-in-production/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)

@@ -2,7 +2,7 @@
 
 OpenAI compatibility
 
-This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) pointed at Crusoe’s OpenAI-compatible endpoint; there is no separate Crusoe integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
+This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) pointed at Crusoe’s OpenAI-compatible endpoint; there is no separate Crusoe integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
 
 ## Installation
 
@@ -72,10 +72,10 @@ Two client settings connect the provider to Crusoe Managed Inference:
 -   **API key**: from the **Security** tab of the [Crusoe Cloud Console](https://console.crusoecloud.com/)
 -   **Base URL**: `https://api.inference.crusoecloud.com/v1/`
 
-Model IDs come from the [Crusoe Managed Inference overview](https://docs.crusoecloud.com/managed-inference/overview), for example `zai/GLM-5.2` or `nvidia/Nemotron-3-Super-120B-A12B`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) guide.
+Model IDs come from the [Crusoe Managed Inference overview](https://docs.crusoecloud.com/managed-inference/overview), for example `zai/GLM-5.2` or `nvidia/Nemotron-3-Super-120B-A12B`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) guide.
 
 ## References
 
 -   [Crusoe Managed Inference documentation](https://docs.crusoecloud.com/managed-inference/overview)
 -   [Crusoe Cloud Console](https://console.crusoecloud.com/)
--   [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md)
+-   [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md)

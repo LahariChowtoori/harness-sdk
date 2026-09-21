@@ -1,8 +1,8 @@
 ## Overview
 
-The `EvaluationDataStore` lets you cache task execution results so you can re-run evaluators against the same data without re-invoking your agent. This is useful when agent calls are expensive, slow, or non-deterministic — you run the agent once, cache the results, then iterate on evaluators.
+The `EvaluationDataStore` caches task execution results so you can re-run evaluators against the same data without re-invoking your agent. Use it when agent calls are expensive, slow, or non-deterministic: run the agent once, cache the results, then iterate on evaluators.
 
-## Quick Start
+## Quick start
 
 ```python
 import asyncio
@@ -29,12 +29,12 @@ async def main():
 asyncio.run(main())
 ```
 
-## How It Works
+## How it works
 
 When you pass an `evaluation_data_store` to `run_evaluations`:
 
 1.  For each case, the store is checked for a cached result using `case.name` as the key
-2.  If found, the cached `EvaluationData` is used directly — the task function is not called
+2.  If found, the cached `EvaluationData` is used directly and the task function is not called
 3.  If not found, the task runs normally and the result is saved to the store
 4.  Evaluators then run against the (cached or fresh) `EvaluationData`
 
@@ -55,7 +55,7 @@ store = LocalFileTaskResultStore("./my_cache")
 
 Each file contains the full `EvaluationData` (input, output, trajectory, environment state, etc.) serialized as JSON.
 
-## Custom Stores
+## Custom stores
 
 Implement the `EvaluationDataStore` protocol for any storage backend:
 
@@ -79,7 +79,7 @@ class S3ResultStore:
 
 The protocol requires just two methods: `load(case_name) -> EvaluationData | None` and `save(case_name, result) -> None`.
 
-## Related Documentation
+## Related documentation
 
 -   [Task Decorator](/docs/user-guide/evals-sdk/how-to/eval_task/index.md): Simplify task function boilerplate
 -   [Experiment Management](/docs/user-guide/evals-sdk/how-to/experiment_management/index.md): Save and load experiments
@@ -87,5 +87,5 @@ The protocol requires just two methods: `load(case_name) -> EvaluationData | Non
 
 ## Related pages
 
-- [Anthropic](/docs/user-guide/concepts/model-providers/anthropic/index.md) (1 shared tag)
-- [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md) (1 shared tag)
+- [Anthropic](/docs/user-guide/sdk/model-providers/anthropic/index.md) (1 shared tag)
+- [Amazon Bedrock](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md) (1 shared tag)

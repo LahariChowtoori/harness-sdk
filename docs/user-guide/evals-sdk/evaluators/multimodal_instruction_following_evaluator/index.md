@@ -2,14 +2,14 @@
 
 The `MultimodalInstructionFollowingEvaluator` assesses whether an agent response satisfies the explicit constraints in the user’s instruction (count, format, scope, order, completeness, and style), independently of factual accuracy.
 
-## Key Features
+## Key features
 
 -   **Output-Level Evaluation**: Scores a single agent response per case
 -   **Binary Scoring**: `1.0` if all constraints are satisfied, `0.0` if any constraint is violated
 -   **Constraint-Focused**: Evaluates compliance with directives, not overall correctness or quality
 -   **Image-Aware**: Verifies image-referential constraints (e.g., “describe only the background”)
 
-## When to Use
+## When to use
 
 Use the `MultimodalInstructionFollowingEvaluator` when you need to:
 
@@ -19,7 +19,7 @@ Use the `MultimodalInstructionFollowingEvaluator` when you need to:
 -   Validate order constraints (“left to right”, “largest to smallest”)
 -   Evaluate instruction compliance independently from factual correctness
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent response per case.
 
@@ -52,7 +52,13 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 -   **Type**: `str | None`
 -   **Default**: `None` (uses the built-in default suffix)
 
-## Scoring System
+### `uses_environment_state` (optional)
+
+-   **Type**: `bool`
+-   **Default**: `False`
+-   **Description**: Whether to include environment state in the evaluation prompt, enabling assessment of agent side effects alongside the output.
+
+## Scoring system
 
 | Score | Label | Meaning |
 | --- | --- | --- |
@@ -61,7 +67,7 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 
 A response passes only if the score is `1.0`.
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -99,9 +105,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## Combining with Other Evaluators
+## Combining with other evaluators
 
-Pair with correctness and faithfulness to assess different failure modes separately. `Experiment.run_evaluations` returns one combined report across all evaluators — each row in `report.cases` carries an `evaluator` key naming the producing evaluator:
+Pair with correctness and faithfulness to assess different failure modes separately. `Experiment.run_evaluations` returns one combined report across all evaluators. Each row in `report.cases` carries an `evaluator` key naming the producing evaluator:
 
 ```python
 from strands_evals import Experiment
@@ -127,20 +133,20 @@ async def main():
 asyncio.run(main())
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**MultimodalOutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md): Parent class with full parameter reference
 -   [**InstructionFollowingEvaluator**](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md): Text-only counterpart
 
 ## Related pages
 
-- [Multimodal Correctness Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) (2 shared tags)
-- [Multimodal Faithfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) (2 shared tags)
-- [Multimodal Output Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) (2 shared tags)
-- [Multimodal Overall Quality Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
-- [Google](/docs/user-guide/concepts/model-providers/google/index.md) (1 shared tag)
-- [Vercel](/docs/user-guide/concepts/model-providers/vercel/index.md) (1 shared tag)
-- [OpenAI](/docs/user-guide/concepts/model-providers/openai/index.md) (1 shared tag)
-- [Writer](/docs/user-guide/concepts/model-providers/writer/index.md) (1 shared tag)
-- [Amazon Nova](/docs/user-guide/concepts/model-providers/amazon-nova/index.md) (1 shared tag)
-- [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md) (1 shared tag)
+- [Multimodal correctness evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) (2 shared tags)
+- [Multimodal faithfulness evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) (2 shared tags)
+- [Multimodal output evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) (2 shared tags)
+- [Multimodal overall quality evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
+- [Google](/docs/user-guide/sdk/model-providers/google/index.md) (1 shared tag)
+- [Vercel](/docs/user-guide/sdk/model-providers/vercel/index.md) (1 shared tag)
+- [OpenAI](/docs/user-guide/sdk/model-providers/openai/index.md) (1 shared tag)
+- [Writer](/docs/user-guide/sdk/model-providers/writer/index.md) (1 shared tag)
+- [Amazon Nova](/docs/user-guide/sdk/model-providers/amazon-nova/index.md) (1 shared tag)
+- [Amazon Bedrock](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md) (1 shared tag)

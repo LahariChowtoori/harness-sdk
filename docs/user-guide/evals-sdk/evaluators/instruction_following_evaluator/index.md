@@ -1,15 +1,15 @@
 ## Overview
 
-The `InstructionFollowingEvaluator` assesses whether an agent’s response follows all explicit instructions provided in the user’s prompt. It focuses strictly on instruction compliance — whether specific constraints, requirements, and directives were satisfied — regardless of response quality or factual accuracy.
+The `InstructionFollowingEvaluator` assesses whether an agent’s response follows all explicit instructions provided in the user’s prompt. It focuses strictly on instruction compliance (whether specific constraints, requirements, and directives were satisfied), regardless of response quality or factual accuracy.
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the most recent turn in the conversation
 -   **Binary Scoring**: Clear Yes (instructions followed) / No (instructions not followed) classification
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Constraint-Focused**: Evaluates compliance with explicit directives, not overall quality
 
-## When to Use
+## When to use
 
 Use the `InstructionFollowingEvaluator` when you need to:
 
@@ -18,7 +18,7 @@ Use the `InstructionFollowingEvaluator` when you need to:
 -   Assess whether agents follow multi-part instructions completely
 -   Evaluate instruction adherence independently from correctness
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn in the conversation.
 
@@ -42,7 +42,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 -   **Default**: `"v0"`
 -   **Description**: Prompt template version.
 
-## Scoring System
+## Scoring system
 
 | Rating | Score | Description |
 | --- | --- | --- |
@@ -51,7 +51,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 
 A response passes the evaluation if all explicit instructions are followed (score = 1.0).
 
-## What Counts as Explicit Instructions
+## What counts as explicit instructions
 
 The evaluator checks for compliance with specific directives such as:
 
@@ -63,7 +63,7 @@ The evaluator checks for compliance with specific directives such as:
 -   **Style**: “Write an ad for a sports car like it’s an obituary”
 -   **Content type**: “Write a body for this email” vs “Write a subject line”
 
-## Evaluation Rules
+## Evaluation rules
 
 -   If a response includes **more** information than requested, it still passes as long as all requested elements are present
 -   If a response is purely evasive without any partial or related answer, it defaults to **Yes**
@@ -71,7 +71,7 @@ The evaluator checks for compliance with specific directives such as:
 -   If there are **no explicit instructions** in the input (casual or open-ended requests), defaults to **Yes**
 -   The evaluator does **not** assess factual accuracy, writing quality, or response effectiveness
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -118,7 +118,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Combining with Other Evaluators
+## Combining with other evaluators
 
 Pair with quality evaluators to assess both compliance and correctness:
 
@@ -130,7 +130,7 @@ evaluators = [
 ]
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**CorrectnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/correctness_evaluator/index.md): Evaluates factual accuracy (complementary to instruction following)
 -   [**OutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Flexible custom rubric evaluation
@@ -139,13 +139,13 @@ evaluators = [
 
 ## Related pages
 
-- [Prompt Engineering](/docs/user-guide/safety-security/prompt-engineering/index.md) (2 shared tags)
-- [Prompts](/docs/user-guide/concepts/agents/prompts/index.md) (2 shared tags)
-- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
-- [Harmfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
-- [Reading the Report](/docs/user-guide/evals-sdk/red-teaming/reading_the_report/index.md) (1 shared tag)
-- [Red Teaming](/docs/user-guide/evals-sdk/red-teaming/index.md) (1 shared tag)
-- [Refusal Evaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) (1 shared tag)
-- [Responsible AI](/docs/user-guide/safety-security/responsible-ai/index.md) (1 shared tag)
-- [Scoring Attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md) (1 shared tag)
-- [Stereotyping Evaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md) (1 shared tag)
+- [Prompt Engineering](/docs/user-guide/sdk/safety-security/prompt-engineering/index.md) (2 shared tags)
+- [Prompts](/docs/user-guide/sdk/agents/prompts/index.md) (2 shared tags)
+- [Attack strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
+- [Harmfulness evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
+- [Reading the report](/docs/user-guide/evals-sdk/red-teaming/reading_the_report/index.md) (1 shared tag)
+- [Red teaming](/docs/user-guide/evals-sdk/red-teaming/index.md) (1 shared tag)
+- [Refusal evaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) (1 shared tag)
+- [Responsible AI](/docs/user-guide/sdk/safety-security/responsible-ai/index.md) (1 shared tag)
+- [Scoring attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md) (1 shared tag)
+- [Secure for production](/docs/user-guide/sdk/safety-security/index.md) (1 shared tag)

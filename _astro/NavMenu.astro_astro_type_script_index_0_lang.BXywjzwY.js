@@ -1,0 +1,1 @@
+import"./language-preference.BUwbbE2o.js";function e(){let e=(localStorage.getItem(`starlight-synced-tabs__jarkqt`)||`TypeScript`)===`Python`?`python`:`typescript`,t=`/`.replace(/\/$/,``);document.querySelectorAll(`[data-lang-href]`).forEach(n=>{n.href=`${t}/docs/api/${e}/`})}e(),window.addEventListener(`lang-change`,e);

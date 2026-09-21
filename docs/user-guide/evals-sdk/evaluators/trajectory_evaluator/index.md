@@ -1,17 +1,17 @@
 ## Overview
 
-The `TrajectoryEvaluator` is an LLM-based evaluator that assesses the sequence of actions or tool calls made by an agent during task execution. It evaluates whether the agent followed an appropriate path to reach its goal, making it ideal for evaluating multi-step reasoning and tool usage patterns. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/trajectory_evaluator.py).
+The `TrajectoryEvaluator` scores the sequence of actions or tool calls an agent made during task execution. It evaluates whether the agent followed an appropriate path to reach its goal, covering multi-step reasoning and tool usage patterns. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/trajectory_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Action Sequence Evaluation**: Assesses the order and appropriateness of actions taken
 -   **Tool Usage Analysis**: Evaluates whether correct tools were selected and used
 -   **Built-in Scoring Tools**: Includes helper tools for exact, in-order, and any-order matching
 -   **Flexible Rubric System**: Define custom criteria for trajectory evaluation
--   **LLM-as-a-Judge**: Uses a language model to perform nuanced trajectory assessments
+-   **LLM-as-a-Judge**: Uses a language model to assess trajectories
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 
-## When to Use
+## When to use
 
 Use the `TrajectoryEvaluator` when you need to:
 
@@ -53,7 +53,7 @@ Use the `TrajectoryEvaluator` when you need to:
 -   **Default**: `True`
 -   **Description**: Whether to include the input prompt in the evaluation context.
 
-## Built-in Scoring Tools
+## Built-in scoring tools
 
 The `TrajectoryEvaluator` comes with three helper tools that the judge can use:
 
@@ -63,11 +63,11 @@ The `TrajectoryEvaluator` comes with three helper tools that the judge can use:
 
 These tools help the judge make consistent scoring decisions based on trajectory matching.
 
-## Using Extractors to Prevent Overflow
+## Using extractors to prevent overflow
 
-When working with trajectories, it’s important to use extractors to efficiently extract tool usage information without overwhelming the evaluation context. The `tools_use_extractor` module provides utility functions for this purpose.
+Use extractors to pull tool usage information without overwhelming the evaluation context. The `tools_use_extractor` module provides utility functions for this purpose.
 
-### Available Extractor Functions
+### Available extractor functions
 
 #### `extract_agent_tools_used_from_messages(agent_messages)`
 
@@ -111,7 +111,7 @@ tool_descriptions = tools_use_extractor.extract_tools_description(
 evaluator.update_trajectory_description(tool_descriptions)
 ```
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -191,7 +191,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Preventing Context Overflow
+## Preventing context overflow
 
 When evaluating trajectories with many tool calls or complex tool configurations, use extractors to keep the evaluation context manageable:
 
@@ -213,7 +213,7 @@ def task_with_many_tools(case: Case) -> dict:
     return TaskOutput(output=str(response), trajectory=tools_use_extractor.extract_agent_tools_used_from_messages(agent.messages))
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `TrajectoryEvaluator` returns `EvaluationOutput` objects with:
 
@@ -222,7 +222,7 @@ The `TrajectoryEvaluator` returns `EvaluationOutput` objects with:
 -   **reason**: String containing the judge’s reasoning
 -   **label**: Optional label categorizing the result
 
-## Best Practices
+## Best practices
 
 1.  **Use Extractors**: Always use `tools_use_extractor` functions to efficiently extract trajectory information
 2.  **Update Descriptions Dynamically**: Call `update_trajectory_description()` with extracted tool descriptions
@@ -230,9 +230,9 @@ The `TrajectoryEvaluator` returns `EvaluationOutput` objects with:
 4.  **Define Clear Expected Trajectories**: Specify exact sequences of expected actions
 5.  **Choose Appropriate Matching**: Select between exact, in-order, or any-order matching based on your needs
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Workflow Validation
+### Pattern 1: Workflow validation
 
 ```python
 evaluator = TrajectoryEvaluator(
@@ -249,7 +249,7 @@ evaluator = TrajectoryEvaluator(
 )
 ```
 
-### Pattern 2: Efficiency Evaluation
+### Pattern 2: Efficiency evaluation
 
 ```python
 evaluator = TrajectoryEvaluator(
@@ -263,7 +263,7 @@ evaluator = TrajectoryEvaluator(
 )
 ```
 
-### Pattern 3: Using Metrics for Analysis
+### Pattern 3: Using metrics for analysis
 
 ```python
 def task_with_metrics(case: Case) -> dict:
@@ -280,7 +280,7 @@ def task_with_metrics(case: Case) -> dict:
     return TaskOutput(output=str(response), trajectory=trajectory)
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**OutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Evaluates the quality of final outputs
 -   [**ToolParameterAccuracyEvaluator**](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md): Evaluates if tool parameters are correct
@@ -289,10 +289,10 @@ def task_with_metrics(case: Case) -> dict:
 
 ## Related pages
 
-- [Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
-- [Tool Parameter Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
-- [Tool Selection Accuracy Evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
-- [Tool Simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (1 shared tag)
-- [Failure Communication Evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
-- [Partial Completion Evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
-- [Recovery Strategy Evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)
+- [Deterministic evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) (1 shared tag)
+- [Tool parameter accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) (1 shared tag)
+- [Tool selection accuracy evaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) (1 shared tag)
+- [Tool simulation](/docs/user-guide/evals-sdk/simulators/tool_simulation/index.md) (1 shared tag)
+- [Failure communication evaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) (1 shared tag)
+- [Partial completion evaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) (1 shared tag)
+- [Recovery strategy evaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) (1 shared tag)

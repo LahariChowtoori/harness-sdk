@@ -26,13 +26,13 @@ When in doubt, open an issue first. We’ll tell you if a design document is nee
 
 The design document process helps align on requirements, explore alternatives, and identify edge cases before implementation begins.
 
-1.  **Check the [roadmap](https://github.com/orgs/strands-agents/projects/8/views/1)** — See if your idea aligns with our direction and isn’t already planned
-2.  **Open an issue first** — Describe the problem you’re trying to solve. We need to validate the problem is worth solving before you invest time in a detailed proposal
-3.  **Create a design document** — Once we agree the problem is worth solving, submit a PR to the [`designs` folder](https://github.com/strands-agents/harness-sdk/tree/main/designs) using the template there. Reference the issue in your design document
-4.  **Gather feedback** — We’ll review and discuss with you, asking clarifying questions
-5.  **Get approval** — When we merge the design document, that’s your go-ahead to implement
-6.  **Implement** — Follow the [SDK contribution process](/docs/contribute/contributing/core-sdk/index.md)
-7.  **Reference the design** — Link to the approved design document in your implementation PR
+1.  **Check the [roadmap](https://github.com/orgs/strands-agents/projects/8/views/1)**: See if your idea aligns with our direction and isn’t already planned
+2.  **Open an issue first**: Describe the problem you’re trying to solve. We validate that the problem is worth solving before you invest time in a detailed proposal
+3.  **Create a design document**: Once we agree the problem is worth solving, submit a PR to the [`designs` folder](https://github.com/strands-agents/harness-sdk/tree/main/team/designs) using the template there. Reference the issue in your design document
+4.  **Gather feedback**: We review and discuss with you, asking clarifying questions
+5.  **Get approval**: When we merge the design document, that’s your go-ahead to implement
+6.  **Implement**: Follow the [SDK contribution process](/docs/contribute/contributing/core-sdk/index.md)
+7.  **Reference the design**: Link to the approved design document in your implementation PR
 
 ## Design document template
 

@@ -2,7 +2,7 @@
 
 OpenAI compatibility
 
-This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) pointed at OrcaRouter’s OpenAI-compatible endpoint; there is no separate OrcaRouter integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
+This integration works through the SDK’s built-in [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) pointed at OrcaRouter’s OpenAI-compatible endpoint; there is no separate OrcaRouter integration. Compatible endpoints can have quirks that deviate from the exact OpenAI API spec, so some features may behave differently than they do against OpenAI itself.
 
 ## Installation
 
@@ -72,10 +72,10 @@ Two client settings connect the provider to OrcaRouter:
 -   **API key**: from your [OrcaRouter dashboard](https://www.orcarouter.ai/keys)
 -   **Base URL**: `https://api.orcarouter.ai/v1`
 
-Model IDs come from the [OrcaRouter model catalog](https://www.orcarouter.ai/models) and are prefixed with the gateway name, for example `orcarouter/auto` or `orcarouter/fusion`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md) guide.
+Model IDs come from the [OrcaRouter model catalog](https://www.orcarouter.ai/models) and are prefixed with the gateway name, for example `orcarouter/auto` or `orcarouter/fusion`. For model parameters and other provider options, see the [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md) guide.
 
 ## References
 
 -   [OrcaRouter docs](https://docs.orcarouter.ai)
 -   [OrcaRouter model catalog](https://www.orcarouter.ai/models)
--   [OpenAI provider](/docs/user-guide/concepts/model-providers/openai/index.md)
+-   [OpenAI provider](/docs/user-guide/sdk/model-providers/openai/index.md)

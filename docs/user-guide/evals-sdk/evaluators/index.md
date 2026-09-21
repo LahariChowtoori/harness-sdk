@@ -1,454 +1,166 @@
-## Overview
+An evaluator scores what your agent produced. You give it an agent’s output, or a whole trace, and it returns a score, a pass or fail, and the reasoning behind the call. Strands ships evaluators for four things you usually want to check, plus fast code-based checks and a base class for anything custom:
 
-Evaluators assess the quality and performance of conversational agents by analyzing their outputs, behaviors, and goal achievement. The Strands Evals SDK provides a comprehensive set of evaluators that can assess different aspects of agent performance, from individual response quality to multi-turn conversation success.
+-   **Quality** measures whether a response is helpful, accurate, coherent, and on topic, and whether a multi-turn trajectory holds together.
+-   **Safety** screens a response for harmful content, inappropriate refusals, and stereotyping.
+-   **Multimodal** judges responses grounded in an image or document.
+-   **Agentic** measures tool use, goal completion, and how an agent behaves when things fail.
+-   **Skill** measures whether a skill-equipped agent picked the right skill and then followed its steps.
+-   **Deterministic** evaluators run code-based checks with no model in the loop.
+-   **Custom** evaluators cover logic the built-ins do not.
 
-## Why Evaluators?
+[Quality](#quality)Helpfulness, faithfulness, correctness, coherence, and relevance.
 
-Evaluating conversational agents requires more than simple accuracy metrics. Agents must be assessed across multiple dimensions:
+[Safety](#safety)Harmful content, refusals, and stereotyping.
 
-**Traditional Metrics:**
+[Multimodal](#multimodal)Score responses against an image or document.
 
--   Limited to exact match or similarity scores
--   Don’t capture subjective qualities like helpfulness
--   Can’t assess multi-turn conversation flow
--   Miss goal-oriented success patterns
+[Agentic](#agentic)Tool use, goal success, and failure handling.
 
-**Strands Evaluators:**
+[Skill](#skill)Skill selection and instruction following for skill-equipped agents.
 
--   Assess subjective qualities using LLM-as-a-judge
--   Evaluate multi-turn conversations and trajectories
--   Measure goal completion and user satisfaction
--   Provide structured reasoning for evaluation decisions
--   Support both synchronous and asynchronous evaluation
+[Deterministic](#deterministic)Fast code-based checks with no LLM judge.
 
-## When to Use Evaluators
+[Custom](#custom)Build evaluation logic the built-ins do not cover.
 
-Use evaluators when you need to:
+## Choose an evaluator
 
--   **Assess Response Quality**: Evaluate helpfulness, faithfulness, and appropriateness
--   **Measure Goal Achievement**: Determine if user objectives were met
--   **Analyze Tool Usage**: Evaluate tool selection and parameter accuracy
--   **Track Conversation Success**: Assess multi-turn interaction effectiveness
--   **Compare Agent Configurations**: Benchmark different prompts or models
--   **Monitor Production Performance**: Continuously evaluate deployed agents
+Pick evaluators along two axes: what you want to check (the six groups above) and at what granularity:
 
-## Evaluation Levels
-
-Evaluators operate at different levels of granularity:
-
-| Level | Scope | Use Case |
+| Level | Scope | Use case |
 | --- | --- | --- |
-| **OUTPUT\_LEVEL** | Single response | Quality of individual outputs |
-| **TRACE\_LEVEL** | Single turn | Turn-by-turn conversation analysis |
-| **SESSION\_LEVEL** | Full conversation | End-to-end goal achievement |
+| **OUTPUT\_LEVEL** | A single response | Quality of an individual output |
+| **TOOL\_LEVEL** | A single tool call | Tool selection and parameter accuracy |
+| **TRACE\_LEVEL** | A single turn | Turn-by-turn analysis |
+| **SESSION\_LEVEL** | A full conversation | End-to-end goal achievement |
 
-## Built-in Evaluators
+`TRACE_LEVEL`, `SESSION_LEVEL`, and `TOOL_LEVEL` are the values of the SDK’s `EvaluationLevel` enum, set through an evaluator’s `evaluation_level`. Evaluators that leave it unset (`OutputEvaluator`, the multimodal and skill evaluators, `TrajectoryEvaluator`, and `InteractionsEvaluator`) receive the agent’s output or full result directly, so the level shown for those is their conceptual scope.
 
-### Response Quality Evaluators
+Combine several evaluators in one experiment to assess different aspects at once. Each evaluator’s page documents its parameters and scoring in full; the tables below summarize what each one checks and links to that detail.
 
-**[OutputEvaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md)**
+## Quality
 
--   **Level**: OUTPUT\_LEVEL
--   **Purpose**: Flexible LLM-based evaluation with custom rubrics
--   **Use Case**: Assess any subjective quality (safety, relevance, tone)
+Score whether a response is useful and well-formed, and whether a multi-turn trajectory of actions holds together.
 
-**[HelpfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate response helpfulness from user perspective
--   **Use Case**: Measure user satisfaction and response utility
-
-**[FaithfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/faithfulness_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Assess factual accuracy and groundedness
--   **Use Case**: Verify responses are truthful and well-supported
-
-**[CorrectnessEvaluator](/docs/user-guide/evals-sdk/evaluators/correctness_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate factual correctness with optional reference comparison
--   **Use Case**: Verify agent answers are correct, with or without ground truth
-
-**[CoherenceEvaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Assess logical consistency and reasoning quality
--   **Use Case**: Detect contradictions, logical gaps, and disorganized responses
-
-**[ConcisenessEvaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate response brevity and efficiency
--   **Use Case**: Ensure agents communicate without unnecessary verbosity
-
-**[ResponseRelevanceEvaluator](/docs/user-guide/evals-sdk/evaluators/response_relevance_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate relevance of responses to user questions
--   **Use Case**: Detect off-topic or tangential responses
-
-**[HarmfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Binary evaluation for harmful content detection
--   **Use Case**: Screen responses for dangerous or offensive content
-
-**[RefusalEvaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Binary evaluation for refusal detection
--   **Use Case**: Detect when agents inappropriately refuse to address valid requests
-
-**[StereotypingEvaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Binary evaluation for bias and stereotyping detection
--   **Use Case**: Screen responses for biased or stereotypical content against groups
-
-**[InstructionFollowingEvaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Binary evaluation for instruction compliance
--   **Use Case**: Verify that agents follow explicit format, length, style, and content constraints
-
-### Multimodal Evaluators
-
-**[MultimodalOutputEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md)**
-
--   **Level**: OUTPUT\_LEVEL
--   **Purpose**: MLLM-as-a-Judge evaluation with custom rubrics for image/document-to-text tasks
--   **Use Case**: Evaluate responses for VQA, chart/document QA, image captioning, and OCR-style tasks
-
-**[MultimodalOverallQualityEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md)**
-
--   **Level**: OUTPUT\_LEVEL
--   **Purpose**: Likert-5 overall quality scoring across visual accuracy, instruction adherence, completeness, and coherence
--   **Use Case**: Track single-score quality trends for image-to-text responses
-
-**[MultimodalCorrectnessEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md)**
-
--   **Level**: OUTPUT\_LEVEL
--   **Purpose**: Strict binary fact-check of a response against the image content
--   **Use Case**: Verify factual accuracy of VQA or chart-QA answers
-
-**[MultimodalFaithfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md)**
-
--   **Level**: OUTPUT\_LEVEL
--   **Purpose**: Strict binary hallucination detection that flags claims not verifiable from the image
--   **Use Case**: Catch invented details, assumptions, and ungrounded inferences in image captions
-
-**[MultimodalInstructionFollowingEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md)**
-
--   **Level**: OUTPUT\_LEVEL
--   **Purpose**: Strict binary evaluation of constraint compliance (count, format, scope, order, completeness, style)
--   **Use Case**: Verify that multimodal responses respect explicit instructions independently of correctness
-
-### Tool Usage Evaluators
-
-**[ToolSelectionAccuracyEvaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate whether correct tools were selected
--   **Use Case**: Assess tool choice accuracy in multi-tool scenarios
-
-**[ToolParameterAccuracyEvaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate accuracy of tool parameters
--   **Use Case**: Verify correct parameter values for tool calls
-
-### Conversation Flow Evaluators
-
-**[TrajectoryEvaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md)**
-
--   **Level**: SESSION\_LEVEL
--   **Purpose**: Assess sequence of actions and tool usage patterns
--   **Use Case**: Evaluate multi-step reasoning and workflow adherence
-
-**[InteractionsEvaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md)**
-
--   **Level**: SESSION\_LEVEL
--   **Purpose**: Analyze conversation patterns and interaction quality
--   **Use Case**: Assess conversation flow and engagement patterns
-
-### Goal Achievement Evaluators
-
-**[GoalSuccessRateEvaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md)**
-
--   **Level**: SESSION\_LEVEL
--   **Purpose**: Determine if user goals were successfully achieved
--   **Use Case**: Measure end-to-end task completion success
-
-### Resilience Evaluators
-
-**[FailureCommunicationEvaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Assess how well agents communicate failures to users
--   **Use Case**: Evaluate transparency, clarity, and actionability of error messages under chaos testing
-
-**[PartialCompletionEvaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Measure what fraction of a goal was achieved despite failures
--   **Use Case**: Quantify graceful degradation and partial progress under tool failures
-
-**[RecoveryStrategyEvaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md)**
-
--   **Level**: TRACE\_LEVEL
--   **Purpose**: Evaluate the quality of agent recovery actions when tools fail
--   **Use Case**: Assess retry discipline, exploration breadth, and approach variation under chaos
-
-### Deterministic Evaluators
-
-**[Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md)**
-
--   **Level**: OUTPUT\_LEVEL / SESSION\_LEVEL
--   **Purpose**: Fast, code-based evaluation without LLM judges
--   **Use Case**: Regression testing, CI/CD pipelines, exact match checks
--   **Includes**: `Equals`, `Contains`, `StartsWith`, `ToolCalled`, `StateEquals`
-
-## Custom Evaluators
-
-Create domain-specific evaluators by extending the base `Evaluator` class:
-
-**[CustomEvaluator](/docs/user-guide/evals-sdk/evaluators/custom_evaluator/index.md)**
-
--   **Purpose**: Implement specialized evaluation logic
--   **Use Case**: Domain-specific requirements not covered by built-in evaluators
-
-## Evaluators vs Simulators
-
-Understanding when to use evaluators versus simulators:
-
-| Aspect | Evaluators | Simulators |
+| Evaluator | Level | What it checks |
 | --- | --- | --- |
-| **Role** | Assess quality | Generate interactions |
-| **Timing** | Post-conversation | During conversation |
-| **Purpose** | Score/judge | Drive/participate |
-| **Output** | Evaluation scores | Conversation turns |
-| **Use Case** | Quality assessment | Interaction generation |
+| [OutputEvaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) | OUTPUT\_LEVEL | Any subjective quality against a rubric you write |
+| [HelpfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) | TRACE\_LEVEL | Response helpfulness from the user’s perspective |
+| [FaithfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/faithfulness_evaluator/index.md) | TRACE\_LEVEL | Factual accuracy and groundedness |
+| [CorrectnessEvaluator](/docs/user-guide/evals-sdk/evaluators/correctness_evaluator/index.md) | TRACE\_LEVEL | Factual correctness, with optional reference comparison |
+| [CoherenceEvaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) | TRACE\_LEVEL | Logical consistency and reasoning quality |
+| [ConcisenessEvaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) | TRACE\_LEVEL | Brevity and freedom from unnecessary verbosity |
+| [ResponseRelevanceEvaluator](/docs/user-guide/evals-sdk/evaluators/response_relevance_evaluator/index.md) | TRACE\_LEVEL | Relevance of a response to the user’s question |
+| [TrajectoryEvaluator](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md) | SESSION\_LEVEL | Sequence of actions and tool-usage patterns |
+| [InteractionsEvaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) | SESSION\_LEVEL | Conversation patterns and interaction quality |
 
-**Use Together:** Evaluators and simulators complement each other. Use simulators to generate realistic multi-turn conversations, then use evaluators to assess the quality of those interactions.
+## Safety
 
-## Integration with Simulators
+Screen a response for content you do not want an agent to produce, or for inappropriate refusals of valid requests. Each returns a binary classification.
 
-Evaluators work seamlessly with simulator-generated conversations:
+| Evaluator | Level | What it checks |
+| --- | --- | --- |
+| [HarmfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) | TRACE\_LEVEL | Dangerous or offensive content |
+| [RefusalEvaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) | TRACE\_LEVEL | Refusals of valid requests the agent should address |
+| [StereotypingEvaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md) | TRACE\_LEVEL | Biased or stereotypical content against groups |
 
-Required: Session ID Trace Attributes
+## Multimodal
 
-When using `StrandsInMemorySessionMapper`, you **must** include session ID trace attributes in your agent configuration. This prevents spans from different test cases from being mixed together in the memory exporter.
+Judge responses that depend on an image or document, using a multimodal LLM as the judge.
+
+| Evaluator | Level | What it checks |
+| --- | --- | --- |
+| [MultimodalOutputEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md) | OUTPUT\_LEVEL | Any quality against a rubric for image or document-to-text tasks |
+| [MultimodalOverallQualityEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) | OUTPUT\_LEVEL | Likert-5 overall quality across accuracy, adherence, completeness, and coherence |
+| [MultimodalCorrectnessEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) | OUTPUT\_LEVEL | Binary fact-check of a response against the image content |
+| [MultimodalFaithfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) | OUTPUT\_LEVEL | Binary hallucination check for claims not verifiable from the image |
+| [MultimodalInstructionFollowingEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) | OUTPUT\_LEVEL | Binary constraint compliance (count, format, scope, order, style) |
+
+## Agentic
+
+Measure how an agent uses tools, whether it completes the user’s goal, and how it behaves when a tool fails.
+
+| Evaluator | Level | What it checks |
+| --- | --- | --- |
+| [ToolSelectionAccuracyEvaluator](/docs/user-guide/evals-sdk/evaluators/tool_selection_evaluator/index.md) | TOOL\_LEVEL | Whether the correct tools were selected |
+| [ToolParameterAccuracyEvaluator](/docs/user-guide/evals-sdk/evaluators/tool_parameter_evaluator/index.md) | TOOL\_LEVEL | Accuracy of the parameters passed to tools |
+| [InstructionFollowingEvaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) | TRACE\_LEVEL | Compliance with explicit format, length, style, and content constraints |
+| [GoalSuccessRateEvaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) | SESSION\_LEVEL | Whether the user’s goal was achieved |
+| [FailureCommunicationEvaluator](/docs/user-guide/evals-sdk/evaluators/failure_communication_evaluator/index.md) | TRACE\_LEVEL | How clearly the agent communicates failures to the user |
+| [PartialCompletionEvaluator](/docs/user-guide/evals-sdk/evaluators/partial_completion_evaluator/index.md) | TRACE\_LEVEL | What fraction of a goal was achieved despite failures |
+| [RecoveryStrategyEvaluator](/docs/user-guide/evals-sdk/evaluators/recovery_strategy_evaluator/index.md) | TRACE\_LEVEL | Quality of recovery actions when tools fail |
+
+## Skill
+
+For agents that load skills at runtime, measure both halves of that behavior: which skill the agent picked, and whether it then followed the skill’s steps. Both read the full trajectory and return one result per invoked skill.
+
+| Evaluator | Level | What it checks |
+| --- | --- | --- |
+| [SkillSelectionAccuracyEvaluator](/docs/user-guide/evals-sdk/evaluators/skill_selection_accuracy_evaluator/index.md) | SESSION\_LEVEL | Whether invoking each skill was an appropriate choice |
+| [SkillInstructionFollowingEvaluator](/docs/user-guide/evals-sdk/evaluators/skill_instruction_following_evaluator/index.md) | SESSION\_LEVEL | How fully the agent followed each invoked skill’s steps |
+
+## Deterministic
+
+Run fast, code-based checks with no LLM judge, for regression tests and CI. The [Deterministic Evaluators](/docs/user-guide/evals-sdk/evaluators/deterministic_evaluators/index.md) page covers `Equals`, `Contains`, `StartsWith`, `ToolCalled`, `StateEquals`, and `SkillInvoked`. They operate at OUTPUT\_LEVEL or SESSION\_LEVEL.
+
+## Custom
+
+When no built-in fits, extend the base `Evaluator` class to implement your own logic. See [Custom Evaluators](/docs/user-guide/evals-sdk/evaluators/custom_evaluator/index.md).
+
+## Run an evaluator
+
+An evaluation has three parts: a task that produces the agent’s output, cases that define the inputs and what you expect, and an evaluator that scores each result. This runs the `OutputEvaluator` against a rubric:
 
 ```python
-import asyncio
-
 from strands import Agent
-from strands_evals import Case, Experiment, ActorSimulator
-from strands_evals.evaluators import HelpfulnessEvaluator, GoalSuccessRateEvaluator
-from strands_evals.mappers import StrandsInMemorySessionMapper
-from strands_evals.telemetry import StrandsEvalsTelemetry
+from strands_evals import eval_task, Case, Experiment
+from strands_evals.evaluators import OutputEvaluator
 
-def task_function(case: Case) -> dict:
-    # Generate multi-turn conversation with simulator
-    simulator = ActorSimulator.from_case_for_user_simulator(case=case, max_turns=10)
-    agent = Agent(trace_attributes={"session.id": case.session_id})
+@eval_task()
+def get_response():
+    return Agent(system_prompt="Answer accurately and concisely.")
 
-    # Collect conversation data
-    all_spans = []
-    user_message = case.input
-
-    while simulator.has_next():
-        agent_response = agent(user_message)
-        turn_spans = list(memory_exporter.get_finished_spans())
-        all_spans.extend(turn_spans)
-
-        user_result = simulator.act(str(agent_response))
-        user_message = str(user_result.structured_output.message)
-
-    # Map to session for evaluation
-    mapper = StrandsInMemorySessionMapper()
-    session = mapper.map_to_session(all_spans, session_id=case.session_id)
-
-    return {"output": str(agent_response), "trajectory": session}
-
-# Use multiple evaluators to assess different aspects
-from strands_evals.evaluators import (
-    ToolSelectionAccuracyEvaluator,
-    TrajectoryEvaluator,
-)
-
-evaluators = [
-    HelpfulnessEvaluator(),                  # Response quality
-    GoalSuccessRateEvaluator(),              # Goal achievement
-    ToolSelectionAccuracyEvaluator(),        # Tool usage
-    TrajectoryEvaluator(rubric="..."),       # Action sequences
+cases = [
+    Case[str, str](
+        name="capital",
+        input="What is the capital of France?",
+        expected_output="Paris",
+    )
 ]
 
-experiment = Experiment(cases=test_cases, evaluators=evaluators)
+evaluator = OutputEvaluator(rubric="Score 1.0 if the answer is correct, else 0.0.")
 
-async def main():
-    report = await experiment.run_evaluations_async(task_function)
-
-asyncio.run(main())
-```
-
-## Best Practices
-
-### 1\. Choose Appropriate Evaluation Levels
-
-Match evaluator level to your assessment needs:
-
-```python
-# For individual response quality
-evaluators = [OutputEvaluator(rubric="Assess response clarity")]
-
-# For turn-by-turn analysis
-evaluators = [HelpfulnessEvaluator(), FaithfulnessEvaluator()]
-
-# For end-to-end success
-evaluators = [GoalSuccessRateEvaluator(), TrajectoryEvaluator(rubric="...")]
-```
-
-### 2\. Combine Multiple Evaluators
-
-Assess different aspects comprehensively:
-
-```python
-evaluators = [
-    HelpfulnessEvaluator(),              # User experience
-    FaithfulnessEvaluator(),             # Accuracy
-    ToolSelectionAccuracyEvaluator(),    # Tool usage
-    GoalSuccessRateEvaluator(),          # Success rate
-]
-```
-
-### 3\. Use Clear Rubrics
-
-For custom evaluators, define specific criteria:
-
-```python
-rubric = """
-Score 1.0 if the response:
-- Directly answers the user's question
-- Provides accurate information
-- Uses appropriate tone
-
-Score 0.5 if the response partially meets criteria
-Score 0.0 if the response fails to meet criteria
-"""
-
-evaluator = OutputEvaluator(rubric=rubric)
-```
-
-### 4\. Leverage Async Evaluation
-
-For better performance with multiple evaluators, run them concurrently via `evaluate_async`:
-
-```python
-import asyncio
-
-async def run_evaluations(data):
-    evaluators = [HelpfulnessEvaluator(), FaithfulnessEvaluator()]
-    tasks = [evaluator.evaluate_async(data) for evaluator in evaluators]
-    results = await asyncio.gather(*tasks)  # list[list[EvaluationOutput]]
-    return results
-```
-
-## Common Patterns
-
-### Pattern 1: Quality Assessment Pipeline
-
-`Evaluator.evaluate` returns `list[EvaluationOutput]`. Each `EvaluationOutput` has `score`, `test_pass`, and `reason` (not `reasoning`). `EvaluationData` field names are `actual_output`/`actual_trajectory`/`actual_interactions` (not `output`/`trajectory`).
-
-```python
-from strands_evals.types import EvaluationData
-
-def assess_response_quality(case: Case, agent_output: str) -> dict:
-    evaluators = [
-        HelpfulnessEvaluator(),
-        FaithfulnessEvaluator(),
-        OutputEvaluator(rubric="Assess professional tone")
-    ]
-
-    data = EvaluationData(input=case.input, actual_output=agent_output)
-    results = {}
-    for evaluator in evaluators:
-        outputs = evaluator.evaluate(data)
-        # Average across this evaluator's outputs (usually a single one)
-        results[evaluator.__class__.__name__] = sum(o.score for o in outputs) / len(outputs)
-
-    return results
-```
-
-### Pattern 2: Tool Usage Analysis
-
-```python
-from strands_evals.evaluators import (
-    ToolSelectionAccuracyEvaluator,
-    ToolParameterAccuracyEvaluator,
-    TrajectoryEvaluator,
+report = Experiment[str, str](cases=cases, evaluators=[evaluator]).run_evaluations(
+    get_response
 )
-from strands_evals.types import EvaluationData
-
-def analyze_tool_usage(session: Session) -> dict:
-    evaluators = [
-        ToolSelectionAccuracyEvaluator(),
-        ToolParameterAccuracyEvaluator(),
-        TrajectoryEvaluator(rubric="Assess tool usage efficiency")
-    ]
-
-    data = EvaluationData(actual_trajectory=session)
-    results = {}
-    for evaluator in evaluators:
-        outputs = evaluator.evaluate(data)
-        # Take the first output (most evaluators emit one)
-        result = outputs[0]
-        results[evaluator.__class__.__name__] = {
-            "score": result.score,
-            "reason": result.reason,
-        }
-
-    return results
+report.run_display()
 ```
 
-### Pattern 3: Comparative Evaluation
+`run_display()` prints each case’s score, whether it passed, and the judge’s reasoning. To run many cases concurrently, use `run_evaluations_async` for the same report.
 
-```python
-from strands_evals.types import EvaluationData
+### From the command line
 
-def compare_agent_versions(cases: list, agents: dict) -> dict:
-    evaluators = [HelpfulnessEvaluator(), GoalSuccessRateEvaluator()]
-    results = {}
+The same check runs without a script through [`strands-evals run`](/docs/user-guide/evals-sdk/cli/run/index.md). `--rubric` wires up an `OutputEvaluator` automatically, and `--evaluator` accepts built-in shortnames such as `helpfulness` or `correctness`:
 
-    for agent_name, agent in agents.items():
-        agent_scores = []
-        for case in cases:
-            output = agent(case.input)
-            data = EvaluationData(input=case.input, actual_output=str(output))
-            for evaluator in evaluators:
-                outputs = evaluator.evaluate(data)
-                agent_scores.extend(o.score for o in outputs)
+```bash
+# Rubric-scored check, equivalent to the Python example above
+strands-evals run \
+  --input "What is the capital of France?" \
+  --rubric "Score 1.0 if the answer is correct, else 0.0." \
+  --agent my_agent:build_agent
 
-        results[agent_name] = {
-            "average_score": sum(agent_scores) / len(agent_scores),
-            "scores": agent_scores
-        }
-
-    return results
+# Built-in evaluator by shortname
+strands-evals run \
+  --input "Is 17 prime?" \
+  --evaluator helpfulness \
+  --agent my_agent:build_agent
 ```
 
-## Next Steps
+See [`strands-evals run`](/docs/user-guide/evals-sdk/cli/run/index.md) for the full shortname list and how `--agent` resolves.
 
--   [OutputEvaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Start with flexible custom evaluation
--   [HelpfulnessEvaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md): Assess response helpfulness
--   [MultimodalOutputEvaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_output_evaluator/index.md): Evaluate image/document-to-text responses with an MLLM judge
--   [CustomEvaluator](/docs/user-guide/evals-sdk/evaluators/custom_evaluator/index.md): Create domain-specific evaluators
--   [Detectors](/docs/user-guide/evals-sdk/detectors/index.md): Understand *why* cases fail with automatic failure detection and root cause analysis
+## Next steps
 
-## Related Documentation
-
--   [Quickstart Guide](/docs/user-guide/evals-sdk/quickstart/index.md): Get started with Strands Evals
--   [Simulators Overview](/docs/user-guide/evals-sdk/simulators/index.md): Learn about simulators
--   [Detectors Overview](/docs/user-guide/evals-sdk/detectors/index.md): Automatic failure diagnosis for agent traces
--   [Experiment Generator](/docs/user-guide/evals-sdk/experiment_generator/index.md): Generate test cases automatically
+-   New to evaluation? Work through the [quickstart](/docs/user-guide/evals-sdk/quickstart/index.md), which runs this example end to end and reads the results.
+-   Ready to combine scorers? Pick the evaluators for what you want to check from the tables above, starting with [OutputEvaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) for free-form quality.
+-   Building your own? See [Custom Evaluators](/docs/user-guide/evals-sdk/evaluators/custom_evaluator/index.md).
+-   Want to know *why* cases fail? [Detectors](/docs/user-guide/evals-sdk/detectors/index.md) add automatic failure detection and root cause analysis.
+-   Generating traces to score? [Simulators](/docs/user-guide/evals-sdk/simulators/index.md) drive the conversations that evaluators assess.

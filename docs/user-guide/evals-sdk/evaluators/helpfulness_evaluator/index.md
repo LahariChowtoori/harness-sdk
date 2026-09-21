@@ -2,7 +2,7 @@
 
 The `HelpfulnessEvaluator` evaluates the helpfulness of agent responses from the user’s perspective. It assesses whether responses effectively address user needs, provide useful information, and contribute positively to achieving the user’s goals. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/helpfulness_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the most recent turn in the conversation
 -   **User-Centric Assessment**: Focuses on helpfulness from the user’s point of view
@@ -11,7 +11,7 @@ The `HelpfulnessEvaluator` evaluates the helpfulness of agent responses from the
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Context-Aware**: Considers conversation history when evaluating helpfulness
 
-## When to Use
+## When to use
 
 Use the `HelpfulnessEvaluator` when you need to:
 
@@ -22,11 +22,17 @@ Use the `HelpfulnessEvaluator` when you need to:
 -   Identify areas where agents could be more helpful
 -   Optimize agent behavior for user experience
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, meaning it evaluates the most recent turn in the conversation (the last agent response and its context).
 
 ## Parameters
+
+### `version` (optional)
+
+-   **Type**: `str`
+-   **Default**: `"v0"`
+-   **Description**: Prompt template version used when no `system_prompt` is supplied.
 
 ### `model` (optional)
 
@@ -46,7 +52,7 @@ This evaluator operates at the **TRACE\_LEVEL**, meaning it evaluates the most r
 -   **Default**: `True`
 -   **Description**: Whether to include the input prompt in the evaluation context.
 
-## Scoring System
+## Scoring system
 
 The evaluator uses a seven-level categorical scoring system:
 
@@ -60,7 +66,7 @@ The evaluator uses a seven-level categorical scoring system:
 
 A response passes the evaluation if the score is >= 0.5.
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -124,7 +130,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `HelpfulnessEvaluator` returns `EvaluationOutput` objects with:
 
@@ -133,7 +139,7 @@ The `HelpfulnessEvaluator` returns `EvaluationOutput` objects with:
 -   **reason**: Step-by-step reasoning explaining the evaluation
 -   **label**: One of the categorical labels (e.g., “Very helpful”, “Somewhat helpful”)
 
-## What Gets Evaluated
+## What gets evaluated
 
 The evaluator examines:
 
@@ -148,7 +154,7 @@ The evaluator examines:
 
 The judge determines how helpful the response is from the user’s perspective.
 
-## Best Practices
+## Best practices
 
 1.  **Use with Proper Telemetry Setup**: The evaluator requires trajectory information captured via OpenTelemetry
 2.  **Provide User Context**: Include conversation history for context-aware evaluation
@@ -156,23 +162,23 @@ The judge determines how helpful the response is from the user’s perspective.
 4.  **Consider Domain-Specific Needs**: Adjust expectations based on your use case
 5.  **Combine with Other Evaluators**: Use alongside accuracy and faithfulness evaluators
 
-## Common Patterns
+## Common patterns
 
-### Pattern 1: Customer Service Evaluation
+### Pattern 1: Customer service evaluation
 
 Assess helpfulness of customer support responses.
 
-### Pattern 2: Information Retrieval
+### Pattern 2: Information retrieval
 
 Evaluate if search or query responses meet user needs.
 
-### Pattern 3: Task Assistance
+### Pattern 3: Task assistance
 
 Measure how well agents help users complete tasks.
 
-## Example Scenarios
+## Example scenarios
 
-### Scenario 1: Very Helpful Response
+### Scenario 1: Very helpful response
 
 ```plaintext
 User: "How do I reset my password?"
@@ -180,7 +186,7 @@ Agent: "To reset your password: 1) Click 'Forgot Password' on the login page, 2)
 Evaluation: Very helpful (0.833) - Clear, complete, actionable steps
 ```
 
-### Scenario 2: Somewhat Helpful Response
+### Scenario 2: Somewhat helpful response
 
 ```plaintext
 User: "How do I reset my password?"
@@ -188,7 +194,7 @@ Agent: "You can reset your password through the login page."
 Evaluation: Somewhat helpful (0.667) - Correct but lacks detail
 ```
 
-### Scenario 3: Not Helpful Response
+### Scenario 3: Not helpful response
 
 ```plaintext
 User: "How do I reset my password?"
@@ -196,35 +202,35 @@ Agent: "Passwords are important for security."
 Evaluation: Not helpful at all (0.0) - Doesn't address the question
 ```
 
-### Scenario 4: Above and Beyond Response
+### Scenario 4: Above and beyond response
 
 ```plaintext
 User: "How do I reset my password?"
 Agent: "I'll help you reset your password. Here are the steps: 1) Click 'Forgot Password' on the login page, 2) Enter your email, 3) Check your inbox for a reset link (check spam if not found), 4) Follow the link and create a new password. Tips: Use a strong password with 12+ characters, mix of letters/numbers/symbols. If you don't receive the email within 5 minutes, let me know and I can help troubleshoot."
-Evaluation: Above and beyond (1.0) - Comprehensive, proactive, anticipates issues
+Evaluation: Above and beyond (1.0) - Thorough, proactive, anticipates issues
 ```
 
-## Common Issues and Solutions
+## Common issues and solutions
 
-### Issue 1: No Evaluation Returned
+### Issue 1: No evaluation returned
 
 **Problem**: Evaluator returns empty results. **Solution**: Ensure trajectory contains at least one agent invocation span.
 
-### Issue 2: Inconsistent Scoring
+### Issue 2: Inconsistent scoring
 
 **Problem**: Similar responses get different scores. **Solution**: This is expected due to LLM non-determinism. Run multiple evaluations and aggregate.
 
-### Issue 3: Context Not Considered
+### Issue 3: Context not considered
 
 **Problem**: Evaluation doesn’t account for conversation history. **Solution**: Verify telemetry captures full conversation and `include_inputs=True`.
 
-## Differences from Other Evaluators
+## Differences from other evaluators
 
 -   **vs. FaithfulnessEvaluator**: Helpfulness focuses on user value, faithfulness on factual grounding
 -   **vs. OutputEvaluator**: Helpfulness is user-centric, output evaluator uses custom rubrics
 -   **vs. GoalSuccessRateEvaluator**: Helpfulness evaluates individual turns, goal success evaluates overall achievement
 
-## Related Evaluators
+## Related evaluators
 
 -   [**FaithfulnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/faithfulness_evaluator/index.md): Evaluates if responses are grounded in context
 -   [**OutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Evaluates overall output quality with custom criteria
@@ -233,13 +239,13 @@ Evaluation: Above and beyond (1.0) - Comprehensive, proactive, anticipates issue
 
 ## Related pages
 
-- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
-- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Output Evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
-- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
-- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Coherence evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal success rate evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Interactions evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
+- [Output evaluator](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)
+- [Customizing user simulation](/docs/user-guide/evals-sdk/simulators/customize_user_simulation/index.md) (1 shared tag)
+- [User simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/sdk/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/sdk/context-management/context-estimation/index.md) (1 shared tag)

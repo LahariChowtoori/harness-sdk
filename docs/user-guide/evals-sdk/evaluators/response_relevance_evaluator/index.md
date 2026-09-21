@@ -2,14 +2,14 @@
 
 The `ResponseRelevanceEvaluator` evaluates whether an agent’s response is relevant to the user’s question. It assesses if the response addresses what was actually asked, rather than going off-topic or providing unrelated information.
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the most recent turn in the conversation
 -   **Five-Level Scoring**: Granular scale from “Not At All” to “Completely Yes”
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Structured Reasoning**: Provides step-by-step reasoning for each evaluation
 
-## When to Use
+## When to use
 
 Use the `ResponseRelevanceEvaluator` when you need to:
 
@@ -18,7 +18,7 @@ Use the `ResponseRelevanceEvaluator` when you need to:
 -   Identify cases where agents misinterpret user intent
 -   Measure response alignment with user queries
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn in the conversation.
 
@@ -48,7 +48,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 -   **Default**: `"v0"`
 -   **Description**: Prompt template version.
 
-## Scoring System
+## Scoring system
 
 | Rating | Score | Description |
 | --- | --- | --- |
@@ -60,7 +60,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 
 A response passes the evaluation if the score is >= 0.5.
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -100,7 +100,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**CoherenceEvaluator**](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md): Evaluates logical consistency
 -   [**CorrectnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/correctness_evaluator/index.md): Evaluates factual accuracy

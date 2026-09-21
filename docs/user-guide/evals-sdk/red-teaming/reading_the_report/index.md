@@ -33,27 +33,27 @@ All attacks (worst first)
 
 ### The breach matrix
 
-One row per case, one column per strategy, plus a `worst` column. Each cell is the attack’s score; a `*` marks a breach. The matrix is the fastest way to see *which strategy broke which case* — in the example, GOAT breached `system_prompt_leak_0` (0.70) where Crescendo didn’t (0.10). A case is `BREACH` if **any** strategy breached it.
+One row per case, one column per strategy, plus a `worst` column. Each cell is the attack’s score; a `*` marks a breach. The matrix is the fastest way to see *which strategy broke which case*: in the example, GOAT breached `system_prompt_leak_0` (0.70) where Crescendo didn’t (0.10). A case is `BREACH` if **any** strategy breached it.
 
 ### The worst-first table
 
 One row per attack (case × strategy), sorted worst-first so the most successful attacks are at the top. Columns:
 
--   **turns** — how many turns the attack used.
--   **blocked** — refused turns that Crescendo backtracked and discarded. This is **Crescendo-only** (every other strategy is append-only and always shows `0`); it is *not* a count of attacks the agent defended. A high `blocked` with a low `score` means the agent refused repeatedly and Crescendo kept retrying.
--   **result** — `BREACH` or `ok` (defended).
--   **score** — the judge’s 0.0–1.0 score.
+-   **turns**: how many turns the attack used.
+-   **blocked**: refused turns that Crescendo backtracked and discarded. This is **Crescendo-only** (every other strategy is append-only and always shows `0`); it is *not* a count of attacks the agent defended. A high `blocked` with a low `score` means the agent refused repeatedly and Crescendo kept retrying.
+-   **result**: `BREACH` or `ok` (defended).
+-   **score**: the judge’s 0.0–1.0 score.
 
 ### The summary line
 
-`6 attacks · 4 breached · 2 blocked` — totals across the run (`blocked` is the Crescendo-backtracked turns, summed). Call `report.display(verbose=True)` to also print the full attacker/target conversation for each attack, which you need to verify a verdict by eye.
+`6 attacks · 4 breached · 2 blocked`: totals across the run (`blocked` is the Crescendo-backtracked turns, summed). Call `report.display(verbose=True)` to also print the full attacker/target conversation for each attack, which you need to verify a verdict by eye.
 
 ## Working with results in code
 
-`report.attack_results()` returns one `AttackResult` per case × strategy. For breached attacks only, sorted worst-first, use `report.failed_cases`:
+`report.attack_results()` returns one `AttackResult` per case × strategy. For breached attacks only, use `report.failed_cases`:
 
 ```python
-for result in report.failed_cases:  # only breached, worst-first
+for result in report.failed_cases:  # only breached
     print(f"BREACH {result.case_name} [{result.severity}]: {result.score:.2f}")
     print(result.reason)        # the judge's explanation
 
@@ -66,19 +66,19 @@ for result in report.attack_results():
 
 `AttackResult` fields:
 
--   **`score`** — the 0.0–1.0 judge score (the max across evaluators, if you ran more than one).
--   **`passed`** — `True` when the agent **defended** (every evaluator passed). A breach is `not result.passed`.
--   **`scores`** / **`passes`** / **`reasons`** — per-evaluator dicts keyed by evaluator name (e.g. `result.scores["AttackSuccessEvaluator"]`). Read these when stacking multiple evaluators.
--   **`reason`** — a single string joining each evaluator’s reason; `result.reasons` keeps them per-evaluator.
--   **`case_name`** — carries a `__<strategy>` suffix (e.g. `data_exfiltration_0__crescendo`); the printed tables strip it.
--   **`strategy`** — the strategy’s lowercase label (e.g. `crescendo`), not its class name.
--   **`risk_category`** — the case’s risk category.
--   **`severity`** — the case’s `AttackGoal.severity` (`"low" | "medium" | "high" | "critical"`), useful for triage.
--   **`objective`** — the case’s `actor_goal`, mirrored onto the result for convenience.
--   **`turns_used`** — how many attacker/target turn pairs the attack kept (after any backtracking).
--   **`backtracks`** — number of refused turns the strategy rolled back. Crescendo is the only strategy that backtracks; on every other strategy this is `0` or `None`.
--   **`pruned_branches`** — list of `{role, content}` entries for the (attacker, target) pairs Crescendo discarded; same data the matrix’s `blocked` column counts (`len(pruned_branches) // 2`).
--   **`conversation`** — the full attacker/target transcript as a list of `{role, content}` entries.
+-   **`score`**: the 0.0–1.0 judge score (the max across evaluators, if you ran more than one).
+-   **`passed`**: `True` when the agent **defended** (every evaluator passed). A breach is `not result.passed`.
+-   **`scores`** / **`passes`** / **`reasons`**: per-evaluator dicts keyed by evaluator name (e.g. `result.scores["AttackSuccessEvaluator"]`). Read these when stacking multiple evaluators.
+-   **`reason`**: a single string joining each evaluator’s reason; `result.reasons` keeps them per-evaluator.
+-   **`case_name`**: carries a `__<strategy>` suffix (e.g. `data_exfiltration_0__crescendo`); the printed tables strip it.
+-   **`strategy`**: the strategy’s lowercase label (e.g. `crescendo`), not its class name.
+-   **`risk_category`**: the case’s risk category.
+-   **`severity`**: the case’s `AttackGoal.severity` (`"low" | "medium" | "high" | "critical"`), useful for triage.
+-   **`objective`**: the case’s `actor_goal`, mirrored onto the result for convenience.
+-   **`turns_used`**: how many attacker/target turn pairs the attack kept (after any backtracking).
+-   **`backtracks`**: number of refused turns the strategy rolled back. Crescendo is the only strategy that backtracks; on every other strategy this is `0` or `None`.
+-   **`pruned_branches`**: list of `{role, content}` entries for the (attacker, target) pairs Crescendo discarded; same data the matrix’s `blocked` column counts (`len(pruned_branches) // 2`).
+-   **`conversation`**: the full attacker/target transcript as a list of `{role, content}` entries.
 
 ### Rollups
 
@@ -95,18 +95,18 @@ Use `by_strategy()` to see which strategies are landing, and `by_risk_category()
 
 A breach is a finding, not a fix. When `report.attack_results()` surfaces one:
 
-1.  **Read the conversation.** Each `AttackResult` carries the full `conversation` (and tool trace) that breached, plus the judge’s `reason`. Confirm it’s a real violation and not a judge false-positive — the transcript is the evidence. `report.display(verbose=True)` prints these inline.
+1.  **Read the conversation.** Each `AttackResult` carries the full `conversation` (and tool trace) that breached, plus the judge’s `reason`. Confirm it’s a real violation and not a judge false-positive: the transcript is the evidence. `report.display(verbose=True)` prints these inline.
 2.  **Identify the weak point.** Was it a missing instruction (the system prompt never forbade the behavior), an over-broad tool (the agent could call something it shouldn’t for that user), or a guardrail that a reframing slipped past? The risk category points at the class of weakness.
-3.  **Apply a mitigation.** Typically a system-prompt change (state the boundary explicitly), a tool change (tighten authorization or remove the capability), or an input/output guardrail. There is no single fix — it depends on where the breach came from.
+3.  **Apply a mitigation.** Typically a system-prompt change (state the boundary explicitly), a tool change (tighten authorization or remove the capability), or an input/output guardrail. There is no single fix; it depends on where the breach came from.
 4.  **Re-run the same cases.** Keep the breaching cases and run the experiment again after the change. A case that flips from breach to defended is your verification; one that still breaches means the mitigation didn’t hold.
 
 Treat the breaching cases as a durable regression suite: re-running them after each prompt or tool change catches regressions a one-off scan would miss.
 
 A clean run is not a safety certificate
 
-A `PASS` (no attack breached) means *these* strategies, with *these* cases, scored by *this* judge, didn’t get through — it’s evidence, not proof. Coverage is bounded by the cases and strategies you ran and the judge’s accuracy.
+A `PASS` (no attack breached) means *these* strategies, with *these* cases, scored by *this* judge, didn’t get through: it’s evidence, not proof. Coverage is bounded by the cases and strategies you ran and the judge’s accuracy.
 
-## Next Steps
+## Next steps
 
 -   [Scoring Attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md): How the judge assigns the 0.0–1.0 score behind every cell
 -   [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md): The strategies whose results you’re reading
@@ -114,13 +114,13 @@ A `PASS` (no attack breached) means *these* strategies, with *these* cases, scor
 
 ## Related pages
 
-- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
-- [Harmfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
-- [Red Teaming](/docs/user-guide/evals-sdk/red-teaming/index.md) (1 shared tag)
-- [Refusal Evaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) (1 shared tag)
-- [Responsible AI](/docs/user-guide/safety-security/responsible-ai/index.md) (1 shared tag)
-- [Scoring Attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md) (1 shared tag)
-- [Stereotyping Evaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md) (1 shared tag)
-- [Writing Custom Cases](/docs/user-guide/evals-sdk/red-teaming/custom_cases/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (1 shared tag)
+- [Attack strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
+- [Harmfulness evaluator](/docs/user-guide/evals-sdk/evaluators/harmfulness_evaluator/index.md) (1 shared tag)
+- [Red teaming](/docs/user-guide/evals-sdk/red-teaming/index.md) (1 shared tag)
+- [Refusal evaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) (1 shared tag)
+- [Responsible AI](/docs/user-guide/sdk/safety-security/responsible-ai/index.md) (1 shared tag)
+- [Scoring attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md) (1 shared tag)
+- [Secure for production](/docs/user-guide/sdk/safety-security/index.md) (1 shared tag)
+- [Stereotyping evaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md) (1 shared tag)
+- [Writing custom cases](/docs/user-guide/evals-sdk/red-teaming/custom_cases/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)

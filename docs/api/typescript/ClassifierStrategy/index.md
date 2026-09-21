@@ -1,4 +1,4 @@
-Defined in: [src/models/routing/classifier-strategy.ts:105](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/classifier-strategy.ts#L105)
+Defined in: [src/models/routing/classifier-strategy.ts:105](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/routing/classifier-strategy.ts#L105)
 
 Choose a candidate by applying a configurable policy with a classifier model.
 
@@ -31,7 +31,7 @@ const agent = new Agent({ model: router })
 new ClassifierStrategy(model, options?): ClassifierStrategy;
 ```
 
-Defined in: [src/models/routing/classifier-strategy.ts:121](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/classifier-strategy.ts#L121)
+Defined in: [src/models/routing/classifier-strategy.ts:121](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/routing/classifier-strategy.ts#L121)
 
 Create a classifier strategy.
 
@@ -62,7 +62,7 @@ Error if `timeoutMs` is not finite and greater than zero or a character limit is
 select(context): Promise<RoutingCandidate>;
 ```
 
-Defined in: [src/models/routing/classifier-strategy.ts:152](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/classifier-strategy.ts#L152)
+Defined in: [src/models/routing/classifier-strategy.ts:152](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/models/routing/classifier-strategy.ts#L152)
 
 Select one opening candidate, declining on classification or serving-time failure.
 

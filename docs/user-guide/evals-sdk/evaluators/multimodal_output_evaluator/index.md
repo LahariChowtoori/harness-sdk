@@ -2,16 +2,16 @@
 
 The `MultimodalOutputEvaluator` assesses the quality of agent outputs for tasks that involve images or documents alongside text. It uses an MLLM as the judge and evaluates responses against a user-defined rubric, extending [`OutputEvaluator`](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md) with multimodal input support. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/multimodal_output_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **MLLM-as-a-Judge**: Uses a multimodal judge model to evaluate responses against the rubric and the media
--   **Data-Driven Dispatch**: Emits Strands SDK content blocks when the input carries media; falls back to a plain text prompt otherwise
+-   **Data-Driven Dispatch**: Emits Strands Harness SDK content blocks when the input carries media; falls back to a plain text prompt otherwise
 -   **Automatic Reference Comparison**: Appends a reference suffix to the rubric when `expected_output` is provided on the case
 -   **Multiple Media Sources**: Accepts file paths, base64 strings, data URLs, HTTP(S) URLs (auto-fetched via the stdlib), raw bytes, and PIL Images
 -   **Built-in Subclasses**: `MultimodalOverallQualityEvaluator`, `MultimodalCorrectnessEvaluator`, `MultimodalFaithfulnessEvaluator`, and `MultimodalInstructionFollowingEvaluator` each default to a built-in rubric
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 
-## When to Use
+## When to use
 
 Use the `MultimodalOutputEvaluator` when you need to:
 
@@ -21,7 +21,7 @@ Use the `MultimodalOutputEvaluator` when you need to:
 -   Compare multimodal agent configurations or prompts
 -   Benchmark MLLM judges against text-only LLM judges on the same tasks
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent response per case.
 
@@ -62,7 +62,7 @@ This evaluator operates at the **OUTPUT\_LEVEL**, scoring a single agent respons
 -   **Default**: `False`
 -   **Description**: Whether to include environment state in the evaluation prompt, enabling assessment of agent side effects alongside the output.
 
-## Data-Driven Dispatch
+## Data-driven dispatch
 
 The evaluator decides whether to call the judge as a multimodal or text-only model based on the shape of `case.input`:
 
@@ -96,7 +96,7 @@ This means the same evaluator can grade a mixed experiment containing both multi
 
 HTTP(S) URLs are auto-fetched via `urllib.request` from the standard library, so no extra dependencies are required. The `format` field (`"jpeg"`, `"png"`, `"gif"`, `"webp"`) is auto-detected from the extension or data URL when omitted. S3 URIs and boto3 auto-fetch are not supported; pre-download S3 objects to bytes or a local path before constructing `ImageData`.
 
-## Built-in Rubrics
+## Built-in rubrics
 
 The following rubric constants are available from `strands_evals.evaluators.prompt_templates.multimodal`:
 
@@ -107,7 +107,7 @@ The following rubric constants are available from `strands_evals.evaluators.prom
 
 Each built-in rubric is the default for the matching subclass (see [Related Evaluators](#related-evaluators)).
 
-## Scoring System
+## Scoring system
 
 The score is a float between `0.0` and `1.0`; the granularity is determined by the rubric:
 
@@ -115,9 +115,9 @@ The score is a float between `0.0` and `1.0`; the granularity is determined by t
 -   **Likert-5** (`OVERALL_QUALITY_RUBRIC_V0`): `0.0`, `0.25`, `0.5`, `0.75`, or `1.0`. A response typically passes if the score is `>= 0.75`.
 -   **Custom rubric**: any granularity you define in the rubric text. Specify the pass threshold in the rubric itself (e.g., “Score 1.0 if …”).
 
-## Basic Usage
+## Basic usage
 
-### Reference-Free Evaluation
+### Reference-free evaluation
 
 ```python
 import asyncio
@@ -155,7 +155,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Reference-Based Evaluation
+### Reference-based evaluation
 
 Setting `expected_output` on a case switches the evaluator into reference-based mode. The configured `reference_suffix` is appended to the rubric so the judge compares the response against the reference answer.
 
@@ -187,7 +187,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### Multiple Images per Case
+### Multiple images per case
 
 Pass a list of `ImageData` (or a list of source strings) to evaluate responses that reason over several images at once:
 
@@ -205,7 +205,7 @@ Case(
 )
 ```
 
-## Evaluation Output
+## Evaluation output
 
 Like `OutputEvaluator`, `MultimodalOutputEvaluator` returns `EvaluationOutput` objects with:
 
@@ -214,7 +214,7 @@ Like `OutputEvaluator`, `MultimodalOutputEvaluator` returns `EvaluationOutput` o
 -   **reason**: String containing the judge’s reasoning for the score
 -   **label**: Optional label categorizing the result
 
-## Best Practices
+## Best practices
 
 1.  **Use a Multimodal-Capable Judge**: The default Bedrock model must support image input. If you override `model`, confirm the model ID accepts image content blocks.
 2.  **Keep Images at Reasonable Resolution**: Very large images increase latency and cost without improving judgment; resize to the minimum resolution needed for the task.
@@ -222,7 +222,7 @@ Like `OutputEvaluator`, `MultimodalOutputEvaluator` returns `EvaluationOutput` o
 4.  **Use Reference Mode for Ground-Truth Tasks**: Chart QA and VQA benchmarks with known answers benefit from `expected_output` and the reference suffix.
 5.  **Start with a Built-in Rubric**: The four built-in rubrics are the defaults that come with Strands Evals; customize only once you see where they fall short on your data.
 
-## Related Evaluators
+## Related evaluators
 
 -   [**MultimodalOverallQualityEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md): Likert-5 quality scoring
 -   [**MultimodalCorrectnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md): Strict binary factual correctness
@@ -232,13 +232,13 @@ Like `OutputEvaluator`, `MultimodalOutputEvaluator` returns `EvaluationOutput` o
 
 ## Related pages
 
-- [Multimodal Correctness Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) (2 shared tags)
-- [Multimodal Faithfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) (2 shared tags)
-- [Multimodal Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) (2 shared tags)
-- [Multimodal Overall Quality Evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
-- [Google](/docs/user-guide/concepts/model-providers/google/index.md) (1 shared tag)
-- [Vercel](/docs/user-guide/concepts/model-providers/vercel/index.md) (1 shared tag)
-- [OpenAI](/docs/user-guide/concepts/model-providers/openai/index.md) (1 shared tag)
-- [Writer](/docs/user-guide/concepts/model-providers/writer/index.md) (1 shared tag)
-- [Amazon Nova](/docs/user-guide/concepts/model-providers/amazon-nova/index.md) (1 shared tag)
-- [Amazon Bedrock](/docs/user-guide/concepts/model-providers/amazon-bedrock/index.md) (1 shared tag)
+- [Multimodal correctness evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_correctness_evaluator/index.md) (2 shared tags)
+- [Multimodal faithfulness evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_faithfulness_evaluator/index.md) (2 shared tags)
+- [Multimodal instruction following evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_instruction_following_evaluator/index.md) (2 shared tags)
+- [Multimodal overall quality evaluator](/docs/user-guide/evals-sdk/evaluators/multimodal_overall_quality_evaluator/index.md) (2 shared tags)
+- [Google](/docs/user-guide/sdk/model-providers/google/index.md) (1 shared tag)
+- [Vercel](/docs/user-guide/sdk/model-providers/vercel/index.md) (1 shared tag)
+- [OpenAI](/docs/user-guide/sdk/model-providers/openai/index.md) (1 shared tag)
+- [Writer](/docs/user-guide/sdk/model-providers/writer/index.md) (1 shared tag)
+- [Amazon Nova](/docs/user-guide/sdk/model-providers/amazon-nova/index.md) (1 shared tag)
+- [Amazon Bedrock](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md) (1 shared tag)

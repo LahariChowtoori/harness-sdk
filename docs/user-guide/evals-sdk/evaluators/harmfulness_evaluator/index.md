@@ -2,14 +2,14 @@
 
 The `HarmfulnessEvaluator` performs binary evaluation to detect harmful content in agent responses. It assesses whether a response contains dangerous, offensive, or otherwise harmful material.
 
-## Key Features
+## Key features
 
 -   **Trace-Level Evaluation**: Evaluates the most recent turn in the conversation
 -   **Binary Scoring**: Clear Harmful / Not Harmful classification
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Safety-Focused**: Designed specifically for content safety assessment
 
-## When to Use
+## When to use
 
 Use the `HarmfulnessEvaluator` when you need to:
 
@@ -18,7 +18,7 @@ Use the `HarmfulnessEvaluator` when you need to:
 -   Validate that guardrails are working correctly
 -   Assess safety across different prompt configurations
 
-## Evaluation Level
+## Evaluation level
 
 This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn in the conversation.
 
@@ -42,7 +42,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 -   **Default**: `"v0"`
 -   **Description**: Prompt template version.
 
-## Scoring System
+## Scoring system
 
 | Rating | Score | Description |
 | --- | --- | --- |
@@ -51,7 +51,7 @@ This evaluator operates at the **TRACE\_LEVEL**, evaluating the most recent turn
 
 A response passes the evaluation only if it is classified as **Not Harmful** (score = 1.0).
 
-## Basic Usage
+## Basic usage
 
 Required: Session ID Trace Attributes
 
@@ -91,9 +91,9 @@ async def main():
 asyncio.run(main())
 ```
 
-## Combining with Other Safety Evaluators
+## Combining with other safety evaluators
 
-For comprehensive safety assessment, combine with guardrails and other evaluators:
+For broader safety coverage, combine with guardrails and other evaluators:
 
 ```python
 evaluators = [
@@ -103,7 +103,7 @@ evaluators = [
 ]
 ```
 
-## Related Evaluators
+## Related evaluators
 
 -   [**FaithfulnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/faithfulness_evaluator/index.md): Checks if responses are grounded in conversation history
 -   [**OutputEvaluator**](/docs/user-guide/evals-sdk/evaluators/output_evaluator/index.md): Flexible custom rubric evaluation for policy compliance
@@ -111,13 +111,13 @@ evaluators = [
 
 ## Related pages
 
-- [Attack Strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
-- [Reading the Report](/docs/user-guide/evals-sdk/red-teaming/reading_the_report/index.md) (1 shared tag)
-- [Red Teaming](/docs/user-guide/evals-sdk/red-teaming/index.md) (1 shared tag)
-- [Refusal Evaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) (1 shared tag)
-- [Responsible AI](/docs/user-guide/safety-security/responsible-ai/index.md) (1 shared tag)
-- [Scoring Attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md) (1 shared tag)
-- [Stereotyping Evaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md) (1 shared tag)
-- [Writing Custom Cases](/docs/user-guide/evals-sdk/red-teaming/custom_cases/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Instruction Following Evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (1 shared tag)
+- [Attack strategies](/docs/user-guide/evals-sdk/red-teaming/strategies/index.md) (1 shared tag)
+- [Reading the report](/docs/user-guide/evals-sdk/red-teaming/reading_the_report/index.md) (1 shared tag)
+- [Red teaming](/docs/user-guide/evals-sdk/red-teaming/index.md) (1 shared tag)
+- [Refusal evaluator](/docs/user-guide/evals-sdk/evaluators/refusal_evaluator/index.md) (1 shared tag)
+- [Responsible AI](/docs/user-guide/sdk/safety-security/responsible-ai/index.md) (1 shared tag)
+- [Scoring attacks](/docs/user-guide/evals-sdk/red-teaming/evaluators/index.md) (1 shared tag)
+- [Secure for production](/docs/user-guide/sdk/safety-security/index.md) (1 shared tag)
+- [Stereotyping evaluator](/docs/user-guide/evals-sdk/evaluators/stereotyping_evaluator/index.md) (1 shared tag)
+- [Writing custom cases](/docs/user-guide/evals-sdk/red-teaming/custom_cases/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)

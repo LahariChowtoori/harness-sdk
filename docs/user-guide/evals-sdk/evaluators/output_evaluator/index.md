@@ -1,16 +1,16 @@
 ## Overview
 
-The `OutputEvaluator` is an LLM-based evaluator that assesses the quality of agent outputs against custom criteria. It uses a judge LLM to evaluate responses based on a user-defined rubric, making it ideal for evaluating subjective qualities like safety, relevance, accuracy, and completeness. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/output_evaluator.py).
+The `OutputEvaluator` scores agent outputs against custom criteria using an LLM as a judge. It evaluates responses against a user-defined rubric, covering subjective qualities like safety, relevance, accuracy, and completeness. A complete example can be found [here](https://github.com/strands-agents/harness-sdk/blob/main/site/docs/examples/evals-sdk/output_evaluator.py).
 
-## Key Features
+## Key features
 
 -   **Flexible Rubric System**: Define custom evaluation criteria tailored to your use case
--   **LLM-as-a-Judge**: Leverages a language model to perform nuanced evaluations
+-   **LLM-as-a-Judge**: Uses a language model to score responses against the rubric
 -   **Structured Output**: Returns standardized evaluation results with scores and reasoning
 -   **Async Support**: Supports both synchronous and asynchronous evaluation
 -   **Input Context**: Optionally includes input prompts in the evaluation for context-aware scoring
 
-## When to Use
+## When to use
 
 Use the `OutputEvaluator` when you need to:
 
@@ -51,7 +51,7 @@ Use the `OutputEvaluator` when you need to:
 -   **Default**: `False`
 -   **Description**: Whether to include environment state in the evaluation prompt. When `True`, the evaluator includes `actual_environment_state` and `expected_environment_state` from the evaluation data, enabling assessment of agent side effects (e.g., database changes, file modifications) alongside or instead of output comparisons.
 
-## Basic Usage
+## Basic usage
 
 ```python
 import asyncio
@@ -104,7 +104,7 @@ async def main():
 asyncio.run(main())
 ```
 
-## Evaluation Output
+## Evaluation output
 
 The `OutputEvaluator` returns `EvaluationOutput` objects with:
 
@@ -113,15 +113,15 @@ The `OutputEvaluator` returns `EvaluationOutput` objects with:
 -   **reason**: String containing the judge’s reasoning for the score
 -   **label**: Optional label categorizing the result
 
-## Best Practices
+## Best practices
 
 1.  **Write Clear, Specific Rubrics**: Include explicit scoring criteria and examples
 2.  **Use Appropriate Judge Models**: Consider using stronger models for complex evaluations
 3.  **Include Input Context When Relevant**: Set `include_inputs=True` for context-dependent evaluation
 4.  **Validate Your Rubric**: Test with known good and bad examples to ensure expected scores
-5.  **Combine with Other Evaluators**: Use alongside trajectory and tool evaluators for comprehensive assessment
+5.  **Combine with Other Evaluators**: Use alongside trajectory and tool evaluators to assess quality from multiple angles
 
-## Related Evaluators
+## Related evaluators
 
 -   [**TrajectoryEvaluator**](/docs/user-guide/evals-sdk/evaluators/trajectory_evaluator/index.md): Evaluates the sequence of actions/tools used
 -   [**FaithfulnessEvaluator**](/docs/user-guide/evals-sdk/evaluators/faithfulness_evaluator/index.md): Checks if responses are grounded in conversation history
@@ -130,13 +130,13 @@ The `OutputEvaluator` returns `EvaluationOutput` objects with:
 
 ## Related pages
 
-- [Coherence Evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
-- [Conciseness Evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
-- [Goal Success Rate Evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
-- [Helpfulness Evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
-- [Interactions Evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
-- [Trusted Message History](/docs/user-guide/safety-security/trusted-message-history/index.md) (1 shared tag)
-- [Built-in Modes](/docs/user-guide/concepts/context-management/built-in-modes/index.md) (1 shared tag)
-- [Context Estimation](/docs/user-guide/concepts/context-management/context-estimation/index.md) (1 shared tag)
-- [Context Management](/docs/user-guide/concepts/context-management/index.md) (1 shared tag)
-- [Custom Strategies](/docs/user-guide/concepts/context-management/custom-strategies/index.md) (1 shared tag)
+- [Coherence evaluator](/docs/user-guide/evals-sdk/evaluators/coherence_evaluator/index.md) (1 shared tag)
+- [Conciseness evaluator](/docs/user-guide/evals-sdk/evaluators/conciseness_evaluator/index.md) (1 shared tag)
+- [Goal success rate evaluator](/docs/user-guide/evals-sdk/evaluators/goal_success_rate_evaluator/index.md) (1 shared tag)
+- [Helpfulness evaluator](/docs/user-guide/evals-sdk/evaluators/helpfulness_evaluator/index.md) (1 shared tag)
+- [Interactions evaluator](/docs/user-guide/evals-sdk/evaluators/interactions_evaluator/index.md) (1 shared tag)
+- [Trusted Message History](/docs/user-guide/sdk/safety-security/trusted-message-history/index.md) (1 shared tag)
+- [Customizing user simulation](/docs/user-guide/evals-sdk/simulators/customize_user_simulation/index.md) (1 shared tag)
+- [User simulation](/docs/user-guide/evals-sdk/simulators/user_simulation/index.md) (1 shared tag)
+- [Built-in Modes](/docs/user-guide/sdk/context-management/built-in-modes/index.md) (1 shared tag)
+- [Context Estimation](/docs/user-guide/sdk/context-management/context-estimation/index.md) (1 shared tag)

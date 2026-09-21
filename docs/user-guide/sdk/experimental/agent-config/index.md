@@ -1,0 +1,169 @@
+Define an agent in a JSON file or a Python dictionary and build it with the experimental `config_to_agent` function, so its model, prompt, and tools live in configuration rather than code. Pass a file path or a dictionary and you get back a ready-to-use `Agent`.
+
+## Basic Usage
+
+### Dictionary Configuration
+
+```python
+from strands.experimental import config_to_agent
+
+# Create agent from dictionary
+agent = config_to_agent({
+    "model": "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+    "prompt": "You are a helpful assistant"
+})
+```
+
+### File Configuration
+
+```python
+from strands.experimental import config_to_agent
+
+# Load from JSON file (with or without file:// prefix)
+agent = config_to_agent("/path/to/config.json")
+# or
+agent = config_to_agent("file:///path/to/config.json")
+```
+
+#### Simple Agent Example
+
+```json
+{
+    "prompt": "You are a helpful assistant."
+}
+```
+
+#### Coding Assistant Example
+
+```json
+{
+  "model": "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+  "prompt": "You are a coding assistant. Help users write, debug, and improve their code. You have access to file operations and can execute shell commands when needed.",
+  "tools": ["strands.vended_tools.file_editor", "strands.vended_tools.shell"]
+}
+```
+
+## Configuration Options
+
+### Supported Keys
+
+-   `model`: model ID string. Only the [Amazon Bedrock model provider string form](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md#basic-usage) is supported here.
+-   `prompt`: System prompt for the agent (string)
+-   `tools`: List of tool specifications (list of strings)
+-   `name`: Agent name (string)
+
+### Tool Loading
+
+The `tools` configuration supports Python-specific tool loading formats:
+
+```json
+{
+  "tools": [
+    "strands.vended_tools.notebook",     // Python module path
+    "my_app.tools.cake_tool",            // Custom module path
+    "/path/to/another_tool.py",          // File path
+    "my_module.my_tool_function"         // @tool annotated function
+  ]
+}
+```
+
+The Agent class handles all tool loading internally, including:
+
+-   Loading from module paths
+-   Loading from file paths
+-   Error handling for missing tools
+-   Tool validation
+
+Tool Loading Limitations
+
+Configuration-based agent setup only works for tools that don’t require code-based instantiation. For tools that need constructor arguments or complex setup, use the programmatic approach after creating the agent:
+
+```python
+import http.client
+from sample_module import ToolWithConfigArg
+
+agent = config_to_agent("config.json")
+# Add tools that need code-based instantiation
+agent.tool_registry.process_tools([ToolWithConfigArg(http.client.HTTPSConnection("localhost"))])
+```
+
+### Model Configurations
+
+The `model` property takes a [Bedrock model ID string](/docs/user-guide/sdk/model-providers/amazon-bedrock/index.md#basic-usage). See [AWS’s model ID reference](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html) for the available IDs. To use a different model provider, pass a model instance in the `**kwargs` of `config_to_agent`:
+
+```python
+from strands.experimental import config_to_agent
+from strands.models.openai import OpenAIModel
+
+# Create agent from dictionary
+agent = config_to_agent(
+  config={"name": "Data Analyst"},
+  model=OpenAIModel(
+    client_args={
+        "api_key": "<KEY>",
+    },
+    model_id="gpt-4o",
+  )
+)
+```
+
+Additionally, you can override the `agent.model` attribute of an agent to configure a new model provider:
+
+```python
+from strands.experimental import config_to_agent
+from strands.models.openai import OpenAIModel
+
+# Create agent from dictionary
+agent = config_to_agent(
+  config={"name": "Data Analyst"}
+)
+
+agent.model = OpenAIModel(
+  client_args={
+      "api_key": "<KEY>",
+  },
+  model_id="gpt-4o",
+)
+```
+
+## Function Parameters
+
+The `config_to_agent` function accepts:
+
+-   `config`: Either a file path (string) or configuration dictionary
+-   `**kwargs`: Additional [Agent constructor parameters](/docs/api/python/strands.agent.agent#Agent.__init__) that override config values
+
+```python
+# Override config values with valid agent parameters
+agent = config_to_agent(
+    "/path/to/config.json",
+    name="Data Analyst"
+)
+```
+
+## Best Practices
+
+1.  **Override with kwargs**: pass Agent constructor arguments to override config values at runtime.
+2.  **Rely on agent defaults**: specify only the values you want to change.
+3.  **Use standard tool formats**: follow the Agent class conventions for tool specifications.
+4.  **Handle load errors**: catch `FileNotFoundError` and `JSONDecodeError` so a missing or malformed config file fails cleanly.
+
+## Related pages
+
+- [Attach and invoke tools](/docs/user-guide/sdk/tools/using-tools/index.md) (1 shared tag)
+- [Community tools package](/docs/user-guide/sdk/tools/community-tools-package/index.md) (1 shared tag)
+- [Create custom tools](/docs/user-guide/sdk/tools/custom-tools/index.md) (1 shared tag)
+- [Tool result format](/docs/user-guide/sdk/tools/tool-results/index.md) (1 shared tag)
+- [Vended Tools](/docs/user-guide/sdk/tools/vended-tools/index.md) (1 shared tag)
+- [Instruction following evaluator](/docs/user-guide/evals-sdk/evaluators/instruction_following_evaluator/index.md) (1 shared tag)
+- [Skills](/docs/user-guide/sdk/plugins/skills/index.md) (1 shared tag)
+- [Add tools to your agent](/docs/user-guide/sdk/tools/index.md) (1 shared tag)
+- [Connect your agent to MCP tools](/docs/user-guide/sdk/tools/mcp-tools/index.md) (1 shared tag)
+- [MCP Transports](/docs/user-guide/sdk/tools/mcp-transports/index.md) (1 shared tag)
+
+
+## Implementation
+
+### Python
+
+- [harness-sdk/strands-py/src/strands/experimental/agent_config.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/agent_config.py)

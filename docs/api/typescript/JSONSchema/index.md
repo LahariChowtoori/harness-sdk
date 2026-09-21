@@ -2,7 +2,7 @@
 type JSONSchema = JSONSchema7;
 ```
 
-Defined in: [src/types/json.ts:46](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/json.ts#L46)
+Defined in: [src/types/json.ts:46](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/types/json.ts#L46)
 
 Represents a JSON Schema definition. Used for defining the structure of tool inputs and outputs.
 

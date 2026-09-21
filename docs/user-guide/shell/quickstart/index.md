@@ -90,9 +90,11 @@ print(data.decode())
 entries = shell.list_files("/workspace")
 for entry in entries:
     print(entry.name)
+
+shell.remove_file("/workspace/note.txt")
 ```
 
-`read_file` and `write_file` work in bytes. A missing path raises `strands_shell.FileNotFoundError`, which also subclasses the built-in `FileNotFoundError`, so existing error-handling code catches it without a translation shim.
+`read_file` and `write_file` work in bytes; `remove_file` deletes a file from the sandbox. A missing path raises `strands_shell.FileNotFoundError`, which also subclasses the built-in `FileNotFoundError`, so existing error-handling code catches it without a translation shim.
 
 ## Node.js
 
@@ -140,7 +142,11 @@ const entries = await shell.listFiles('/workspace')
 for (const entry of entries) {
   console.log(entry.name)
 }
+
+await shell.removeFile('/workspace/note.txt')
 ```
+
+`removeFile` deletes a file from the sandbox and rejects with `NotFoundError` when the path is missing, the same as `readFile`.
 
 ## What you built
 
@@ -154,9 +160,10 @@ You created a sandbox with exactly one host directory visible to it and ran a co
 
 ## Related pages
 
-- [Get started](/docs/user-guide/quickstart/overview/index.md) (1 shared tag)
-- [Python Quickstart](/docs/user-guide/quickstart/python/index.md) (1 shared tag)
-- [Strands Evaluation Quickstart](/docs/user-guide/evals-sdk/quickstart/index.md) (1 shared tag)
-- [TypeScript Quickstart](/docs/user-guide/quickstart/typescript/index.md) (1 shared tag)
-- [Red Teaming Quickstart](/docs/user-guide/evals-sdk/red-teaming/quickstart/index.md) (1 shared tag)
-- [Voice & Realtime Quickstart](/docs/user-guide/concepts/bidirectional-streaming/quickstart/index.md) (1 shared tag)
+- [Choosing an Agent Foundation](/docs/user-guide/migrate/choosing-an-agent-foundation/index.md) (1 shared tag)
+- [Get started](/docs/user-guide/sdk/quickstart/overview/index.md) (1 shared tag)
+- [Python Quickstart](/docs/user-guide/sdk/quickstart/python/index.md) (1 shared tag)
+- [Strands evaluation quickstart](/docs/user-guide/evals-sdk/quickstart/index.md) (1 shared tag)
+- [TypeScript Quickstart](/docs/user-guide/sdk/quickstart/typescript/index.md) (1 shared tag)
+- [Red teaming quickstart](/docs/user-guide/evals-sdk/red-teaming/quickstart/index.md) (1 shared tag)
+- [Build a voice agent](/docs/user-guide/sdk/bidirectional-streaming/quickstart/index.md) (1 shared tag)
