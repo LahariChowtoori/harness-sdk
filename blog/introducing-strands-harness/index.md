@@ -14,7 +14,7 @@ Strands harness **costs 28% less** when using the same Claude or GPT models acro
 
 With Fable 5, Strands harness **cost 77% less** than Claude Code *and* **scored higher** on Terminal Bench 2.1. We’re also pleased to see two other open source harnesses perform similarly well on cost/accuracy against Claude Code.
 
-Strands harness, built on the [Strands Harness SDK](https://github.com/strands-agents/harness-sdk), contains defaults for prompt caching and context management. Our [default context management](https://strandsagents.com/blog/jit-context-retrieval.mdx) largely drove the token-efficiency and accuracy: tool results over ~1500 tokens get truncated, summarization (compaction) triggers when the context window hits above 85%, and context recovery runs within the loop if there’s an overflow.
+Strands harness, built on the [Strands Harness SDK](https://github.com/strands-agents/harness-sdk), contains defaults for prompt caching and context management. Our default context management largely drove the token-efficiency and accuracy: tool results over ~1500 tokens get truncated, summarization (compaction) triggers when the context window hits above 85%, and context recovery runs within the loop if there’s an overflow.
 
 Keep an eye out for a follow-up paper from our researchers regarding these benchmarks. In the meantime, we’re excited everyone gets to use these defaults in Strands harness.
 
