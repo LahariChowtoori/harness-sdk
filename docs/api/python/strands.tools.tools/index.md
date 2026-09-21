@@ -77,7 +77,7 @@ The normalized schema.
 def normalize_tool_spec(tool_spec: ToolSpec) -> ToolSpec
 ```
 
-Defined in: [src/strands/tools/tools.py:152](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L152)
+Defined in: [src/strands/tools/tools.py:155](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L155)
 
 Normalize a complete tool specification by transforming its inputSchema.
 
@@ -99,7 +99,7 @@ The normalized tool specification.
 class PythonAgentTool(AgentTool)
 ```
 
-Defined in: [src/strands/tools/tools.py:179](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L179)
+Defined in: [src/strands/tools/tools.py:184](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L184)
 
 Tool implementation for Python-based tools.
 
@@ -111,7 +111,7 @@ This class handles tools implemented as Python functions, providing a simple int
 def __init__(tool_name: str, tool_spec: ToolSpec, tool_func: ToolFunc) -> None
 ```
 
-Defined in: [src/strands/tools/tools.py:190](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L190)
+Defined in: [src/strands/tools/tools.py:195](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L195)
 
 Initialize a Python-based tool.
 
@@ -128,7 +128,7 @@ Initialize a Python-based tool.
 def tool_name() -> str
 ```
 
-Defined in: [src/strands/tools/tools.py:205](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L205)
+Defined in: [src/strands/tools/tools.py:210](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L210)
 
 Get the name of the tool.
 
@@ -143,7 +143,7 @@ The name of the tool.
 def tool_spec() -> ToolSpec
 ```
 
-Defined in: [src/strands/tools/tools.py:214](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L214)
+Defined in: [src/strands/tools/tools.py:219](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L219)
 
 Get the tool specification for this Python-based tool.
 
@@ -158,7 +158,7 @@ The tool specification.
 def tool_spec(value: ToolSpec) -> None
 ```
 
-Defined in: [src/strands/tools/tools.py:223](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L223)
+Defined in: [src/strands/tools/tools.py:228](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L228)
 
 Set the tool specification.
 
@@ -179,7 +179,7 @@ This allows runtime modification of the tool’s schema, enabling dynamic tool c
 def supports_hot_reload() -> bool
 ```
 
-Defined in: [src/strands/tools/tools.py:248](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L248)
+Defined in: [src/strands/tools/tools.py:253](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L253)
 
 Check if this tool supports automatic reloading when modified.
 
@@ -194,7 +194,7 @@ Always true for function-based tools.
 def tool_type() -> str
 ```
 
-Defined in: [src/strands/tools/tools.py:257](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L257)
+Defined in: [src/strands/tools/tools.py:262](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L262)
 
 Identifies this as a Python-based tool implementation.
 
@@ -210,7 +210,7 @@ async def stream(tool_use: ToolUse, invocation_state: dict[str, Any],
                  **kwargs: Any) -> ToolGenerator
 ```
 
-Defined in: [src/strands/tools/tools.py:266](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L266)
+Defined in: [src/strands/tools/tools.py:271](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/tools/tools.py#L271)
 
 Stream the Python function with the given tool use request.
 

@@ -22,7 +22,7 @@ npm install -g @strands-agents/cli
 
 ### Create your agent
 
-Run `strands --setup` (or `/setup` inside a chat) to open the setup assistant. It walks you through the creation process, asking:
+Run `strands` (or `/setup` inside a chat) to open the setup assistant. It walks you through the creation process, asking:
 
 -   **Where to start** — from scratch, or from a configuration it detects in the current directory.
 -   **Name and goals** — what the agent is called and what you want it to do.
@@ -32,7 +32,7 @@ Run `strands --setup` (or `/setup` inside a chat) to open the setup assistant. I
 It keeps the configuration as a draft until you approve it, then opens your custom agent in a fresh chat. For example:
 
 ```text
-$ strands --setup
+$ strands
 ? Start from scratch, or use the configuration in ./ ?   Start from scratch
 ? What should your agent be called?                      release-notes-bot
 ? What should it do?                                     Draft release notes from merged PRs
@@ -44,7 +44,7 @@ $ strands --setup
 You can also skip the wizard and set fields with flags, or start from an existing agent file:
 
 ```bash
-strands --setup                                                     # full interactive wizard
+strands                                                             # full interactive wizard
 strands --name release-notes-bot --model anthropic/claude-sonnet-5  # set fields directly
 strands --agent ./agent.ts                                          # start from an exported agent
 ```
