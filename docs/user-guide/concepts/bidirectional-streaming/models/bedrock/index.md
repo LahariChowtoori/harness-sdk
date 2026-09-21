@@ -34,7 +34,7 @@ After installing the Bedrock Nova Sonic and local audio extras, create a voice a
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands_tools import calculator, stop
@@ -113,10 +113,10 @@ For more details on this approach, please refer to the [boto3 session docs](http
 | Parameter | Description | Example | Options |
 | --- | --- | --- | --- |
 | `model_id` | Nova Sonic model identifier. | `"amazon.nova-2-sonic-v1:0"` | Nova Sonic model IDs |
-| `audio` | Input and output stream options. | `{"output": {"sample_rate": 24000}}` | [reference](/docs/api/python/strands.experimental.bidi.models.bedrock#BedrockNovaSonicAudioConfig) |
+| `audio` | Input and output stream options. | `{"output": {"sample_rate": 24000}}` | [reference](/docs/api/python/strands.experimental.bidi.models#BedrockNovaSonicAudioConfig) |
 | `voice` | Output voice identifier. Defaults to `"matthew"`. | `"tiffany"` | Nova Sonic voices |
 | `params` | Provider-specific session parameters, such as inference and turn detection configuration. | `{"inferenceConfiguration": {"temperature": 0.7}}` | [`sessionStart` fields](https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-input-events.html) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models.configs#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
 
 Conversation History Limits
 
@@ -142,7 +142,7 @@ As a reminder, Nova Sonic is only available in us-east-1, us-west-2, eu-north-1,
 
 -   [Nova Sonic](https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html)
 -   [Experimental Bedrock Client](https://github.com/aws/aws-sdk-python/tree/develop/clients/aws-sdk-bedrock-runtime)
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.models.bedrock#BedrockNovaSonicModel)
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.models#BedrockNovaSonicModel)
 
 ## Related pages
 

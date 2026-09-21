@@ -19,7 +19,7 @@ Bidirectional streaming uses a different event model than [standard streaming](/
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
@@ -38,7 +38,9 @@ asyncio.run(main())
 
 ## Input Types
 
-Send text, audio, or images with `agent.send()`. It accepts a string, a `TextBlock`, `AudioBlock`, or `ImageBlock`, or a dictionary containing exactly one `text`, `audio`, or `image` key.
+Send text, streaming audio, or images with `agent.send()`. It accepts a string, a `TextBlock`, `AudioDelta`, or `ImageBlock`, or a dictionary containing exactly one `text`, `audio_delta`, or `image` key.
+
+Text blocks contain complete text input, and image blocks contain complete images. Audio deltas add samples to the live input stream without explicitly ending the user’s turn.
 
 ### Text
 
@@ -56,20 +58,20 @@ await agent.send({"text": "What is the weather?"})
 
 ### Audio
 
-Send audio bytes using an audio content block. The model configuration determines the sample rate and channel count for real-time PCM audio.
+Send each chunk of audio samples with `AudioDelta`. The model configuration determines the sample rate and channel count for real-time PCM audio.
 
 ```python
 from pathlib import Path
 
-from strands.types.media import AudioBlock
+from strands.experimental.bidi.types import AudioDelta
 
-audio_bytes = Path("audio.pcm").read_bytes()
+audio_bytes = Path("audio-chunk.pcm").read_bytes()
 
-await agent.send(AudioBlock(format="pcm", source={"bytes": audio_bytes}))
+await agent.send(AudioDelta(format="pcm", source={"bytes": audio_bytes}))
 
 # Or use a dictionary:
 await agent.send({
-    "audio": {
+    "audio_delta": {
         "format": "pcm",
         "source": {"bytes": audio_bytes},
     }
@@ -429,7 +431,8 @@ async for event in agent.receive():
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent, BidiAudioIO
+from strands.experimental.bidi.agent import BidiAgent
+from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
@@ -465,7 +468,7 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
@@ -485,7 +488,7 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands_tools import calculator
 
@@ -518,7 +521,7 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
@@ -548,7 +551,7 @@ asyncio.run(main())
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
@@ -597,6 +600,7 @@ For details on hook events and usage patterns, see the [Hooks](/docs/user-guide/
 
 - [harness-sdk/strands-py/src/strands/experimental/bidi/types/agent.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/agent.py)
 - [harness-sdk/strands-py/src/strands/experimental/bidi/types/content.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/content.py)
+- [harness-sdk/strands-py/src/strands/experimental/bidi/types/media.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/media.py)
 - [harness-sdk/strands-py/src/strands/types/content.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/types/content.py)
 - [harness-sdk/strands-py/src/strands/experimental/bidi/types/events.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/events.py)
 - [harness-sdk/strands-py/src/strands/experimental/bidi/types/io.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py)

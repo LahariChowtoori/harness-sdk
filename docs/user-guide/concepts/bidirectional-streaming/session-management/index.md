@@ -18,7 +18,8 @@ For a comprehensive introduction to session management concepts and general patt
 Create a `BidiAgent` with a session manager and use it:
 
 ```python
-from strands.experimental.bidi import BidiAgent, BidiAudioIO
+from strands.experimental.bidi.agent import BidiAgent
+from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.session.file_session_manager import FileSessionManager
 
@@ -72,7 +73,7 @@ Both inherit the shared `RepositorySessionManager` implementation. For a custom 
 The `FileSessionManager` provides a simple way to persist sessions to the local filesystem:
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.session.file_session_manager import FileSessionManager
 
 # Create a session manager
@@ -99,7 +100,7 @@ agent = BidiAgent(
 The `S3SessionManager` stores sessions in Amazon S3 for distributed deployments:
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.session.s3_session_manager import S3SessionManager
 
 # Create an S3 session manager
@@ -129,7 +130,7 @@ agent = BidiAgent(
 Create the session by constructing a session manager. Passing it to `BidiAgent` initializes the agent’s session data during construction:
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.session import FileSessionManager
 
@@ -146,7 +147,7 @@ agent = BidiAgent(
 To reload saved messages and application state, construct a new session manager over the same storage and pass it to `BidiAgent` with the same session ID and agent ID. Restoration happens during construction, before `await agent.start()` opens the model connection.
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.session import FileSessionManager
 
@@ -213,7 +214,7 @@ Register a message hook after constructing the agent to run it after the session
 
 ```python
 from strands import LocalAgent
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.hooks import MessageAddedEvent
 from strands.session import FileSessionManager
 
@@ -239,7 +240,7 @@ For best practices on session ID management, session cleanup, error handling, st
 -   [Agent](/docs/user-guide/concepts/bidirectional-streaming/agent/index.md) - Learn about BidiAgent configuration and lifecycle
 -   [Hooks](/docs/user-guide/concepts/bidirectional-streaming/hooks/index.md) - Extend agent functionality with hooks
 -   [Events](/docs/user-guide/concepts/bidirectional-streaming/events/index.md) - Complete guide to bidirectional streaming events
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent.agent) - Complete API documentation
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent) - Complete API documentation
 
 ## Related pages
 

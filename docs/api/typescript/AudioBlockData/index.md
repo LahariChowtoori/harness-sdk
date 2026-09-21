@@ -1,4 +1,4 @@
-Defined in: [src/types/media.ts:151](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/media.ts#L151)
+Defined in: [src/types/media.ts:151](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/media.ts#L151)
 
 Data for an audio block.
 
@@ -10,7 +10,7 @@ Data for an audio block.
 format: AudioFormat;
 ```
 
-Defined in: [src/types/media.ts:153](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/media.ts#L153)
+Defined in: [src/types/media.ts:153](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/media.ts#L153)
 
 Audio format.
 
@@ -22,6 +22,6 @@ Audio format.
 source: AudioSourceData;
 ```
 
-Defined in: [src/types/media.ts:156](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/media.ts#L156)
+Defined in: [src/types/media.ts:156](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/media.ts#L156)
 
 Audio source.

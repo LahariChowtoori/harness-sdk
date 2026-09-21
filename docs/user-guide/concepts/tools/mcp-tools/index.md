@@ -221,7 +221,7 @@ oauth_mcp_client = MCPClient(
 
 `scopes` is joined with spaces and is advisory only: if the server advertises its own scopes (via the `WWW-Authenticate` header or its protected-resource / authorization-server metadata), the server’s scopes are used instead and this value is ignored. Token acquisition and refresh happen automatically. The `headers` parameter can be combined with `auth` when the server also expects custom headers.
 
-For advanced flows such as the interactive authorization\_code grant, pass any `httpx.Auth` implementation as `auth_provider` instead. The `mcp` package’s `OAuthClientProvider` is one such implementation:
+For advanced flows such as the interactive authorization\_code grant, pass an authentication provider as `auth_provider`. Providers from the installed `mcp` package pass through directly. Strands also adapts header-mutating `httpx.Auth` implementations for transports that use `httpx2`. The `mcp` package’s `OAuthClientProvider` works across both supported major versions:
 
 ```python
 from mcp.client.auth import OAuthClientProvider
@@ -298,6 +298,37 @@ const githubMcpClient = new McpClient({
   ) as Transport,
 })
 ```
+
+#### OAuth Authentication
+
+For machine-to-machine authentication, pass the server `url` and an `auth` credential. `McpClient` constructs the Streamable HTTP transport and exchanges the client credentials for tokens:
+
+```typescript
+import { Agent, McpClient } from '@strands-agents/sdk'
+
+const clientId = process.env.OAUTH_CLIENT_ID
+const clientSecret = process.env.OAUTH_CLIENT_SECRET
+
+if (!clientId || !clientSecret) {
+  throw new Error('Set OAUTH_CLIENT_ID and OAUTH_CLIENT_SECRET')
+}
+
+const oauthMcpClient = new McpClient({
+  url: 'https://api.example.com/mcp/',
+  auth: {
+    clientId,
+    clientSecret,
+    scopes: ['mcp:tools'],
+  },
+  headers: { 'X-Client-Name': 'support-agent' },
+})
+
+const agent = new Agent({ tools: [oauthMcpClient] })
+```
+
+The optional `scopes` array is joined with spaces for the token request. Use `headers` when the server requires additional headers alongside OAuth.
+
+For advanced OAuth flows, pass an `OAuthClientProvider` as `authProvider`. The `auth` and `authProvider` options are mutually exclusive, both require `url`, and OAuth is supported only with Streamable HTTP. Declarative configuration supports the same `auth` credential through [`loadServers`](#using-multiple-mcp-servers).
 (( /tab "TypeScript" ))
 
 ### Server-Sent Events (SSE)
@@ -357,6 +388,37 @@ with sse_mcp_client, stdio_mcp_client:
 # Managed approach
 agent = Agent(tools=[sse_mcp_client, stdio_mcp_client])
 ```
+
+**Load from configuration**
+
+Use `load_servers` to create clients from a dictionary or JSON file. Transport types are detected from `command` or `url`, and environment placeholders keep credentials out of the configuration:
+
+```python
+from strands import Agent
+from strands.tools.mcp import MCPClient
+
+clients = MCPClient.load_servers(
+    {
+        "mcpServers": {
+            "documentation": {
+                "command": "uvx",
+                "args": ["awslabs.aws-documentation-mcp-server@latest"],
+            },
+            "protected-api": {
+                "url": "https://api.example.com/mcp/",
+                "auth": {
+                    "client_id": "${OAUTH_CLIENT_ID}",
+                    "client_secret": "${OAUTH_CLIENT_SECRET}",
+                    "scopes": ["mcp:tools"],
+                },
+            },
+        }
+    },
+    prefix_with_server_name=True,
+)
+
+agent = Agent(tools=clients)
+```
 (( /tab "Python" ))
 
 (( tab "TypeScript" ))
@@ -379,6 +441,37 @@ const agentMultiple = new Agent({
   tools: [localClient, remoteClient],
 })
 ```
+
+**Load from configuration**
+
+In Node.js, use `loadServers` to create clients from an object or JSON file. Transport types are detected from `command` or `url`, and environment placeholders keep credentials out of the configuration:
+
+```typescript
+import { Agent, McpClient } from '@strands-agents/sdk'
+
+const clients = await McpClient.loadServers(
+  {
+    documentation: {
+      command: 'uvx',
+      args: ['awslabs.aws-documentation-mcp-server@latest'],
+    },
+    protectedApi: {
+      url: 'https://api.example.com/mcp/',
+      auth: {
+        clientId: '${OAUTH_CLIENT_ID}',
+        clientSecret: '${OAUTH_CLIENT_SECRET}',
+        scopes: ['mcp:tools'],
+      },
+    },
+  },
+  undefined, // Skip optional client defaults
+  { prefixWithServerName: true }
+)
+
+const agent = new Agent({ tools: clients })
+```
+
+Set `prefixWithServerName` when servers expose tools with overlapping names. A server-level `prefix` overrides the generated prefix, and `prefix: ''` disables it.
 (( /tab "TypeScript" ))
 
 ## Client Configuration
@@ -821,4 +914,7 @@ When tool execution fails:
 
 ### TypeScript
 
+- [harness-sdk/strands-ts/src/mcp/client.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/mcp/client.ts)
+- [harness-sdk/strands-ts/src/mcp/config.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/mcp/config.ts)
+- [harness-sdk/strands-ts/src/mcp/config.node.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/mcp/config.node.ts)
 - [harness-sdk/strands-ts/src/tools/mcp-tool.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/tools/mcp-tool.ts)

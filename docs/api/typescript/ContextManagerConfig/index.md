@@ -1,4 +1,4 @@
-Defined in: [src/context-manager/types.ts:85](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/types.ts#L85)
+Defined in: [src/context-manager/types.ts:85](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/context-manager/types.ts#L85)
 
 **`Experimental`**
 
@@ -17,7 +17,7 @@ optional strategies?: (
   | "staleToolCleanup")[];
 ```
 
-Defined in: [src/context-manager/types.ts:95](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/types.ts#L95)
+Defined in: [src/context-manager/types.ts:95](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/context-manager/types.ts#L95)
 
 **`Experimental`**
 
@@ -33,7 +33,7 @@ Accepts raw `ContextStrategy` objects, preset name strings (e.g. `'largeToolOffl
 optional stash?: boolean | StashConfig;
 ```
 
-Defined in: [src/context-manager/types.ts:105](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/context-manager/types.ts#L105)
+Defined in: [src/context-manager/types.ts:105](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/context-manager/types.ts#L105)
 
 **`Experimental`**
 

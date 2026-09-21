@@ -350,20 +350,29 @@ const response = await agent.invoke('Write a short story about an AI assistant.'
 
 #### TypeScript Request Timeout
 
-The TypeScript SDK applies a default `requestTimeout` of 120000 ms (120 seconds) when constructing the Bedrock Runtime client, since the underlying AWS SDK defaults to `0` (disabled), which lets a stuck connection hang. Override it by passing your own value through `clientConfig.requestHandler`:
+The TypeScript SDK applies a default `requestTimeout` of 120000 ms (120 seconds) when constructing the Bedrock Runtime client, since the underlying AWS SDK defaults to `0` (disabled), which lets a stuck connection hang. The timeout counts stream inactivity, so a long-thinking model or a large tool-call payload that keeps the stream quiet past the limit fails with `Stream timed out because of no activity`. Raise it with the `requestTimeout` option:
 
 ```typescript
 import { BedrockModel } from '@strands-agents/sdk/models/bedrock'
 
 const bedrockModel = new BedrockModel({
   modelId: 'global.anthropic.claude-sonnet-4-6',
+  requestTimeout: 600_000, // 10 minutes
+})
+```
+
+The same value can also be set through `clientConfig.requestHandler` alongside other handler options; when both are given, the top-level `requestTimeout` wins:
+
+```typescript
+const bedrockModel = new BedrockModel({
+  modelId: 'global.anthropic.claude-sonnet-4-6',
   clientConfig: {
-    requestHandler: { requestTimeout: 60_000 },
+    requestHandler: { requestTimeout: 600_000, connectionTimeout: 5_000 },
   },
 })
 ```
 
-Passing a fully-constructed handler instance (rather than an options bag) bypasses the default; the handler’s own timeouts apply unchanged.
+Passing a fully-constructed handler instance (rather than an options bag) bypasses both; the handler’s own timeouts apply unchanged and a `requestTimeout` option is ignored with a warning.
 
 ## Advanced Features
 

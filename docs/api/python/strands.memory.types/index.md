@@ -231,7 +231,7 @@ Declarative identity and behavior fields a store is configured with.
 class MemoryStore(Protocol)
 ```
 
-Defined in: [src/strands/memory/types.py:254](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L254)
+Defined in: [src/strands/memory/types.py:263](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L263)
 
 Runtime contract for a memory store backend.
 
@@ -252,7 +252,7 @@ async def search(query: str,
                  options: SearchOptions | None = None) -> list[MemoryEntry]
 ```
 
-Defined in: [src/strands/memory/types.py:275](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L275)
+Defined in: [src/strands/memory/types.py:284](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L284)
 
 Search the store for entries matching the query, ordered by relevance.
 
@@ -262,7 +262,7 @@ Search the store for entries matching the query, ordered by relevance.
 async def add(content: str, metadata: Metadata | None = None) -> Any
 ```
 
-Defined in: [src/strands/memory/types.py:281](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L281)
+Defined in: [src/strands/memory/types.py:295](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L295)
 
 Add a single piece of content to the store.
 
@@ -275,7 +275,7 @@ async def add_messages(messages: list[Message],
                        context: AddMessagesContext | None = None) -> Any
 ```
 
-Defined in: [src/strands/memory/types.py:290](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L290)
+Defined in: [src/strands/memory/types.py:304](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L304)
 
 Ingest a batch of conversation messages, preserving role structure.
 
@@ -287,7 +287,7 @@ The sink for extraction without a client-side extractor: the manager hands the f
 async def initialize() -> None
 ```
 
-Defined in: [src/strands/memory/types.py:299](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L299)
+Defined in: [src/strands/memory/types.py:313](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L313)
 
 Perform async setup that must succeed before the agent runs.
 
@@ -299,6 +299,6 @@ Called by the `MemoryManager` during `init_agent`. Stores that require remote re
 def get_tools() -> list[AgentTool]
 ```
 
-Defined in: [src/strands/memory/types.py:307](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L307)
+Defined in: [src/strands/memory/types.py:321](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/memory/types.py#L321)
 
 Return store-specific tools to register alongside the manager’s tools.

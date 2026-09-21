@@ -30,7 +30,7 @@ After installing the Gemini Live and local audio extras, create a voice agent:
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import GoogleGeminiLiveModel
 from strands_tools import calculator, stop
@@ -64,10 +64,10 @@ Pass Google GenAI client options through `client_args`. For the supported fields
 | Parameter | Description | Example | Options |
 | --- | --- | --- | --- |
 | `model_id` | Gemini Live model identifier. | `"gemini-2.5-flash-native-audio-preview-09-2025"` | [Gemini models](https://ai.google.dev/gemini-api/docs/models) |
-| `audio` | Input audio options. | `{"input": {"sample_rate": 48000}}` | [reference](/docs/api/python/strands.experimental.bidi.models.google#GoogleGeminiLiveAudioConfig) |
+| `audio` | Input audio options. | `{"input": {"sample_rate": 48000}}` | [reference](/docs/api/python/strands.experimental.bidi.models#GoogleGeminiLiveAudioConfig) |
 | `voice` | Prebuilt output voice name. Uses the provider default when omitted. | `"Kore"` | [Voices and languages](https://docs.cloud.google.com/text-to-speech/docs/list-voices-and-types) |
 | `params` | Gemini Live session parameters. | `{"temperature": 0.7}` | [`LiveConnectConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.LiveConnectConfig) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models.configs#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
 
 ### Additional Provider Options
 
@@ -105,7 +105,7 @@ Set your Google AI API key through `client_args` or the `GOOGLE_API_KEY` environ
 
 -   [Gemini Live API](https://ai.google.dev/gemini-api/docs/live)
 -   [Gemini API Reference](https://googleapis.github.io/python-genai/genai.html#)
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.models.google#GoogleGeminiLiveModel)
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.models#GoogleGeminiLiveModel)
 
 ## Related pages
 

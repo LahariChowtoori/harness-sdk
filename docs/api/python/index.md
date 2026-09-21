@@ -174,9 +174,15 @@
 -   **Vended Tools**
     -   **File Editor**
         -   [File Editor](/docs/api/python/strands.vended_tools.file_editor.file_editor)
+    -   **Handoff To User**
+        -   [Handoff To User](/docs/api/python/strands.vended_tools.handoff_to_user.handoff_to_user)
+        -   [Types](/docs/api/python/strands.vended_tools.handoff_to_user.types)
     -   **Http Request**
         -   [Http Request](/docs/api/python/strands.vended_tools.http_request.http_request)
         -   [Types](/docs/api/python/strands.vended_tools.http_request.types)
+    -   **Mcp Router**
+        -   [Mcp Router](/docs/api/python/strands.vended_tools.mcp_router.mcp_router)
+        -   [Types](/docs/api/python/strands.vended_tools.mcp_router.types)
     -   **Notebook**
         -   [Notebook](/docs/api/python/strands.vended_tools.notebook.notebook)
         -   [Types](/docs/api/python/strands.vended_tools.notebook.types)
@@ -192,31 +198,12 @@
 -   **Experimental**
     -   [Agent Config](/docs/api/python/strands.experimental.agent_config)
     -   **Bidi**
-        -   [Overview](/docs/api/python/strands.experimental.bidi)
-        -   **Agent**
-            -   [Agent](/docs/api/python/strands.experimental.bidi.agent.agent)
-            -   [Loop](/docs/api/python/strands.experimental.bidi.agent.loop)
-        -   **Hooks**
-            -   [Events](/docs/api/python/strands.experimental.bidi.hooks.events)
-        -   **Io**
-            -   [Overview](/docs/api/python/strands.experimental.bidi.io)
-            -   [Audio](/docs/api/python/strands.experimental.bidi.io.audio)
-            -   [Text](/docs/api/python/strands.experimental.bidi.io.text)
-            -   [Transcript](/docs/api/python/strands.experimental.bidi.io.transcript)
-        -   **Models**
-            -   [Overview](/docs/api/python/strands.experimental.bidi.models)
-            -   [Bedrock](/docs/api/python/strands.experimental.bidi.models.bedrock)
-            -   [Configs](/docs/api/python/strands.experimental.bidi.models.configs)
-            -   [Google](/docs/api/python/strands.experimental.bidi.models.google)
-            -   [Model](/docs/api/python/strands.experimental.bidi.models.model)
-            -   [Openai](/docs/api/python/strands.experimental.bidi.models.openai)
-        -   **Tools**
-            -   [Stop Conversation](/docs/api/python/strands.experimental.bidi.tools.stop_conversation)
-        -   **Types**
-            -   [Agent](/docs/api/python/strands.experimental.bidi.types.agent)
-            -   [Content](/docs/api/python/strands.experimental.bidi.types.content)
-            -   [Events](/docs/api/python/strands.experimental.bidi.types.events)
-            -   [Io](/docs/api/python/strands.experimental.bidi.types.io)
+        -   [Agent](/docs/api/python/strands.experimental.bidi.agent)
+        -   [Hooks](/docs/api/python/strands.experimental.bidi.hooks)
+        -   [Io](/docs/api/python/strands.experimental.bidi.io)
+        -   [Models](/docs/api/python/strands.experimental.bidi.models)
+        -   [Tools](/docs/api/python/strands.experimental.bidi.tools)
+        -   [Types](/docs/api/python/strands.experimental.bidi.types)
     -   **Checkpoint**
         -   [Checkpoint](/docs/api/python/strands.experimental.checkpoint.checkpoint)
     -   **Tools**

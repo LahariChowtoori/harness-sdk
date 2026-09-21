@@ -265,6 +265,7 @@
   - [nebius-token-factory](https://strandsagents.com/docs/integrations/model-providers/nebius-token-factory/index.md): Use Nebius Token Factory with Strands agents for fast open-source model inference through the OpenAI-compatible API.
   - [nvidia-nim](https://strandsagents.com/docs/integrations/model-providers/nvidia-nim/index.md): Connect Strands agents to NVIDIA NIM inference microservices with the strands-nvidia-nim community model provider.
   - [openrouter](https://strandsagents.com/docs/integrations/model-providers/openrouter/index.md): Run Strands agents on hundreds of models through OpenRouter, using the SDK's built-in OpenAI provider against the OpenAI-compatible endpoint.
+  - [orcarouter](https://strandsagents.com/docs/integrations/model-providers/orcarouter/index.md): Run Strands agents on many models through OrcaRouter, using the SDK's built-in OpenAI provider against the OpenAI-compatible endpoint.
   - [sglang](https://strandsagents.com/docs/integrations/model-providers/sglang/index.md): Use SGLang servers as a Strands model provider with Token-In/Token-Out support for agentic reinforcement learning training.
   - [vllm](https://strandsagents.com/docs/integrations/model-providers/vllm/index.md): Serve Strands agents from vLLM with Token-In/Token-Out support for agentic RL training via the OpenAI-compatible API.
   - [mlx](https://strandsagents.com/docs/integrations/model-providers/mlx/index.md): Run Strands agents locally on Apple Silicon with the MLX model provider, supporting inference, LoRA fine-tuning, and vision.
@@ -308,25 +309,12 @@
 - [strands.event_loop.event_loop](https://strandsagents.com/docs/api/python/strands.event_loop.event_loop/index.md)
 - [strands.event_loop.streaming](https://strandsagents.com/docs/api/python/strands.event_loop.streaming/index.md)
 - [strands.experimental.agent_config](https://strandsagents.com/docs/api/python/strands.experimental.agent_config/index.md)
-- [strands.experimental.bidi](https://strandsagents.com/docs/api/python/strands.experimental.bidi/index.md)
-- [strands.experimental.bidi.agent.agent](https://strandsagents.com/docs/api/python/strands.experimental.bidi.agent.agent/index.md)
-- [strands.experimental.bidi.agent.loop](https://strandsagents.com/docs/api/python/strands.experimental.bidi.agent.loop/index.md)
-- [strands.experimental.bidi.hooks.events](https://strandsagents.com/docs/api/python/strands.experimental.bidi.hooks.events/index.md)
+- [strands.experimental.bidi.agent](https://strandsagents.com/docs/api/python/strands.experimental.bidi.agent/index.md)
+- [strands.experimental.bidi.hooks](https://strandsagents.com/docs/api/python/strands.experimental.bidi.hooks/index.md)
 - [strands.experimental.bidi.io](https://strandsagents.com/docs/api/python/strands.experimental.bidi.io/index.md)
-- [strands.experimental.bidi.io.audio](https://strandsagents.com/docs/api/python/strands.experimental.bidi.io.audio/index.md)
-- [strands.experimental.bidi.io.text](https://strandsagents.com/docs/api/python/strands.experimental.bidi.io.text/index.md)
-- [strands.experimental.bidi.io.transcript](https://strandsagents.com/docs/api/python/strands.experimental.bidi.io.transcript/index.md)
 - [strands.experimental.bidi.models](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models/index.md)
-- [strands.experimental.bidi.models.bedrock](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.bedrock/index.md)
-- [strands.experimental.bidi.models.configs](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.configs/index.md)
-- [strands.experimental.bidi.models.google](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.google/index.md)
-- [strands.experimental.bidi.models.model](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.model/index.md)
-- [strands.experimental.bidi.models.openai](https://strandsagents.com/docs/api/python/strands.experimental.bidi.models.openai/index.md)
-- [strands.experimental.bidi.tools.stop_conversation](https://strandsagents.com/docs/api/python/strands.experimental.bidi.tools.stop_conversation/index.md)
-- [strands.experimental.bidi.types.agent](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.agent/index.md)
-- [strands.experimental.bidi.types.content](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.content/index.md)
-- [strands.experimental.bidi.types.events](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.events/index.md)
-- [strands.experimental.bidi.types.io](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types.io/index.md)
+- [strands.experimental.bidi.tools](https://strandsagents.com/docs/api/python/strands.experimental.bidi.tools/index.md)
+- [strands.experimental.bidi.types](https://strandsagents.com/docs/api/python/strands.experimental.bidi.types/index.md)
 - [strands.experimental.checkpoint.checkpoint](https://strandsagents.com/docs/api/python/strands.experimental.checkpoint.checkpoint/index.md)
 - [strands.experimental.tools.stop.stop](https://strandsagents.com/docs/api/python/strands.experimental.tools.stop.stop/index.md)
 - [strands.handlers.callback_handler](https://strandsagents.com/docs/api/python/strands.handlers.callback_handler/index.md)
@@ -448,8 +436,12 @@
 - [strands.vended_plugins.steering.handlers.llm.llm_handler](https://strandsagents.com/docs/api/python/strands.vended_plugins.steering.handlers.llm.llm_handler/index.md)
 - [strands.vended_plugins.steering.handlers.llm.mappers](https://strandsagents.com/docs/api/python/strands.vended_plugins.steering.handlers.llm.mappers/index.md)
 - [strands.vended_tools.file_editor.file_editor](https://strandsagents.com/docs/api/python/strands.vended_tools.file_editor.file_editor/index.md)
+- [strands.vended_tools.handoff_to_user.handoff_to_user](https://strandsagents.com/docs/api/python/strands.vended_tools.handoff_to_user.handoff_to_user/index.md)
+- [strands.vended_tools.handoff_to_user.types](https://strandsagents.com/docs/api/python/strands.vended_tools.handoff_to_user.types/index.md)
 - [strands.vended_tools.http_request.http_request](https://strandsagents.com/docs/api/python/strands.vended_tools.http_request.http_request/index.md)
 - [strands.vended_tools.http_request.types](https://strandsagents.com/docs/api/python/strands.vended_tools.http_request.types/index.md)
+- [strands.vended_tools.mcp_router.mcp_router](https://strandsagents.com/docs/api/python/strands.vended_tools.mcp_router.mcp_router/index.md)
+- [strands.vended_tools.mcp_router.types](https://strandsagents.com/docs/api/python/strands.vended_tools.mcp_router.types/index.md)
 - [strands.vended_tools.notebook.notebook](https://strandsagents.com/docs/api/python/strands.vended_tools.notebook.notebook/index.md)
 - [strands.vended_tools.notebook.types](https://strandsagents.com/docs/api/python/strands.vended_tools.notebook.types/index.md)
 - [strands.vended_tools.shell.shell](https://strandsagents.com/docs/api/python/strands.vended_tools.shell.shell/index.md)
@@ -789,6 +781,7 @@
 
 ## Blog
 
+- [Introducing Strands harness: frontier performance with 28% lower token cost](https://strandsagents.com/blog/introducing-strands-harness/index.md): Strands harness is a fully assembled, customizable, state-of-the-art agent you run locally or deploy anywhere.
 - [Framework-agnostic evaluation with Strands Evals](https://strandsagents.com/blog/framework-agnostic-evaluation-strands-evals/index.md): Strands Evals supports agents built with Claude Agents SDK, OpenAI Agents, Google ADK, and more. Learn how it achieves compatibility with other frameworks and how you can begin writing cross-framework experiments.
 - [Strands Team AI Usage Reflection](https://strandsagents.com/blog/ai-usage-reflection/index.md): A reflection on the impact that AI has had on the strands agents team, our thoughts about it, and how we intend to address the issues we are facing.
 - [Our production SDK hit 99.95% on ARC-AGI-3](https://strandsagents.com/blog/our-production-sdk-hit-99-95-on-arc-agi-3/index.md): Strands Agents scored 99.95% on ARC-AGI-3 using the same minimal harness that developers ship to production every day

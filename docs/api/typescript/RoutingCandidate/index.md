@@ -1,4 +1,4 @@
-Defined in: [src/models/routing/router.ts:57](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/routing/router.ts#L57)
+Defined in: [src/models/routing/router.ts:57](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/router.ts#L57)
 
 A model or opaque model group with optional strategy-facing evidence.
 
@@ -14,7 +14,7 @@ Base instances are frozen automatically. Subclasses must freeze themselves after
 new RoutingCandidate(options): RoutingCandidate;
 ```
 
-Defined in: [src/models/routing/router.ts:75](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/routing/router.ts#L75)
+Defined in: [src/models/routing/router.ts:75](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/router.ts#L75)
 
 Create an immutable routing candidate.
 
@@ -50,7 +50,7 @@ readonly model:
   | ModelRouter;
 ```
 
-Defined in: [src/models/routing/router.ts:59](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/routing/router.ts#L59)
+Defined in: [src/models/routing/router.ts:59](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/router.ts#L59)
 
 Concrete model or opaque nested router.
 
@@ -62,7 +62,7 @@ Concrete model or opaque nested router.
 readonly optional name?: string;
 ```
 
-Defined in: [src/models/routing/router.ts:61](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/routing/router.ts#L61)
+Defined in: [src/models/routing/router.ts:61](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/router.ts#L61)
 
 Optional strategy-facing name.
 
@@ -74,7 +74,7 @@ Optional strategy-facing name.
 readonly optional description?: string;
 ```
 
-Defined in: [src/models/routing/router.ts:63](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/routing/router.ts#L63)
+Defined in: [src/models/routing/router.ts:63](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/router.ts#L63)
 
 Optional strategy-facing description.
 
@@ -86,6 +86,6 @@ Optional strategy-facing description.
 readonly optional metadata?: Readonly<Record<string, JSONValue>>;
 ```
 
-Defined in: [src/models/routing/router.ts:65](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/models/routing/router.ts#L65)
+Defined in: [src/models/routing/router.ts:65](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/models/routing/router.ts#L65)
 
 Optional strategy-facing evidence; must be JSON-serializable and free of secrets.

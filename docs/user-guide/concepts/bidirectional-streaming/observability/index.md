@@ -15,7 +15,8 @@ Tracing configuration is identical to the non-streaming agent. Configure OpenTel
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent, BidiConnectionStartEvent
+from strands.experimental.bidi.agent import BidiAgent
+from strands.experimental.bidi.types import BidiConnectionStartEvent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.telemetry import StrandsTelemetry
 
@@ -225,7 +226,7 @@ Register a hook provider to accumulate session health counters:
 ```python
 import logging
 
-from strands.experimental.bidi.hooks.events import (
+from strands.experimental.bidi.hooks import (
     BidiAfterConnectionRestartEvent,
     BidiInterruptionEvent,
 )
@@ -261,11 +262,8 @@ Pass it in with `hooks=[SessionStats()]` when constructing the agent. `BidiAfter
 Traces record aggregate session tokens. The per-modality breakdown is only available on the event stream:
 
 ```python
-from strands.experimental.bidi import (
-    BidiAgent,
-    BidiResponseCompleteEvent,
-    BidiUsageEvent,
-)
+from strands.experimental.bidi.agent import BidiAgent
+from strands.experimental.bidi.types import BidiResponseCompleteEvent, BidiUsageEvent
 
 
 async def track_session(agent: BidiAgent) -> None:
@@ -389,7 +387,7 @@ Providers report streaming lifecycle events differently, which is reflected dire
 -   [Events](/docs/user-guide/concepts/bidirectional-streaming/events/index.md) - Complete guide to bidirectional streaming events
 -   [Hooks](/docs/user-guide/concepts/bidirectional-streaming/hooks/index.md) - Extend agent functionality with hooks
 -   [Interruptions](/docs/user-guide/concepts/bidirectional-streaming/interruption/index.md) - How barge-in detection works
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent.agent) - Complete API documentation
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent) - Complete API documentation
 
 ## Related pages
 

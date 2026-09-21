@@ -1,4 +1,4 @@
-Defined in: [src/plugins/plugin.ts:51](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/plugins/plugin.ts#L51)
+Defined in: [src/plugins/plugin.ts:51](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/plugins/plugin.ts#L51)
 
 Interface for objects that extend agent functionality.
 
@@ -47,7 +47,7 @@ class MyToolPlugin implements Plugin {
 readonly name: string;
 ```
 
-Defined in: [src/plugins/plugin.ts:58](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/plugins/plugin.ts#L58)
+Defined in: [src/plugins/plugin.ts:58](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/plugins/plugin.ts#L58)
 
 A stable string identifier for the plugin. Used for logging, duplicate detection, and plugin management.
 
@@ -61,7 +61,7 @@ For strands-vended plugins, names should be prefixed with `strands:`.
 initAgent(agent): void | Promise<void>;
 ```
 
-Defined in: [src/plugins/plugin.ts:68](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/plugins/plugin.ts#L68)
+Defined in: [src/plugins/plugin.ts:68](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/plugins/plugin.ts#L68)
 
 Initialize the plugin with the agent instance.
 
@@ -85,7 +85,7 @@ Implement this method to register hooks and perform custom initialization. Tool 
 optional getTools(): Tool[];
 ```
 
-Defined in: [src/plugins/plugin.ts:76](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/plugins/plugin.ts#L76)
+Defined in: [src/plugins/plugin.ts:76](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/plugins/plugin.ts#L76)
 
 Returns tools provided by this plugin for auto-registration. Called after [initAgent](#initagent) resolves; may depend on state set there.
 

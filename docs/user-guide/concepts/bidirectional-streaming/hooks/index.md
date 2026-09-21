@@ -26,7 +26,7 @@ Register related hooks together by implementing `register_hooks()`:
 
 ```python
 from strands import LocalAgent
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.hooks import BidiAgentStopEvent, BidiResponseCompleteEvent
 from strands.hooks import AgentInitializedEvent, HookRegistry, MessageAddedEvent
 
@@ -62,7 +62,7 @@ Register a single hook with `add_hook()`, which infers the event type:
 
 ```python
 from strands import LocalAgent
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.hooks import MessageAddedEvent
 
 
@@ -82,7 +82,7 @@ agent.add_hook(log_message)
 
 ```python
 from strands import LocalAgent, ToolContext, tool
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.hooks import AfterToolCallEvent, BeforeToolCallEvent
 
 
@@ -149,7 +149,7 @@ Choose hooks according to the boundary you need to observe:
 
 `BidiResponseCompleteEvent` carries `agent`, `response_id`, and `stop_reason`. Hooks run in registration order and finish before the corresponding streaming event reaches the consumer. The hook mirrors model-reported completion: shutdown or a connection failure without a completion event does not emit it.
 
-The hook and streaming event share a name but are separate classes. Import the hook from `strands.experimental.bidi.hooks`. Import the streaming event from `strands.experimental.bidi.types.events` when handling `agent.receive()` output.
+The hook and streaming event share a name but are separate classes. Import the hook from `strands.experimental.bidi.hooks`. Import the streaming event from `strands.experimental.bidi.types` when handling `agent.receive()` output.
 
 ## Cookbook
 
@@ -160,7 +160,7 @@ This section contains practical hook implementations for common use cases.
 Count interruptions and record their reasons:
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.hooks import BidiInterruptionEvent
 from strands.hooks import HookRegistry
 
@@ -186,7 +186,7 @@ agent = BidiAgent(hooks=[tracker])
 Track connection restart attempts and their outcomes:
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.hooks import (
     BidiAfterConnectionRestartEvent,
     BidiBeforeConnectionRestartEvent,
@@ -221,7 +221,7 @@ agent = BidiAgent(hooks=[ConnectionMonitor()])
 Count model-reported response completions and report the total when the agent stops:
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.hooks import BidiAgentStopEvent, BidiResponseCompleteEvent
 from strands.hooks import HookRegistry
 
@@ -255,7 +255,7 @@ Pass context through `start(invocation_state=...)` or `run(..., invocation_state
 
 ```python
 from strands import LocalAgent, tool
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.hooks import BeforeToolCallEvent
 
 
@@ -290,7 +290,7 @@ For more guidance on performance, errors, and composition, see the [Hooks docume
 -   [Agent](/docs/user-guide/concepts/bidirectional-streaming/agent/index.md) - Learn about BidiAgent configuration and lifecycle
 -   [Session Management](/docs/user-guide/concepts/bidirectional-streaming/session-management/index.md) - Persist conversations across sessions
 -   [Events](/docs/user-guide/concepts/bidirectional-streaming/events/index.md) - Complete guide to bidirectional streaming events
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent.agent) - Complete API documentation
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent) - Complete API documentation
 
 ## Related pages
 

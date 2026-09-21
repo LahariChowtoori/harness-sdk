@@ -22,9 +22,10 @@ Both protocols include optional lifecycle methods (`start` and `stop`) for resou
 Implementation of these protocols will look as follows:
 
 ```python
-from strands.experimental.bidi import BidiAgent, BidiAgentInput
-from strands.experimental.bidi.types.events import BidiOutputEvent
-from strands.experimental.bidi.types.io import BidiInput, BidiOutput
+from strands.experimental.bidi.agent import BidiAgent
+from strands.experimental.bidi.types import BidiAgentInput
+from strands.experimental.bidi.types import BidiOutputEvent
+from strands.experimental.bidi.types import BidiInput, BidiOutput
 
 
 class MyBidiInput(BidiInput):
@@ -62,7 +63,7 @@ To connect your I/O channels into the agent loop, you can pass them as arguments
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands_tools import stop
 
 
@@ -92,7 +93,7 @@ pip install "strands-agents[bidi,bidi-io,bidi-pyaudio]"
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.io import BidiAudioIO
 from strands_tools import stop
 
@@ -111,7 +112,7 @@ async def main():
 asyncio.run(main())
 ```
 
-This creates a voice-enabled agent that captures audio from your microphone, streams it to the model in real time, and plays responses through your speakers.
+This creates a voice-enabled agent that captures audio from your microphone, streams it to the model as `AudioDelta` inputs, and plays responses through your speakers.
 
 Audio output also displays live transcripts, with user speech in shaded `>` blocks and assistant speech as plain text. The next user prompt appears when response generation finishes or is interrupted.
 
@@ -155,7 +156,7 @@ pip install "strands-agents[bidi-io]"
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.io import BidiTextIO
 from strands_tools import stop
 
@@ -191,7 +192,7 @@ server.py
 ```python
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import OpenAIRealtimeModel
 
 app = FastAPI()

@@ -6,7 +6,7 @@ Summarizing conversation history management with configurable options.
 class SummarizingConversationManager(ConversationManager)
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:33](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L33)
+Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:34](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L34)
 
 Implements a summarizing window manager.
 
@@ -25,7 +25,7 @@ def __init__(summary_ratio: float = 0.3,
              | None = None)
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:41](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L41)
+Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:42](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L42)
 
 Initialize the summarizing conversation manager.
 
@@ -48,7 +48,7 @@ Initialize the summarizing conversation manager.
 def restore_from_session(state: dict[str, Any]) -> list[Message] | None
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:85](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L85)
+Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:86](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L86)
 
 Restores the Summarizing Conversation manager from its previous state in a session.
 
@@ -66,7 +66,7 @@ Optionally returns the previous conversation summary if it exists.
 def get_state() -> dict[str, Any]
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:98](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L98)
+Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:99](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L99)
 
 Returns a dictionary representation of the state for the Summarizing Conversation Manager.
 
@@ -76,7 +76,7 @@ Returns a dictionary representation of the state for the Summarizing Conversatio
 def apply_management(agent: "Agent", **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:102](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L102)
+Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:103](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L103)
 
 Apply management strategy to conversation history.
 
@@ -95,7 +95,7 @@ def reduce_context(agent: "Agent",
                    **kwargs: Any) -> None
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:116](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L116)
+Defined in: [src/strands/agent/conversation\_manager/summarizing\_conversation\_manager.py:117](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/summarizing_conversation_manager.py#L117)
 
 Reduce context using summarization.
 

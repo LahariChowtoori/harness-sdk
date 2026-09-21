@@ -87,7 +87,31 @@ A user-role message containing the model-generated summary.
 
 **Raises**:
 
--   `RuntimeError` - If the model fails to produce a response.
+-   `RuntimeError` - If the model fails to produce a response, or its reply carries no text.
+
+#### as\_user\_summary
+
+```python
+def as_user_summary(message: Message) -> Message
+```
+
+Defined in: [src/strands/agent/conversation\_manager/compression/context\_compression.py:194](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/compression/context_compression.py#L194)
+
+Re-role a model reply as the user-role summary message kept in history.
+
+Only the reply’s text is kept: providers reject reasoning and tool-use blocks in user messages (Bedrock: “User messages cannot contain reasoning content”).
+
+**Arguments**:
+
+-   `message` - The summarizer’s reply.
+
+**Returns**:
+
+A user-role message holding the reply’s text blocks.
+
+**Raises**:
+
+-   `RuntimeError` - If the reply carries no text.
 
 #### matches\_message\_type
 
@@ -95,7 +119,7 @@ A user-role message containing the model-generated summary.
 def matches_message_type(message: Message, filter: MessageType) -> bool
 ```
 
-Defined in: [src/strands/agent/conversation\_manager/compression/context\_compression.py:195](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/compression/context_compression.py#L195)
+Defined in: [src/strands/agent/conversation\_manager/compression/context\_compression.py:223](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/agent/conversation_manager/compression/context_compression.py#L223)
 
 Return True if the message matches the given type filter.
 

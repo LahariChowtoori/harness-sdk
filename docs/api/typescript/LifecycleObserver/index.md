@@ -1,4 +1,4 @@
-Defined in: [src/types/lifecycle-observer.ts:10](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/lifecycle-observer.ts#L10)
+Defined in: [src/types/lifecycle-observer.ts:10](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/lifecycle-observer.ts#L10)
 
 Implementors are given the agent at registration time so they can subscribe to hook events of their choice via LocalAgent.addHook. This is the extension point for components that need to observe arbitrary lifecycle events. Each observer method is optional — implementors define only the surfaces they care about, and the agent probes for each at registration.
 
@@ -10,7 +10,7 @@ Implementors are given the agent at registration time so they can subscribe to h
 readonly name: string;
 ```
 
-Defined in: [src/types/lifecycle-observer.ts:12](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/lifecycle-observer.ts#L12)
+Defined in: [src/types/lifecycle-observer.ts:12](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/lifecycle-observer.ts#L12)
 
 Stable identifier for this observer. Used for logging and duplicate detection.
 
@@ -22,7 +22,7 @@ Stable identifier for this observer. Used for logging and duplicate detection.
 optional observeAgent(agent): void | Promise<void>;
 ```
 
-Defined in: [src/types/lifecycle-observer.ts:18](https://github.com/strands-agents/harness-sdk/blob/3bbfb60ae79b3941305737c1c5ca1e7ef639361f/strands-ts/src/types/lifecycle-observer.ts#L18)
+Defined in: [src/types/lifecycle-observer.ts:18](https://github.com/strands-agents/harness-sdk/blob/f28adcd83d480d3a2edc76db0c583e8a26f50a63/strands-ts/src/types/lifecycle-observer.ts#L18)
 
 Called once when the observer is registered with an agent. Implementations typically subscribe to one or more events via `agent.addHook`.
 

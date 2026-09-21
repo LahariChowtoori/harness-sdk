@@ -56,7 +56,8 @@ print(result.message)  # "The result is 1200"
 
 ```python
 import asyncio
-from strands.experimental.bidi import BidiAgent, BidiAudioIO
+from strands.experimental.bidi.agent import BidiAgent
+from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
@@ -182,7 +183,7 @@ User → send() → Model → receive() → Model Task → Event Queue → recei
 ### Basic Configuration
 
 ```python
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
@@ -430,7 +431,7 @@ The agent automatically cleans up background tasks, model connections, I/O chann
 -   [Model Providers](/docs/user-guide/concepts/bidirectional-streaming/models/bedrock/index.md) - Provider-specific configuration
 -   [Observability](/docs/user-guide/concepts/bidirectional-streaming/observability/index.md) - Trace sessions, responses, and interruptions
 -   [Quickstart](/docs/user-guide/concepts/bidirectional-streaming/quickstart/index.md) - Getting started guide
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent.agent) - Complete API documentation
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent) - Complete API documentation
 
 ## Related pages
 

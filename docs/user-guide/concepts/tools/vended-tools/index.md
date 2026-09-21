@@ -26,7 +26,9 @@ const agent = new Agent({
 | [HTTP Request](#http-request) | Make HTTP requests to external APIs | Python, TypeScript (Node.js 22+, browsers) |
 | [Notebook](#notebook) | Manage persistent text notebooks | Python, TypeScript (Node.js, browsers) |
 | [Bash](#bash) | Execute shell commands with persistent sessions | Python, TypeScript (Node.js, Unix/Linux/macOS) |
+| [MCP Router](#mcp-router) | Connect to Model Context Protocol servers on a developer-set allowlist | Python |
 | [Sleep](#sleep) | Pause execution for a bounded, cancellable duration | Python, TypeScript (Node.js, browsers) |
+| [Handoff to User](#handoff-to-user) | Pause the agent loop and surface a message to the user | Python, TypeScript (Node.js, browsers) |
 | [Stop](#stop-experimental) | Gracefully end the agent loop when the task is complete | Python, TypeScript (Node.js, browsers) |
 | [Web Fetch](#web-fetch) | Fetch a URL and return cleaned markdown for a model to read | Python, TypeScript (Node.js) |
 
@@ -353,6 +355,77 @@ agent = Agent(tools=[short_sleep])
 
 ---
 
+### Handoff to User
+
+Lets the model pause the agent loop and surface a message to the user for human-in-the-loop input. Use this when the agent needs explicit confirmation, additional information, or user approval before proceeding.
+
+*Supported in: Node.js, modern browsers (TypeScript); all platforms (Python).*
+
+Bidirectional streaming not supported
+
+`handoff_to_user` relies on the interrupt/resume mechanism, which requires the agent loop to fully halt and restart. It cannot be used inside bidirectional streaming sessions, where the loop runs continuously without a clean pause point.
+
+The loop halts with a `stop_reason` / `stopReason` of `"interrupt"` and the message is available on the interrupt’s `reason` field in `AgentResult.interrupts`. Resume the agent by passing back an `interruptResponse` content block with the interrupt ID and the user’s reply; the tool then returns that reply as its result and the model continues. To recognize a handoff interrupt, match its `name` against the exported `HANDOFF_INTERRUPT_NAME` constant.
+
+Combining with HumanInTheLoop
+
+`HumanInTheLoop()` requires approval for every tool by default, so pairing it with `handoff_to_user` prompts the user twice — once to approve the call, then again to answer it. Allow-list the tool with `HumanInTheLoop(allowed_tools=["handoff_to_user"])` / `new HumanInTheLoop({ allowedTools: ["handoff_to_user"] })` so only the handoff itself prompts.
+
+**Example:**
+
+(( tab "TypeScript" ))
+```typescript
+import { Agent, InterruptResponseContent } from '@strands-agents/sdk'
+import { handoffToUser, HANDOFF_INTERRUPT_NAME } from '@strands-agents/sdk/vended-tools/handoff-to-user'
+
+const agent = new Agent({
+  tools: [handoffToUser],
+  systemPrompt:
+    'Before deleting any files, call handoff_to_user to confirm with the user.',
+})
+
+let result = await agent.invoke('Delete all .tmp files in /workspace.')
+const interrupt = result.interrupts?.find((i) => i.name === HANDOFF_INTERRUPT_NAME)
+if (interrupt) {
+  console.log(interrupt.reason)
+  result = await agent.invoke([
+    new InterruptResponseContent({ interruptId: interrupt.id, response: 'confirmed' }),
+  ])
+}
+```
+(( /tab "TypeScript" ))
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.vended_tools.handoff_to_user import HANDOFF_INTERRUPT_NAME, handoff_to_user
+
+agent = Agent(
+    tools=[handoff_to_user],
+    system_prompt=(
+        "Before deleting any files, call handoff_to_user to confirm with the user."
+    ),
+)
+
+result = agent("Delete all .tmp files in /workspace.")
+interrupt = next(i for i in (result.interrupts or []) if i.name == HANDOFF_INTERRUPT_NAME)
+print(interrupt.reason)
+
+resumed = agent([
+    {
+        "interruptResponse": {
+            "interruptId": interrupt.id,
+            "response": "confirmed",
+        }
+    }
+])
+```
+(( /tab "Python" ))
+
+📖 [Full API Reference](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/handoff-to-user/README.md)
+
+---
+
 ### Stop (Experimental)
 
 > This tool is experimental and subject to change in future revisions without notice.
@@ -514,6 +587,44 @@ agent = Agent(tools=[web_fetch])
 
 ---
 
+### MCP Router
+
+Lets your agent connect to Model Context Protocol servers at runtime, list the tools they expose, invoke one, and disconnect. The factory takes a developer-set allowlist of server configurations; the model can only initiate connections to servers on that list.
+
+The tool exposes five commands: `connect` (opens a named connection to an allowlisted server using a `connection_id`), `list_connections` (returns all open connection IDs for the current agent), `list_tools` (returns the tools the server exposes), `call_tool` (invokes a tool by name), and `disconnect` (closes a connection).
+
+Connections are scoped per agent and persist across invocations on the same agent instance. A connection is closed when the model calls `disconnect` explicitly, or when the agent is garbage collected. The connection remains open otherwise.
+
+*Supported in: all platforms (Python).*
+
+Security Warning
+
+The allowlist controls which servers the model may connect to. For HTTP servers, treat this like any network request — egress control belongs at the encapsulation layer. For stdio servers, the allowlisted command is spawned as a local process with access to the host filesystem, environment variables, and network. Only allowlist commands you would run directly on the host.
+
+**Example:**
+
+(( tab "Python" ))
+```python
+from strands import Agent
+from strands.vended_tools import make_mcp_router
+
+mcp_router = make_mcp_router(
+    servers={
+        "files": {"command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]},
+        "my-api": {"url": "https://mcp.example.com/mcp"},
+    },
+    max_connections=5,
+)
+agent = Agent(tools=[mcp_router])
+agent(
+    "Connect to 'files', list its tools, "
+    "call the read_file tool on /tmp/hello.txt, then disconnect."
+)
+```
+(( /tab "Python" ))
+
+---
+
 ## Using Multiple Tools Together
 
 Combine vended tools to build powerful agent workflows:
@@ -572,6 +683,7 @@ Tool names are stable and will not change. In minor versions, a tool’s descrip
 ### TypeScript
 
 - [harness-sdk/strands-ts/src/vended-tools/file-editor/file-editor.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/file-editor/file-editor.ts)
+- [harness-sdk/strands-ts/src/vended-tools/handoff-to-user/handoff-to-user.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/handoff-to-user/handoff-to-user.ts)
 - [harness-sdk/strands-ts/src/vended-tools/bash/bash.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/bash/bash.ts)
 - [harness-sdk/strands-ts/src/vended-tools/http-request/http-request.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/http-request/http-request.ts)
 - [harness-sdk/strands-ts/src/vended-tools/notebook/notebook.ts](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/vended-tools/notebook/notebook.ts)
@@ -581,8 +693,10 @@ Tool names are stable and will not change. In minor versions, a tool’s descrip
 
 ### Python
 
+- [harness-sdk/strands-py/src/strands/vended_tools/handoff_to_user/handoff_to_user.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/handoff_to_user/handoff_to_user.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/http_request/http_request.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/http_request/http_request.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/notebook/notebook.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/notebook/notebook.py)
+- [harness-sdk/strands-py/src/strands/vended_tools/mcp_router/mcp_router.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/mcp_router/mcp_router.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/shell/shell.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/shell/shell.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/sleep/sleep.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/sleep/sleep.py)
 - [harness-sdk/strands-py/src/strands/vended_tools/web_fetch/web_fetch.py](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/vended_tools/web_fetch/web_fetch.py)

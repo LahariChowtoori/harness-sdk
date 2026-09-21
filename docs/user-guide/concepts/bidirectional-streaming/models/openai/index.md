@@ -29,7 +29,7 @@ After installing the OpenAI Realtime and local audio extras, create a voice agen
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.io import BidiAudioIO
 from strands.experimental.bidi.models import OpenAIRealtimeModel
 from strands_tools import calculator, stop
@@ -70,7 +70,7 @@ if __name__ == "__main__":
 | `model_id` | OpenAI Realtime model identifier. | `"gpt-realtime"` | [OpenAI models](https://platform.openai.com/docs/models) |
 | `voice` | Output voice identifier. Defaults to `"alloy"`. | `"coral"` | [Voice options](https://platform.openai.com/docs/guides/realtime-conversations#voice-options) |
 | `params` | OpenAI Realtime session parameters. Audio must remain mono PCM at 24000 Hz. | `{"max_output_tokens": 4096}` | [`session.update`](https://platform.openai.com/docs/api-reference/realtime-client-events/session/update) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models.configs#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
 
 ### Additional Provider Options
 
@@ -104,7 +104,7 @@ Set the `OPENAI_API_KEY` environment variable or pass the key through `api_key`.
 
 -   [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime)
 -   [OpenAI API Reference](https://platform.openai.com/docs/api-reference/realtime)
--   [Python API Reference](/docs/api/python/strands.experimental.bidi.models.openai#OpenAIRealtimeModel)
+-   [Python API Reference](/docs/api/python/strands.experimental.bidi.models#OpenAIRealtimeModel)
 
 ## Related pages
 
