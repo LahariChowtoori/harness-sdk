@@ -26,6 +26,16 @@ await agent.invoke("Research the top three vector databases, compare pricing and
 
 Amazon Bedrock is the default. See [choose a model](/docs/user-guide/harness/configure/model/index.md) to run on Anthropic, OpenAI, Google, or Ollama.
 
+Strands harness is open source — browse the source on GitHub:
+
+(( tab "Python" ))
+[`harness-py`](https://github.com/strands-agents/harness-sdk/tree/main/harness-py) — the Python package.
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+[`harness-ts`](https://github.com/strands-agents/harness-sdk/tree/main/harness-ts) — the TypeScript package.
+(( /tab "TypeScript" ))
+
 ## Make it yours
 
 Strands harness is a powerful general-purpose harness that you can customize. It is opinionated in its implementation but not restrictive: every default is overridable, and what you get back is a standard Strands `Agent` with no wrapper or hidden abstraction. As your use case gets more specific, override the defaults that matter for it and keep the rest.

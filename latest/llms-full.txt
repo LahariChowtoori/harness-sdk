@@ -19190,6 +19190,16 @@ await agent.invoke("Research the top three vector databases, compare pricing and
 
 Amazon Bedrock is the default. See [choose a model](/docs/user-guide/harness/configure/model/index.md) to run on Anthropic, OpenAI, Google, or Ollama.
 
+Strands harness is open source — browse the source on GitHub:
+
+(( tab "Python" ))
+[`harness-py`](https://github.com/strands-agents/harness-sdk/tree/main/harness-py) — the Python package.
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+[`harness-ts`](https://github.com/strands-agents/harness-sdk/tree/main/harness-ts) — the TypeScript package.
+(( /tab "TypeScript" ))
+
 ## Make it yours
 
 Strands harness is a powerful general-purpose harness that you can customize. It is opinionated in its implementation but not restrictive: every default is overridable, and what you get back is a standard Strands `Agent` with no wrapper or hidden abstraction. As your use case gets more specific, override the defaults that matter for it and keep the rest.
@@ -20827,7 +20837,15 @@ When you’re ready to embed the agent in an application, `/export` writes a Pyt
 
 ## Use it as a library
 
-Prefer to write the code yourself? Install the Python or TypeScript package and run your first agent in a few lines.
+Prefer to write the code yourself? Install the Python or TypeScript package and run your first agent in a few lines. The source lives on GitHub:
+
+(( tab "Python" ))
+[`harness-py`](https://github.com/strands-agents/harness-sdk/tree/main/harness-py) — the Python package.
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+[`harness-ts`](https://github.com/strands-agents/harness-sdk/tree/main/harness-ts) — the TypeScript package.
+(( /tab "TypeScript" ))
 
 ### Install
 
@@ -63482,7 +63500,7 @@ We noticed builders often wished their Claude Code or Codex setup could run in t
 
 But the moment you build your own agent, you’re on your own. It’s tricky wiring up the right primitives just well enough to match that “it just worked” feeling.
 
-Today we’re releasing Strands harness: a fully assembled state-of-the-art agent harness you can easily run locally or deploy to your favorite provider. It’s built to be a general-purpose agent rather than a coding agent. All you need is one line of Python or TypeScript to get it working with your choice of model. Strands harness beats other agent harnesses on cost efficiency while maintaining equal or better accuracy. It’s available under an Apache 2.0 license.
+Today we’re releasing [Strands harness](https://github.com/strands-agents/harness-sdk/tree/main): a fully assembled state-of-the-art agent harness you can easily run locally or deploy to your favorite provider. It’s built to be a general-purpose agent rather than a coding agent. All you need is one line of Python or TypeScript to get it working with your choice of model. Strands harness beats other agent harnesses on cost efficiency while maintaining equal or better accuracy. It’s available under an Apache 2.0 license.
 
 Strands harness **costs 28% less** when using the same Claude or GPT models across six benchmarks. We found Strands harness showed better token-efficiency and nearly equal benchmark scores compared to Claude Code, Codex, and other popular harnesses. That’s important because we never want to sacrifice accuracy for lower cost. Deepseek Harness proved to be the most token-efficient overall, however, it typically reported the lowest accuracy scores. Our testing setup was distributed benchmarking on EC2 with Harbor.
 
@@ -63647,7 +63665,7 @@ We’re excited for all kinds of agents that’ll come to life with Strands harn
 
 ## Try it out today
 
-You can easily install Strands harness with `pip install strands-harness` for Python or `npm install @strands-agents/harness` for TypeScript.
+You can easily install [Strands harness](https://strandsagents.com/docs/user-guide/harness/) with `pip install strands-harness` for Python or `npm install @strands-agents/harness` for TypeScript. For an interactive experience, download the Strands CLI: `npm install -g @strands-agents/cli`.
 
 We believe quickly prototyping with a batteries included harness will create more useful agents. Our team is also in [Discord](https://discord.gg/strands), so come say hi or ask us any question about agents!
 

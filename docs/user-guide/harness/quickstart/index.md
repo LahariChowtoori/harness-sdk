@@ -55,7 +55,15 @@ When you’re ready to embed the agent in an application, `/export` writes a Pyt
 
 ## Use it as a library
 
-Prefer to write the code yourself? Install the Python or TypeScript package and run your first agent in a few lines.
+Prefer to write the code yourself? Install the Python or TypeScript package and run your first agent in a few lines. The source lives on GitHub:
+
+(( tab "Python" ))
+[`harness-py`](https://github.com/strands-agents/harness-sdk/tree/main/harness-py) — the Python package.
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+[`harness-ts`](https://github.com/strands-agents/harness-sdk/tree/main/harness-ts) — the TypeScript package.
+(( /tab "TypeScript" ))
 
 ### Install
 
