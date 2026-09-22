@@ -23,17 +23,17 @@ The interruption flow: Model’s VAD detects user speech → `BidiInterruptionEv
 
 ### Automatic Handling (Default)
 
-When using `BidiAudioIO`, interruptions are handled automatically:
+When using `AudioIO`, interruptions are handled automatically:
 
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     # Interruptions handled automatically
@@ -45,7 +45,7 @@ async def main():
 asyncio.run(main())
 ```
 
-The `BidiAudioIO` output automatically clears the audio buffer, stops playback immediately, and resumes normal operation for the next response.
+The `AudioIO` output automatically clears the audio buffer, stops playback immediately, and resumes normal operation for the next response.
 
 ### Manual Handling
 
@@ -103,7 +103,9 @@ Use hooks to track interruptions across your application:
 
 ```python
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.hooks import BidiInterruptionEvent as BidiInterruptionHookEvent
+from strands.experimental.bidi.hooks import (
+    BidiInterruptionEvent as BidiInterruptionHookEvent,
+)
 
 class InterruptionTracker:
     def __init__(self):
@@ -149,7 +151,7 @@ model = OpenAIRealtimeModel(
 )
 
 # Verify microphone is working
-audio_io = BidiAudioIO(input_device_index=1)  # Specify device
+audio_io = AudioIO(input_device_index=1)  # Specify device
 
 # Check system permissions (macOS)
 # System Preferences → Security & Privacy → Microphone
@@ -160,7 +162,7 @@ audio_io = BidiAudioIO(input_device_index=1)  # Specify device
 If audio keeps playing after interruption:
 
 ```python
-# Ensure BidiAudioIO is handling interruptions
+# Ensure AudioIO is handling interruptions
 async def __call__(self, event: BidiOutputEvent):
     if isinstance(event, BidiInterruptionEvent):
         self._buffer.clear()  # Critical!
@@ -197,7 +199,7 @@ model = OpenAIRealtimeModel(
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
 - [Bidirectional Streaming Hooks](/docs/user-guide/sdk/bidirectional-streaming/hooks/index.md) (1 shared tag)

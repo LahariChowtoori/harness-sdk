@@ -464,13 +464,13 @@ async for event in agent.receive():
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
     model = BedrockNovaSonicModel()
     agent = BidiAgent(model=model)
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
 
     await agent.start()
 
@@ -621,7 +621,7 @@ For details on hook events and usage patterns, see the [Hooks](/docs/user-guide/
 - [BidiAgent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) (1 shared tag)
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)

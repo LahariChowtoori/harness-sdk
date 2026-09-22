@@ -29,7 +29,8 @@ The smallest real thing this section builds: a `BidiAgent` on a realtime model, 
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent, BidiAudioIO
+from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
@@ -37,7 +38,7 @@ agent = BidiAgent(
     model=model,
     system_prompt="You are a helpful voice assistant. Keep replies short and natural.",
 )
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 
 async def main():
@@ -61,7 +62,7 @@ Building for a server rather than a local machine? Read [I/O channels](/docs/use
 - [BidiAgent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)

@@ -21345,7 +21345,7 @@ Where the model provider has its own search, `web_search` is a switch, not a too
 
 On providers without native search (Amazon Bedrock Converse, other `bedrock-mantle` models, and `Model` instances), `web_search` is a no-op when it is on only by default: Strands harness logs a warning and builds the agent without it. Requesting it explicitly on such a provider (by listing `web_search` in your own `builtin_tools`) fails at construction instead, so a deliberate request never silently does nothing.
 
-To search on those providers anyway, set `{"web_search": "exa"}` in `builtin_tools`. The harness then builds a `web_search` tool backed by [Exa](https://exa.ai)’s hosted search instead of relying on the provider. It needs no setup: the keyless free tier covers getting started. Exa is a third party, so every query the agent makes is sent to Exa and handled under its terms; weigh that before turning it on for sensitive work. Set `EXA_API_KEY` in the environment to lift the free tier’s rate limit.
+To search on those providers anyway, set `{"web_search": "exa"}` in `builtin_tools`. The harness then builds a `web_search` tool backed by [Exa](https://exa.ai)’s hosted search instead of relying on the provider. The setting is honoured on every model, so it also replaces native search where the provider has one. It needs no setup: the keyless free tier covers getting started. Exa is a third party, so every query the agent makes is sent to Exa and handled under its terms; weigh that before turning it on for sensitive work. Set `EXA_API_KEY` in the environment to lift the free tier’s rate limit.
 
 ## Selecting them
 
@@ -29929,7 +29929,8 @@ The smallest real thing this section builds: a `BidiAgent` on a realtime model, 
 ```python
 import asyncio
 
-from strands.experimental.bidi import BidiAgent, BidiAudioIO
+from strands.experimental.bidi import BidiAgent
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
@@ -29937,7 +29938,7 @@ agent = BidiAgent(
     model=model,
     system_prompt="You are a helpful voice assistant. Keep replies short and natural.",
 )
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 
 async def main():
@@ -29961,7 +29962,7 @@ Building for a server rather than a local machine? Read [I/O channels](/docs/use
 - [BidiAgent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
@@ -30034,12 +30035,12 @@ print(result.message)
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
 agent = BidiAgent(model=model, tools=[notebook])
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     # Persistent connection with continuous streaming
@@ -30266,7 +30267,7 @@ await agent.stop()
 
 ```python
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 await agent.run(
     inputs=[audio_io.input()],
@@ -30334,17 +30335,15 @@ The restart sequence: reconnect timer fires (or a timeout is reported) → `Bidi
 
 #### Tuning Reconnect Timing
 
-Each provider declares its reconnect timing as a `BidiConnectionConfig`. Override it, or opt out of automatic reconnect, through `provider_config["connection"]`:
+Each provider declares its reconnect timing as a `ConnectionConfig`. Override it, or opt out of automatic reconnect with the model’s `connection` argument:
 
 ```python
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel(
-    provider_config={
-        "connection": {
-            "restart_after_s": 360,   # reconnect this many seconds after a connection opens
-            "auto_reconnect": True,   # set False to disable automatic reconnect
-        }
+    connection={
+        "restart_after_s": 360,  # Reconnect this many seconds after a connection opens
+        "auto_reconnect": True,  # Set False to disable automatic reconnect
     }
 )
 ```
@@ -30392,7 +30391,7 @@ finally:
 import signal
 
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     # Setup signal handler
@@ -30418,7 +30417,7 @@ asyncio.run(main())
 
 ### Resource Cleanup
 
-The agent automatically cleans up background tasks, model connections, I/O channels, event queues, and invokes cleanup hooks.
+The agent automatically cleans up background tasks, model connections, I/O streams, and event queues, then invokes cleanup hooks.
 
 ### Best Practices
 
@@ -30432,7 +30431,7 @@ The agent automatically cleans up background tasks, model connections, I/O chann
 ## Next Steps
 
 -   [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) - Complete guide to bidirectional streaming events
--   [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) - Building custom input/output channels
+-   [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) - Building custom input and output streams
 -   [Model Providers](/docs/user-guide/sdk/bidirectional-streaming/models/bedrock/index.md) - Provider-specific configuration
 -   [Quickstart](/docs/user-guide/sdk/bidirectional-streaming/quickstart/index.md) - Getting started guide
 -   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent) - Complete API documentation
@@ -30442,7 +30441,7 @@ The agent automatically cleans up background tasks, model connections, I/O chann
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
@@ -30930,13 +30929,13 @@ async for event in agent.receive():
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
     model = BedrockNovaSonicModel()
     agent = BidiAgent(model=model)
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
 
     await agent.start()
 
@@ -31087,7 +31086,7 @@ For details on hook events and usage patterns, see the [Hooks](/docs/user-guide/
 - [BidiAgent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) (1 shared tag)
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
@@ -31414,7 +31413,7 @@ For more guidance on performance, errors, and composition, see the [Hooks docume
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
@@ -31463,17 +31462,17 @@ The interruption flow: Model’s VAD detects user speech → `BidiInterruptionEv
 
 ### Automatic Handling (Default)
 
-When using `BidiAudioIO`, interruptions are handled automatically:
+When using `AudioIO`, interruptions are handled automatically:
 
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     # Interruptions handled automatically
@@ -31485,7 +31484,7 @@ async def main():
 asyncio.run(main())
 ```
 
-The `BidiAudioIO` output automatically clears the audio buffer, stops playback immediately, and resumes normal operation for the next response.
+The `AudioIO` output automatically clears the audio buffer, stops playback immediately, and resumes normal operation for the next response.
 
 ### Manual Handling
 
@@ -31543,7 +31542,9 @@ Use hooks to track interruptions across your application:
 
 ```python
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.hooks import BidiInterruptionEvent as BidiInterruptionHookEvent
+from strands.experimental.bidi.hooks import (
+    BidiInterruptionEvent as BidiInterruptionHookEvent,
+)
 
 class InterruptionTracker:
     def __init__(self):
@@ -31589,7 +31590,7 @@ model = OpenAIRealtimeModel(
 )
 
 # Verify microphone is working
-audio_io = BidiAudioIO(input_device_index=1)  # Specify device
+audio_io = AudioIO(input_device_index=1)  # Specify device
 
 # Check system permissions (macOS)
 # System Preferences → Security & Privacy → Microphone
@@ -31600,7 +31601,7 @@ audio_io = BidiAudioIO(input_device_index=1)  # Specify device
 If audio keeps playing after interruption:
 
 ```python
-# Ensure BidiAudioIO is handling interruptions
+# Ensure AudioIO is handling interruptions
 async def __call__(self, event: BidiOutputEvent):
     if isinstance(event, BidiInterruptionEvent):
         self._buffer.clear()  # Critical!
@@ -31637,7 +31638,7 @@ model = OpenAIRealtimeModel(
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
 - [Bidirectional Streaming Hooks](/docs/user-guide/sdk/bidirectional-streaming/hooks/index.md) (1 shared tag)
@@ -31656,9 +31657,9 @@ Source: https://strandsagents.com/docs/user-guide/sdk/bidirectional-streaming/in
 
 ---
 
-## I/O Channels
+## I/O Streams
 
-I/O channels handle the flow of data between your application and the bidi-agent. They manage input sources (microphone, keyboard, WebSocket) and output destinations (speakers, console, UI) while the agent focuses on conversation logic and model communication.
+I/O streams handle the flow of data between your application and the bidi-agent. They manage input sources (microphone, keyboard, WebSocket) and output destinations (speakers, console, UI) while the agent focuses on conversation logic and model communication.
 
 ```mermaid
 flowchart LR
@@ -31674,8 +31675,8 @@ flowchart LR
 
 The bidi agent uses two protocol interfaces that define how data flows in and out of conversations:
 
--   `BidiInput`: A callable protocol for reading data from sources such as a microphone, keyboard, or WebSocket and returning `BidiAgentInput`.
--   `BidiOutput`: A callable protocol for receiving `BidiOutputEvent` objects from the agent and handling them appropriately.
+-   `InputStream`: A callable protocol for reading data from sources such as a microphone, keyboard, or WebSocket and returning `BidiAgentInput`.
+-   `OutputStream`: A callable protocol for receiving `BidiOutputEvent` objects from the agent and handling them appropriately.
 
 Both protocols include optional lifecycle methods (`start` and `stop`) for resource management.
 
@@ -31685,10 +31686,10 @@ Implementation of these protocols will look as follows:
 from strands.experimental.bidi.agent import BidiAgent
 from strands.experimental.bidi.types import BidiAgentInput
 from strands.experimental.bidi.types import BidiOutputEvent
-from strands.experimental.bidi.types import BidiInput, BidiOutput
+from strands.experimental.bidi.types import InputStream, OutputStream
 
 
-class MyBidiInput(BidiInput):
+class MyInputStream(InputStream):
     async def start(self, agent: BidiAgent) -> None:
         # Initialize input resources or state, using agent as needed.
         return
@@ -31702,7 +31703,7 @@ class MyBidiInput(BidiInput):
         return
 
 
-class MyBidiOutput(BidiOutput):
+class MyOutputStream(OutputStream):
     async def start(self, agent: BidiAgent) -> None:
         # Initialize output resources or state, using agent as needed.
         return
@@ -31718,7 +31719,7 @@ class MyBidiOutput(BidiOutput):
 
 ## I/O Usage
 
-To connect your I/O channels into the agent loop, you can pass them as arguments into the agent `run()` method.
+Pass your I/O streams to the agent’s `run()` method to connect them to the agent loop.
 
 ```python
 import asyncio
@@ -31730,21 +31731,21 @@ from strands.experimental.tools import stop
 async def main():
     # stop tool allows user to verbally stop agent execution.
     agent = BidiAgent(tools=[stop])
-    await agent.run(inputs=[MyBidiInput()], outputs=[MyBidiOutput()])
+    await agent.run(inputs=[MyInputStream()], outputs=[MyOutputStream()])
 
 
 asyncio.run(main())
 ```
 
-The `run()` method handles the startup, execution, and shutdown of both the agent and its I/O channels. Inputs and outputs run concurrently, so you can mix and match them freely.
+The `run()` method handles startup, execution, and shutdown for the agent and its I/O streams. Inputs and outputs run concurrently, so you can mix and match implementations.
 
 ## Audio I/O
 
-To connect a microphone and speakers to the bidi-agent, use `BidiAudioIO`. It captures microphone audio, streams it to the model in real time, and plays responses back through the speakers using [PyAudio](https://pypi.org/project/PyAudio/).
+Out of the box, Strands provides `AudioIO` to connect your microphone and speakers to the bidi-agent. It captures microphone audio, streams it to the model in real time, and plays responses through the speakers using [PyAudio](https://pypi.org/project/PyAudio/).
 
 Installation Required
 
-`BidiAudioIO` requires the `bidi-io` and `bidi-pyaudio` extras plus the PortAudio system library. Install PortAudio first (for example `brew install portaudio` on macOS or `sudo apt-get install portaudio19-dev` on Debian/Ubuntu), then install the extras:
+`AudioIO` requires the `bidi-io` and `bidi-pyaudio` extras plus the PortAudio system library. Install PortAudio first, then install the extras:
 
 ```bash
 pip install "strands-agents[bidi,bidi-io,bidi-pyaudio]"
@@ -31756,14 +31757,14 @@ PyAudio is excluded from the aggregate `bidi-all` extra because of its PortAudio
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.tools import stop
 
 
 async def main():
     # stop tool allows user to verbally stop agent execution.
     agent = BidiAgent(tools=[stop])
-    audio_io = BidiAudioIO(input_device_index=1)
+    audio_io = AudioIO(input_device_index=1)
 
     await agent.run(
         inputs=[audio_io.input()],
@@ -31780,11 +31781,11 @@ Audio output also displays live transcripts, with user speech in shaded `>` bloc
 
 ### Configurations
 
-`BidiAudioIO` accepts the fields of `BidiAudioIOConfig` as keyword arguments:
+`AudioIO` accepts the fields of `AudioIOConfig` as keyword arguments:
 
 | Parameter | Description | Example | Default |
 | --- | --- | --- | --- |
-| `audio_processor` | Enable microphone audio processing. Pass `True` for defaults or a `BidiAudioProcessorConfig` for custom options. | `True` | None (disabled) |
+| `audio_processor` | Enable microphone audio processing. Pass `True` for defaults or an `AudioProcessorConfig` for custom options. | `True` | None (disabled) |
 | `input_buffer_size` | Maximum number of audio chunks to buffer from the microphone before dropping the oldest. | `1024` | None (unbounded) |
 | `input_device_index` | Specific microphone device ID to use for audio input. | `1` | None (system default) |
 | `input_frames_per_buffer` | Number of audio frames to read per input callback (affects latency and performance). | `1024` | 512 |
@@ -31802,47 +31803,46 @@ Audio processing depends on `pywebrtc-audio`, installed through the `bidi-aec` e
 pip install "strands-agents[bidi,bidi-pyaudio,bidi-aec]"
 ```
 
-Pass `audio_processor=True` for the defaults, or a `BidiAudioProcessorConfig` to tune it:
+Pass `audio_processor=True` for the defaults, or an `AudioProcessorConfig` to tune it:
 
 ```python
-from strands.experimental.bidi import BidiAudioProcessorConfig
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO, AudioProcessorConfig
 
 # Echo cancellation, noise suppression, and auto gain control with defaults:
-audio_io = BidiAudioIO(audio_processor=True)
+audio_io = AudioIO(audio_processor=True)
 
 # Noise suppression and auto gain control without echo cancellation (for headset users):
-audio_io = BidiAudioIO(audio_processor=BidiAudioProcessorConfig(echo_cancellation=False))
+audio_io = AudioIO(audio_processor=AudioProcessorConfig(echo_cancellation=False))
 ```
 
-`BidiAudioProcessorConfig` exposes two fields:
+`AudioProcessorConfig` exposes two fields:
 
 | Parameter | Description | Default |
 | --- | --- | --- |
 | `echo_cancellation` | Cancel the agent’s speaker audio from the microphone input. | `True` |
 | `stream_delay_ms` | Playback-to-capture delay hint in milliseconds for echo cancellation. `0` lets the canceller auto-estimate. Set a non-zero value only when echo cancellation measurably fails on hardware with large or fixed latency, such as Bluetooth. | `0` |
 
-Echo cancellation coordinates the microphone and speaker channels, so it works only when both come from the same `BidiAudioIO` instance. It also requires a microphone sample rate of 16000, 32000, or 48000 Hz, set through the model’s audio config.
+Echo cancellation coordinates the microphone and speaker streams, so it works only when both come from the same `AudioIO` instance. It also requires a microphone sample rate of 16000, 32000, or 48000 Hz, set through the model’s audio config.
 
-Configure voice and supported sample rates on the model. `BidiAudioIO` reads `model.get_audio_config()`, which returns separate `input` and `output` dictionaries, each containing `sample_rate`, `channels`, and `format`. It uses those values to configure capture and playback, so you do not need to repeat them on the I/O channel.
+Configure voice and supported sample rates on the model. `AudioIO` reads `model.get_audio_config()`, which returns separate `input` and `output` dictionaries, each containing `sample_rate`, `channels`, and `format`. It uses those values to configure capture and playback, so you do not need to repeat them on the I/O stream.
 
-`BidiAudioIO` requires signed 16-bit little-endian PCM. Starting a device stream with another encoding raises `ValueError`. Use custom I/O for other encodings.
+`AudioIO` requires signed 16-bit little-endian PCM. Starting a device stream with another encoding raises `ValueError`. Use custom I/O for other encodings.
 
 ### Interruption Handling
 
-`BidiAudioIO` handles interruptions automatically so users can cut in mid-response. When an interruption occurs:
+`AudioIO` automatically handles interruptions so users can interrupt the agent mid-response. When an interruption occurs:
 
 1.  The agent emits a `BidiInterruptionEvent`.
-2.  `BidiAudioIO` clears its output buffer to stop playback.
+2.  `AudioIO` clears its output buffer to stop playback.
 3.  The agent responds to the new user input.
 
 ## Text I/O
 
-For terminal-based text input and output, use `BidiTextIO`. It reads user input from the terminal and prints transcripts and responses to the console using [prompt-toolkit](https://pypi.org/project/prompt-toolkit/).
+Strands also provides `ConsoleIO` for terminal-based text input and output using [prompt-toolkit](https://pypi.org/project/prompt-toolkit/).
 
 Installation Required
 
-`BidiTextIO` is included with the `bidi-io` extra:
+`ConsoleIO` is included with the `bidi-io` extra:
 
 ```bash
 pip install "strands-agents[bidi-io]"
@@ -31852,14 +31852,14 @@ pip install "strands-agents[bidi-io]"
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiTextIO
+from strands.experimental.bidi.io import ConsoleIO
 from strands.experimental.tools import stop
 
 
 async def main():
     # stop tool allows user to verbally stop agent execution.
     agent = BidiAgent(tools=[stop])
-    text_io = BidiTextIO(input_prompt="> You: ")
+    text_io = ConsoleIO(input_prompt="> You: ")
 
     await agent.run(
         inputs=[text_io.input()],
@@ -31880,7 +31880,7 @@ This creates a text-based agent that reads user input from the terminal and prin
 
 ## WebSocket I/O
 
-WebSockets are a common I/O channel for bidi-agents. To learn how to setup WebSockets with `run()`, consider the following server example:
+WebSockets are a common I/O stream for bidi-agents. The following server example shows how to use WebSockets with `run()`:
 
 server.py
 
@@ -32000,7 +32000,7 @@ After installing the Bedrock Nova Sonic and local audio extras, create a voice a
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.experimental.tools import stop
 from strands.vended_tools import notebook
@@ -32013,7 +32013,7 @@ async def main() -> None:
         voice="tiffany",
     )
     agent = BidiAgent(model=model, tools=[notebook, stop])
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
     await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output()])
 
 
@@ -32082,7 +32082,7 @@ For more details on this approach, please refer to the [boto3 session docs](http
 | `audio` | Input and output stream options. | `{"output": {"sample_rate": 24000}}` | [reference](/docs/api/python/strands.experimental.bidi.models#BedrockNovaSonicAudioConfig) |
 | `voice` | Output voice identifier. Defaults to `"matthew"`. | `"tiffany"` | Nova Sonic voices |
 | `params` | Provider-specific session parameters, such as inference and turn detection configuration. | `{"inferenceConfiguration": {"temperature": 0.7}}` | [`sessionStart` fields](https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-input-events.html) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": False}` | [reference](/docs/api/python/strands.experimental.bidi.models#ConnectionConfig) |
 
 Conversation History Limits
 
@@ -32175,7 +32175,7 @@ After installing the Gemini Live and local audio extras, create a voice agent:
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import GoogleGeminiLiveModel
 from strands.experimental.tools import stop
 from strands.vended_tools import notebook
@@ -32190,7 +32190,7 @@ async def main() -> None:
     # stop tool allows user to verbally stop agent execution.
     agent = BidiAgent(model=model, tools=[notebook, stop])
 
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
     await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output()])
 
 
@@ -32212,7 +32212,7 @@ Pass Google GenAI client options through `client_args`. For the supported fields
 | `audio` | Input audio options. | `{"input": {"sample_rate": 48000}}` | [reference](/docs/api/python/strands.experimental.bidi.models#GoogleGeminiLiveAudioConfig) |
 | `voice` | Prebuilt output voice name. Uses the provider default when omitted. | `"Kore"` | [Voices and languages](https://docs.cloud.google.com/text-to-speech/docs/list-voices-and-types) |
 | `params` | Gemini Live session parameters. | `{"temperature": 0.7}` | [`LiveConnectConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.LiveConnectConfig) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": False}` | [reference](/docs/api/python/strands.experimental.bidi.models#ConnectionConfig) |
 
 ### Additional Provider Options
 
@@ -32257,7 +32257,7 @@ Set your Google AI API key through `client_args` or the `GOOGLE_API_KEY` environ
 - [BidiAgent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) (1 shared tag)
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
@@ -32310,7 +32310,7 @@ After installing the OpenAI Realtime and local audio extras, create a voice agen
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import OpenAIRealtimeModel
 from strands.experimental.tools import stop
 from strands.vended_tools import notebook
@@ -32325,7 +32325,7 @@ async def main() -> None:
     # stop tool allows user to verbally stop agent execution.
     agent = BidiAgent(model=model, tools=[notebook, stop])
 
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
     await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output()])
 
 
@@ -32351,7 +32351,7 @@ if __name__ == "__main__":
 | `model_id` | OpenAI Realtime model identifier. | `"gpt-realtime"` | [OpenAI models](https://platform.openai.com/docs/models) |
 | `voice` | Output voice identifier. Defaults to `"alloy"`. | `"coral"` | [Voice options](https://platform.openai.com/docs/guides/realtime-conversations#voice-options) |
 | `params` | OpenAI Realtime session parameters. Audio must remain mono PCM at 24000 Hz. | `{"max_output_tokens": 4096}` | [`session.update`](https://platform.openai.com/docs/api-reference/realtime-client-events/session/update) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": False}` | [reference](/docs/api/python/strands.experimental.bidi.models#ConnectionConfig) |
 
 ### Additional Provider Options
 
@@ -32399,7 +32399,7 @@ Set the `OPENAI_API_KEY` environment variable or pass the key through `api_key`.
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)
 - [Bidirectional Streaming Hooks](/docs/user-guide/sdk/bidirectional-streaming/hooks/index.md) (1 shared tag)
@@ -32819,7 +32819,7 @@ Providers report streaming lifecycle events differently, which shows up directly
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Evaluating remote traces](/docs/user-guide/evals-sdk/how-to/trace_providers/index.md) (1 shared tag)
@@ -32842,7 +32842,7 @@ Source: https://strandsagents.com/docs/user-guide/sdk/bidirectional-streaming/ob
 
 Build an agent that listens and talks in real time. This guide walks through a bidirectional streaming agent end to end: audio input and output, streaming events, tool calls mid-conversation, and the model providers that support it.
 
-After completing this guide, you can build voice assistants, interactive chatbots, multi-modal applications, and integrate bidirectional streaming with web servers or custom I/O channels.
+After completing this guide, you can build voice assistants, interactive chatbots, multi-modal applications, and integrate bidirectional streaming with web servers or custom I/O streams.
 
 ## Prerequisites
 
@@ -32864,7 +32864,7 @@ To install support for all bidirectional streaming providers:
 pip install "strands-agents[bidi-all]"
 ```
 
-This includes all three providers (Nova Sonic, OpenAI, and Gemini Live), `BidiTextIO`, and microphone audio processing. For local microphone and speaker I/O with `BidiAudioIO`, also install PortAudio and the `bidi-pyaudio` extra (see [Platform-Specific Audio Setup](#platform-specific-audio-setup)); PyAudio is excluded from `bidi-all` because of its PortAudio system dependency.
+This includes all three providers (Nova Sonic, OpenAI, and Gemini Live), `ConsoleIO`, and microphone audio processing. Local microphone and speaker I/O with `AudioIO` also requires PortAudio and the `bidi-pyaudio` extra. See [Platform-Specific Audio Setup](#platform-specific-audio-setup).
 
 ### For Specific Providers
 
@@ -32902,11 +32902,11 @@ pip install "strands-agents[bidi-google,bidi-io]"
 
 Server-Side Deployments
 
-The `bidi-pyaudio` extra provides PyAudio for direct microphone and speaker access, and PyAudio depends on the PortAudio system library. The `bidi-io` extra provides terminal text input and transcript rendering. For server deployments where clients (browsers, mobile apps) handle audio I/O, omit `bidi-pyaudio` and implement custom handlers using the `BidiInput` and `BidiOutput` protocols. See [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) for details.
+The `bidi-pyaudio` extra provides PyAudio for direct microphone and speaker access. The `bidi-io` extra provides terminal text input and transcript rendering. For server deployments where clients handle audio I/O, omit `bidi-pyaudio` and implement custom handlers using the `InputStream` and `OutputStream` protocols. See [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) for details.
 
 ### Platform-Specific Audio Setup
 
-`BidiAudioIO` depends on PyAudio, which requires the PortAudio system library. Install PortAudio first, then install the `bidi-pyaudio` extra alongside `bidi-all`.
+`AudioIO` depends on PyAudio, which requires the PortAudio system library. Install PortAudio first, then install the `bidi-pyaudio` extra alongside `bidi-all`.
 
 (( tab "macOS" ))
 ```bash
@@ -32969,7 +32969,7 @@ Now let’s create a simple voice-enabled agent that can have real-time conversa
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 # Create a bidirectional streaming model
@@ -32982,7 +32982,7 @@ agent = BidiAgent(
 )
 
 # Setup audio I/O for microphone and speakers
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 # Run the conversation
 async def main():
@@ -33008,7 +33008,7 @@ The `run()` method runs indefinitely. See [Controlling Conversation Lifecycle](#
 
 ## Live Transcripts
 
-`BidiAudioIO.output()` displays user and assistant transcripts while audio plays through the speakers. User speech appears in shaded `>` blocks and assistant speech appears as plain text.
+`AudioIO.output()` displays user and assistant transcripts while audio plays through the speakers. User speech appears in shaded `>` blocks and assistant speech appears as plain text.
 
 ## Controlling Conversation Lifecycle
 
@@ -33017,13 +33017,13 @@ The `run()` method runs indefinitely by default. The simplest way to stop conver
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 async def main():
     model = BedrockNovaSonicModel()
     agent = BidiAgent(model=model)
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
 
     try:
         # Runs indefinitely until interrupted
@@ -33052,7 +33052,7 @@ Just like standard Strands agents, bidirectional agents can use tools during con
 import asyncio
 from strands import tool
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.vended_tools import notebook
 
@@ -33079,7 +33079,7 @@ agent = BidiAgent(
     system_prompt="You are a helpful assistant with access to tools."
 )
 
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     await agent.run(
@@ -33110,13 +33110,13 @@ Each provider has different features, timeout limits, and audio quality. See the
 
 ## Configuring Audio Settings
 
-Choose supported audio settings on the model and device buffering on the I/O channel:
+Choose supported audio settings on the model and device buffering on the I/O stream:
 
 ```python
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import GoogleGeminiLiveModel
 
 # Configure model audio settings
@@ -33126,7 +33126,7 @@ model = GoogleGeminiLiveModel(
 )
 
 # Configure I/O buffer settings
-audio_io = BidiAudioIO(
+audio_io = AudioIO(
     input_buffer_size=10,           # Max input queue size
     output_buffer_size=20,          # Max output queue size
     input_frames_per_buffer=512,   # Input chunk size
@@ -33144,7 +33144,7 @@ async def main():
 asyncio.run(main())
 ```
 
-`BidiAudioIO` reads the model’s resolved input and output formats through `get_audio_config()`. You do not need to repeat rates or channel counts on the I/O channel.
+`AudioIO` reads the model’s resolved input and output formats through `get_audio_config()`. You do not need to repeat rates or channel counts on the I/O stream.
 
 ## Handling Interruptions
 
@@ -33153,13 +33153,13 @@ Bidirectional agents automatically handle interruptions when users start speakin
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.experimental.bidi.types import BidiInterruptionEvent
 
 model = BedrockNovaSonicModel()
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     await agent.start()
@@ -33221,7 +33221,7 @@ Use the SDK’s experimental `stop` tool to allow users to end conversations nat
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.experimental.tools import stop
 
@@ -33232,7 +33232,7 @@ agent = BidiAgent(
     system_prompt="You are a helpful assistant. When the user says 'stop conversation', use the stop tool."
 )
 
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     await agent.run(
@@ -33265,7 +33265,7 @@ To enable debug logs in your agent, configure the `strands` logger:
 import asyncio
 import logging
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 # Enable debug logs
@@ -33277,7 +33277,7 @@ logging.basicConfig(
 
 model = BedrockNovaSonicModel()
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     await agent.run(
@@ -33306,7 +33306,7 @@ pip install "strands-agents[bidi,bidi-pyaudio,bidi-aec]"
 ```
 
 ```python
-audio_io = BidiAudioIO(audio_processor=True)
+audio_io = AudioIO(audio_processor=True)
 ```
 
 See [Audio Processing](/docs/user-guide/sdk/bidirectional-streaming/io/index.md#audio-processing) for the available options.
@@ -33324,7 +33324,7 @@ for i in range(p.get_device_count()):
     print(f"{i}: {info['name']}")
 
 # Specify output device explicitly
-audio_io = BidiAudioIO(output_device_index=2)
+audio_io = AudioIO(output_device_index=2)
 ```
 
 ### Microphone Not Working
@@ -33333,7 +33333,7 @@ If the agent doesn’t respond to speech:
 
 ```python
 # Specify input device explicitly
-audio_io = BidiAudioIO(input_device_index=1)
+audio_io = AudioIO(input_device_index=1)
 
 # Check system permissions (macOS)
 # System Preferences → Security & Privacy → Microphone
@@ -33354,13 +33354,13 @@ async for event in agent.receive():
         continue
 ```
 
-Providers declare the reconnect timing through `BidiConnectionConfig`. Tune it, or opt out of automatic reconnect, through `provider_config["connection"]`:
+Providers declare reconnect timing through `ConnectionConfig`. Tune it, or opt out of automatic reconnect with the model’s `connection` argument:
 
 ```python
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 # Reconnect 60s earlier than the provider default
-model = BedrockNovaSonicModel(provider_config={"connection": {"restart_after_s": 360}})
+model = BedrockNovaSonicModel(connection={"restart_after_s": 360})
 ```
 
 For longer sessions on a single connection, OpenAI Realtime allows a larger connection window than Nova Sonic.
@@ -33369,7 +33369,7 @@ For longer sessions on a single connection, OpenAI Realtime allows a larger conn
 
 -   [Agent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) - Deep dive into BidiAgent configuration and lifecycle
 -   [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) - Complete guide to bidirectional streaming events
--   [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) - Understanding and customizing input/output channels
+-   [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) - Understanding and customizing input and output streams
 -   **Model Providers:**
     -   [Nova Sonic](/docs/user-guide/sdk/bidirectional-streaming/models/bedrock/index.md) - Amazon Bedrock’s bidirectional streaming model
     -   [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) - OpenAI’s Realtime API
@@ -33416,7 +33416,7 @@ Create a `BidiAgent` with a session manager and use it:
 
 ```python
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.session.file_session_manager import FileSessionManager
 
@@ -33431,7 +33431,7 @@ agent = BidiAgent(
 )
 
 # Use the agent - all messages are automatically persisted
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 await agent.run(
     inputs=[audio_io.input()],
     outputs=[audio_io.output()]
@@ -33604,7 +33604,7 @@ async for event in agent.receive():
         print(f"Reconnecting (reason={event.reason}) with full history preserved")
 ```
 
-For the reconnect timing and how to tune it with `BidiConnectionConfig`, see [Connection Restart](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md#connection-restart).
+For reconnect timing and how to tune it with `ConnectionConfig`, see [Connection Restart](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md#connection-restart).
 
 ## Integration with Hooks
 
@@ -33649,7 +33649,7 @@ For best practices on session ID management, session cleanup, error handling, st
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 

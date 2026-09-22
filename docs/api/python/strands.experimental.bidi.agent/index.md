@@ -307,19 +307,19 @@ Automatically ends the connection and cleans up resources including when exiting
 #### run
 
 ```python
-async def run(inputs: list[BidiInput],
-              outputs: list[BidiOutput],
+async def run(inputs: list[InputStream],
+              outputs: list[OutputStream],
               invocation_state: dict[str, Any] | None = None) -> None
 ```
 
 Defined in: [src/strands/experimental/bidi/agent/agent.py:409](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/agent/agent.py#L409)
 
-Run the agent using provided IO channels for bidirectional communication.
+Run the agent using provided I/O streams for bidirectional communication.
 
 **Arguments**:
 
--   `inputs` - Input callables to read data from a source
--   `outputs` - Output callables to receive events from the agent
+-   `inputs` - Streams that produce input for the agent.
+-   `outputs` - Streams that consume output events from the agent.
 -   `invocation_state` - Optional context shared by reference with tools and hooks for the duration of run(), including across connection restarts. Tools access it through ToolContext.invocation\_state. Defaults to a new empty dictionary.
 
 **Example**:
@@ -327,7 +327,7 @@ Run the agent using provided IO channels for bidirectional communication.
 ```python
 # Using model defaults:
 model = BedrockNovaSonicModel()
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 agent = BidiAgent(model=model, tools=[calculator])
 await agent.run(
     inputs=[audio_io.input()],
@@ -342,7 +342,7 @@ model = BedrockNovaSonicModel(
         "output": \{"sample_rate": 24000},
     }
 )
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 agent = BidiAgent(model=model, tools=[calculator])
 await agent.run(
     inputs=[audio_io.input()],

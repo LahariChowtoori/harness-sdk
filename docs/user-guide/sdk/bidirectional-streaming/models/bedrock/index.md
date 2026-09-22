@@ -35,7 +35,7 @@ After installing the Bedrock Nova Sonic and local audio extras, create a voice a
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.experimental.tools import stop
 from strands.vended_tools import notebook
@@ -48,7 +48,7 @@ async def main() -> None:
         voice="tiffany",
     )
     agent = BidiAgent(model=model, tools=[notebook, stop])
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
     await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output()])
 
 
@@ -117,7 +117,7 @@ For more details on this approach, please refer to the [boto3 session docs](http
 | `audio` | Input and output stream options. | `{"output": {"sample_rate": 24000}}` | [reference](/docs/api/python/strands.experimental.bidi.models#BedrockNovaSonicAudioConfig) |
 | `voice` | Output voice identifier. Defaults to `"matthew"`. | `"tiffany"` | Nova Sonic voices |
 | `params` | Provider-specific session parameters, such as inference and turn detection configuration. | `{"inferenceConfiguration": {"temperature": 0.7}}` | [`sessionStart` fields](https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-input-events.html) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": False}` | [reference](/docs/api/python/strands.experimental.bidi.models#ConnectionConfig) |
 
 Conversation History Limits
 

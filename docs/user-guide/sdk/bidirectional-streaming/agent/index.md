@@ -57,12 +57,12 @@ print(result.message)
 ```python
 import asyncio
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel()
 agent = BidiAgent(model=model, tools=[notebook])
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     # Persistent connection with continuous streaming
@@ -289,7 +289,7 @@ await agent.stop()
 
 ```python
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 await agent.run(
     inputs=[audio_io.input()],
@@ -357,17 +357,15 @@ The restart sequence: reconnect timer fires (or a timeout is reported) → `Bidi
 
 #### Tuning Reconnect Timing
 
-Each provider declares its reconnect timing as a `BidiConnectionConfig`. Override it, or opt out of automatic reconnect, through `provider_config["connection"]`:
+Each provider declares its reconnect timing as a `ConnectionConfig`. Override it, or opt out of automatic reconnect with the model’s `connection` argument:
 
 ```python
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 
 model = BedrockNovaSonicModel(
-    provider_config={
-        "connection": {
-            "restart_after_s": 360,   # reconnect this many seconds after a connection opens
-            "auto_reconnect": True,   # set False to disable automatic reconnect
-        }
+    connection={
+        "restart_after_s": 360,  # Reconnect this many seconds after a connection opens
+        "auto_reconnect": True,  # Set False to disable automatic reconnect
     }
 )
 ```
@@ -415,7 +413,7 @@ finally:
 import signal
 
 agent = BidiAgent(model=model)
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 
 async def main():
     # Setup signal handler
@@ -441,7 +439,7 @@ asyncio.run(main())
 
 ### Resource Cleanup
 
-The agent automatically cleans up background tasks, model connections, I/O channels, event queues, and invokes cleanup hooks.
+The agent automatically cleans up background tasks, model connections, I/O streams, and event queues, then invokes cleanup hooks.
 
 ### Best Practices
 
@@ -455,7 +453,7 @@ The agent automatically cleans up background tasks, model connections, I/O chann
 ## Next Steps
 
 -   [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) - Complete guide to bidirectional streaming events
--   [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) - Building custom input/output channels
+-   [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) - Building custom input and output streams
 -   [Model Providers](/docs/user-guide/sdk/bidirectional-streaming/models/bedrock/index.md) - Provider-specific configuration
 -   [Quickstart](/docs/user-guide/sdk/bidirectional-streaming/quickstart/index.md) - Getting started guide
 -   [Python API Reference](/docs/api/python/strands.experimental.bidi.agent) - Complete API documentation
@@ -465,7 +463,7 @@ The agent automatically cleans up background tasks, model connections, I/O chann
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)

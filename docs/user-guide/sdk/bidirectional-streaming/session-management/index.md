@@ -19,7 +19,7 @@ Create a `BidiAgent` with a session manager and use it:
 
 ```python
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import BedrockNovaSonicModel
 from strands.session.file_session_manager import FileSessionManager
 
@@ -34,7 +34,7 @@ agent = BidiAgent(
 )
 
 # Use the agent - all messages are automatically persisted
-audio_io = BidiAudioIO()
+audio_io = AudioIO()
 await agent.run(
     inputs=[audio_io.input()],
     outputs=[audio_io.output()]
@@ -207,7 +207,7 @@ async for event in agent.receive():
         print(f"Reconnecting (reason={event.reason}) with full history preserved")
 ```
 
-For the reconnect timing and how to tune it with `BidiConnectionConfig`, see [Connection Restart](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md#connection-restart).
+For reconnect timing and how to tune it with `ConnectionConfig`, see [Connection Restart](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md#connection-restart).
 
 ## Integration with Hooks
 
@@ -252,7 +252,7 @@ For best practices on session ID management, session cleanup, error handling, st
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
 - [Google Gemini Live](/docs/user-guide/sdk/bidirectional-streaming/models/google/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 

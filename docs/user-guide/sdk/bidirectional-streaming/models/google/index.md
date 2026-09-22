@@ -31,7 +31,7 @@ After installing the Gemini Live and local audio extras, create a voice agent:
 import asyncio
 
 from strands.experimental.bidi.agent import BidiAgent
-from strands.experimental.bidi.io import BidiAudioIO
+from strands.experimental.bidi.io import AudioIO
 from strands.experimental.bidi.models import GoogleGeminiLiveModel
 from strands.experimental.tools import stop
 from strands.vended_tools import notebook
@@ -46,7 +46,7 @@ async def main() -> None:
     # stop tool allows user to verbally stop agent execution.
     agent = BidiAgent(model=model, tools=[notebook, stop])
 
-    audio_io = BidiAudioIO()
+    audio_io = AudioIO()
     await agent.run(inputs=[audio_io.input()], outputs=[audio_io.output()])
 
 
@@ -68,7 +68,7 @@ Pass Google GenAI client options through `client_args`. For the supported fields
 | `audio` | Input audio options. | `{"input": {"sample_rate": 48000}}` | [reference](/docs/api/python/strands.experimental.bidi.models#GoogleGeminiLiveAudioConfig) |
 | `voice` | Prebuilt output voice name. Uses the provider default when omitted. | `"Kore"` | [Voices and languages](https://docs.cloud.google.com/text-to-speech/docs/list-voices-and-types) |
 | `params` | Gemini Live session parameters. | `{"temperature": 0.7}` | [`LiveConnectConfig`](https://googleapis.github.io/python-genai/genai.html#genai.types.LiveConnectConfig) |
-| `connection` | Reconnect timing overrides. | `{"auto_reconnect": false}` | [reference](/docs/api/python/strands.experimental.bidi.models#BidiConnectionConfig) |
+| `connection` | Reconnect timing overrides. | `{"auto_reconnect": False}` | [reference](/docs/api/python/strands.experimental.bidi.models#ConnectionConfig) |
 
 ### Additional Provider Options
 
@@ -113,7 +113,7 @@ Set your Google AI API key through `client_args` or the `GOOGLE_API_KEY` environ
 - [BidiAgent](/docs/user-guide/sdk/bidirectional-streaming/agent/index.md) (1 shared tag)
 - [Build a realtime voice agent](/docs/user-guide/sdk/bidirectional-streaming/index.md) (1 shared tag)
 - [Events](/docs/user-guide/sdk/bidirectional-streaming/events/index.md) (1 shared tag)
-- [I/O Channels](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
+- [I/O Streams](/docs/user-guide/sdk/bidirectional-streaming/io/index.md) (1 shared tag)
 - [Interruptions](/docs/user-guide/sdk/bidirectional-streaming/interruption/index.md) (1 shared tag)
 - [OpenAI Realtime](/docs/user-guide/sdk/bidirectional-streaming/models/openai/index.md) (1 shared tag)
 - [Bidirectional Streaming Observability](/docs/user-guide/sdk/bidirectional-streaming/observability/index.md) (1 shared tag)

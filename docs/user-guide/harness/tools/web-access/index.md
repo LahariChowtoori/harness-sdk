@@ -60,7 +60,7 @@ Where the model provider has its own search, `web_search` is a switch, not a too
 
 On providers without native search (Amazon Bedrock Converse, other `bedrock-mantle` models, and `Model` instances), `web_search` is a no-op when it is on only by default: Strands harness logs a warning and builds the agent without it. Requesting it explicitly on such a provider (by listing `web_search` in your own `builtin_tools`) fails at construction instead, so a deliberate request never silently does nothing.
 
-To search on those providers anyway, set `{"web_search": "exa"}` in `builtin_tools`. The harness then builds a `web_search` tool backed by [Exa](https://exa.ai)’s hosted search instead of relying on the provider. It needs no setup: the keyless free tier covers getting started. Exa is a third party, so every query the agent makes is sent to Exa and handled under its terms; weigh that before turning it on for sensitive work. Set `EXA_API_KEY` in the environment to lift the free tier’s rate limit.
+To search on those providers anyway, set `{"web_search": "exa"}` in `builtin_tools`. The harness then builds a `web_search` tool backed by [Exa](https://exa.ai)’s hosted search instead of relying on the provider. The setting is honoured on every model, so it also replaces native search where the provider has one. It needs no setup: the keyless free tier covers getting started. Exa is a third party, so every query the agent makes is sent to Exa and handled under its terms; weigh that before turning it on for sensitive work. Set `EXA_API_KEY` in the environment to lift the free tier’s rate limit.
 
 ## Selecting them
 
