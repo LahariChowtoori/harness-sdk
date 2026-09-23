@@ -72,18 +72,35 @@ const agent = await createHarness({ memory: false })
 
 ## Flush before a short run exits
 
-Extraction is background and turn-triggered, so a short run can end with its latest turns not yet written. Flush at your shutdown boundary to persist what is pending:
+Extraction is background and turn-triggered, so a short run can end with its latest turns not yet written. The simplest way to persist what is pending is to scope the agent so its shutdown runs when the block exits — on a normal return and on a thrown error alike:
 
 (( tab "Python" ))
 ```python
-if agent.memory_manager:
-    await agent.memory_manager.flush()
+async with create_harness() as agent:
+    await agent.invoke_async(task)
+# the agent's shutdown runs here as the scope exits, flushing pending memory
 ```
 (( /tab "Python" ))
 
 (( tab "TypeScript" ))
 ```typescript
-await agent.memoryManager?.flush()
+await using agent = await createHarness()
+await agent.invoke(task)
+// the agent's shutdown runs here as the scope exits, flushing pending memory
+```
+(( /tab "TypeScript" ))
+
+If you manage the agent’s lifetime yourself, run its shutdown at your shutdown boundary:
+
+(( tab "Python" ))
+```python
+agent.shutdown()  # or `await agent.shutdown_async()` from async code
+```
+(( /tab "Python" ))
+
+(( tab "TypeScript" ))
+```typescript
+await agent.shutdown()
 ```
 (( /tab "TypeScript" ))
 

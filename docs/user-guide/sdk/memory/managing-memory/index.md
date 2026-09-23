@@ -383,6 +383,14 @@ Whether you need to flush manually depends on how you call the agent:
 # After driving the agent with invoke_async / stream_async, before the loop closes.
 await memory_manager.flush()
 ```
+
+`await agent.shutdown_async()` (or the synchronous `agent.shutdown()`) does the same flush through the agent, and scoping the agent with `async with agent:` runs that shutdown when the block exits, including on a thrown error:
+
+```python
+async with agent:
+    await agent.invoke_async("Summarize the conversation so far")
+# agent.shutdown() runs here as the scope exits, flushing pending memory
+```
 (( /tab "Python" ))
 
 (( tab "TypeScript" ))
@@ -393,6 +401,14 @@ The agent loop never flushes for you, on any call path. Await `flush()` as part 
 process.on('beforeExit', async () => {
   await memoryManager.flush()
 })
+```
+
+`await agent.shutdown()` does the same flush through the agent, and binding the agent with `await using` runs that shutdown when the scope exits, including on a thrown error:
+
+```typescript
+await using agent = new Agent({ model, memoryManager })
+await agent.invoke('Summarize the conversation so far')
+// agent.shutdown() runs here as the scope exits, flushing pending memory
 ```
 (( /tab "TypeScript" ))
 

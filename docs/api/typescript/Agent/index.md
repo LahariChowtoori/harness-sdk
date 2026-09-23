@@ -812,13 +812,55 @@ InvokableAgent.invoke
 
 ---
 
+### shutdown()
+
+```ts
+shutdown(): Promise<void>;
+```
+
+Defined in: [src/agent/agent.ts:1100](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1100)
+
+Runs the agent’s shutdown procedures at end of life. Safe to call more than once, and a no-op when there is nothing to release.
+
+Call it directly when you own the agent’s lifecycle (e.g. draining on a shutdown signal), or bind the agent with `await using` to run it automatically on scope exit.
+
+#### Returns
+
+`Promise`<`void`\>
+
+#### Example
+
+```typescript
+await using agent = await createHarness()
+await agent.invoke('summarize the repo')
+// agent.shutdown() runs here as the scope exits
+```
+
+---
+
+### \[asyncDispose\]()
+
+```ts
+asyncDispose: Promise<void>;
+```
+
+Defined in: [src/agent/agent.ts:1108](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1108)
+
+Runs [Agent.shutdown](#shutdown) when the agent leaves an `await using` scope, on normal exit and on throw, so its shutdown procedures run without a manual `finally`.
+
+#### Returns
+
+`Promise`<`void`\>
+
+---
+
 ### stream()
 
 ```ts
 stream(args, options?): AsyncGenerator<AgentStreamEvent, AgentResult, undefined>;
 ```
 
-Defined in: [src/agent/agent.ts:1116](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1116)
+Defined in: [src/agent/agent.ts:1142](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1142)
 
 Streams the agent execution, yielding events and returning the final result.
 
@@ -870,7 +912,7 @@ InvokableAgent.stream
 asTool(options?): Tool;
 ```
 
-Defined in: [src/agent/agent.ts:1396](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1396)
+Defined in: [src/agent/agent.ts:1422](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1422)
 
 Returns a [Tool](/docs/api/typescript/Tool/index.md) that wraps this agent, allowing it to be used as a tool by another agent.
 
@@ -910,7 +952,7 @@ const writer = new Agent({ tools: [researcher] })
 takeSnapshot(options): Snapshot;
 ```
 
-Defined in: [src/agent/agent.ts:1430](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1430)
+Defined in: [src/agent/agent.ts:1456](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1456)
 
 Captures a point-in-time snapshot of the agent’s current state.
 
@@ -968,7 +1010,7 @@ LocalAgent.takeSnapshot
 loadSnapshot(snapshot): void;
 ```
 
-Defined in: [src/agent/agent.ts:1459](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1459)
+Defined in: [src/agent/agent.ts:1485](https://github.com/strands-agents/harness-sdk/blob/main/strands-ts/src/agent/agent.ts#L1485)
 
 Restores agent state from a previously captured snapshot.
 

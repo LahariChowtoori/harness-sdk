@@ -1,30 +1,3 @@
-Configuration types for bidirectional I/O.
-
-## AudioProcessorConfig
-
-```python
-class AudioProcessorConfig(TypedDict)
-```
-
-Defined in: [src/strands/experimental/bidi/io/configs.py:6](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/configs.py#L6)
-
-Configure microphone audio processing.
-
-**Attributes**:
-
--   `echo_cancellation` - Cancel the agent’s own speaker audio from the mic input.
--   `stream_delay_ms` - Playback-to-capture delay hint in milliseconds for AEC.
-
-## AudioIOConfig
-
-```python
-class AudioIOConfig(TypedDict)
-```
-
-Defined in: [src/strands/experimental/bidi/io/configs.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/configs.py#L18)
-
-Configure bidirectional audio input and output.
-
 Send and receive audio data from devices.
 
 Reads user audio from input device and sends agent audio to output device using PyAudio. If a user interrupts the agent, the output buffer is cleared to stop playback.
@@ -119,6 +92,33 @@ def output() -> _AudioOutputStream
 Defined in: [src/strands/experimental/bidi/io/audio.py:449](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/audio.py#L449)
 
 Return the speaker and transcript output stream.
+
+Configuration types for bidirectional I/O.
+
+## AudioProcessorConfig
+
+```python
+class AudioProcessorConfig(TypedDict)
+```
+
+Defined in: [src/strands/experimental/bidi/io/configs.py:6](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/configs.py#L6)
+
+Configure microphone audio processing.
+
+**Attributes**:
+
+-   `echo_cancellation` - Cancel the agent’s own speaker audio from the mic input.
+-   `stream_delay_ms` - Playback-to-capture delay hint in milliseconds for AEC.
+
+## AudioIOConfig
+
+```python
+class AudioIOConfig(TypedDict)
+```
+
+Defined in: [src/strands/experimental/bidi/io/configs.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/io/configs.py#L18)
+
+Configure bidirectional audio input and output.
 
 Handle text input and output to and from bidi agent.
 

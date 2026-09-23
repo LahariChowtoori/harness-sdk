@@ -1,29 +1,3 @@
-Content-related type definitions for bidirectional streaming.
-
-#### BidiContentBlock
-
-A complete text or image block.
-
-#### BidiContentDelta
-
-An audio delta for the live input stream.
-
-#### BidiContentBlockData
-
-Dictionary form of one text or image block.
-
-#### BidiContentDeltaData
-
-Dictionary form of an audio delta.
-
-Agent-related type definitions for bidirectional streaming.
-
-This module defines the types used for BidiAgent.
-
-#### BidiAgentInput
-
-Input accepted by a bidirectional agent.
-
 Media input types for bidirectional streaming.
 
 ## AudioDelta
@@ -54,103 +28,13 @@ Defined in: [src/strands/experimental/bidi/types/media.py:28](https://github.com
 
 Return the dictionary form of this delta.
 
-Protocols for bidirectional input and output streams.
+Agent-related type definitions for bidirectional streaming.
 
-The protocols separate input and output concerns into independent callables with lifecycle methods managed by `BidiAgent`.
+This module defines the types used for BidiAgent.
 
-## InputStream
+#### BidiAgentInput
 
-```python
-@runtime_checkable
-class InputStream(Protocol)
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L18)
-
-Callable input stream managed by a bidirectional agent.
-
-An input stream reads one value from a source each time the agent calls it.
-
-#### start
-
-```python
-async def start(agent: "BidiAgent") -> None
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:24](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L24)
-
-Start input.
-
-#### stop
-
-```python
-async def stop() -> None
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L28)
-
-Stop input.
-
-#### \_\_call\_\_
-
-```python
-def __call__() -> Awaitable[BidiAgentInput]
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:32](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L32)
-
-Read input data from the source.
-
-**Returns**:
-
-Awaitable that resolves to input content (audio, text, image, etc.)
-
-## OutputStream
-
-```python
-@runtime_checkable
-class OutputStream(Protocol)
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:42](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L42)
-
-Callable output stream managed by a bidirectional agent.
-
-An output stream handles one event each time the agent calls it.
-
-#### start
-
-```python
-async def start(agent: "BidiAgent") -> None
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:48](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L48)
-
-Start output.
-
-#### stop
-
-```python
-async def stop() -> None
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:52](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L52)
-
-Stop output.
-
-#### \_\_call\_\_
-
-```python
-def __call__(event: BidiOutputEvent) -> Awaitable[None]
-```
-
-Defined in: [src/strands/experimental/bidi/types/io.py:56](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L56)
-
-Process output events from the agent.
-
-**Arguments**:
-
--   `event` - Output event from the agent (audio, text, tool calls, etc.)
+Input accepted by a bidirectional agent.
 
 Bidirectional streaming types for real-time audio/text conversations.
 
@@ -873,3 +757,119 @@ Additional error context beyond the exception itself.
 #### BidiOutputEvent
 
 Union of different bidi output event types.
+
+Content-related type definitions for bidirectional streaming.
+
+#### BidiContentBlock
+
+A complete text or image block.
+
+#### BidiContentDelta
+
+An audio delta for the live input stream.
+
+#### BidiContentBlockData
+
+Dictionary form of one text or image block.
+
+#### BidiContentDeltaData
+
+Dictionary form of an audio delta.
+
+Protocols for bidirectional input and output streams.
+
+The protocols separate input and output concerns into independent callables with lifecycle methods managed by `BidiAgent`.
+
+## InputStream
+
+```python
+@runtime_checkable
+class InputStream(Protocol)
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:18](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L18)
+
+Callable input stream managed by a bidirectional agent.
+
+An input stream reads one value from a source each time the agent calls it.
+
+#### start
+
+```python
+async def start(agent: "BidiAgent") -> None
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:24](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L24)
+
+Start input.
+
+#### stop
+
+```python
+async def stop() -> None
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:28](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L28)
+
+Stop input.
+
+#### \_\_call\_\_
+
+```python
+def __call__() -> Awaitable[BidiAgentInput]
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:32](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L32)
+
+Read input data from the source.
+
+**Returns**:
+
+Awaitable that resolves to input content (audio, text, image, etc.)
+
+## OutputStream
+
+```python
+@runtime_checkable
+class OutputStream(Protocol)
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:42](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L42)
+
+Callable output stream managed by a bidirectional agent.
+
+An output stream handles one event each time the agent calls it.
+
+#### start
+
+```python
+async def start(agent: "BidiAgent") -> None
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:48](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L48)
+
+Start output.
+
+#### stop
+
+```python
+async def stop() -> None
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:52](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L52)
+
+Stop output.
+
+#### \_\_call\_\_
+
+```python
+def __call__(event: BidiOutputEvent) -> Awaitable[None]
+```
+
+Defined in: [src/strands/experimental/bidi/types/io.py:56](https://github.com/strands-agents/harness-sdk/blob/main/strands-py/src/strands/experimental/bidi/types/io.py#L56)
+
+Process output events from the agent.
+
+**Arguments**:
+
+-   `event` - Output event from the agent (audio, text, tool calls, etc.)
